@@ -4,10 +4,16 @@ import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
 
+const clientChunks = new Set(['index', 'client', 'CodePreviewClient']);
+const sharedChunks = {
+    CodePreviewShared: ['src/components/CodePreview/utils/codeBlockParser.ts'],
+};
+
 export default {
     input: {
         index: 'src/index.ts',
-        client: 'src/client.ts'
+        client: 'src/client.ts',
+        server: 'src/server.tsx'
     },
     output: [
         {
@@ -16,7 +22,11 @@ export default {
             sourcemap: true,
             entryFileNames: '[name].esm.js',
             chunkFileNames: '[name]-[hash].esm.js',
-            banner: (chunk) => (chunk.name === 'client' ? '"use client";\n' : '')
+            banner: (chunk) => (clientChunks.has(chunk.name) ? '"use client";\n' : ''),
+            manualChunks: {
+                CodePreviewClient: ['src/components/CodePreview/CodePreviewClient.tsx'],
+                ...sharedChunks
+            }
         },
         {
             dir: 'dist',
@@ -24,10 +34,20 @@ export default {
             sourcemap: true,
             entryFileNames: '[name].cjs',
             chunkFileNames: '[name]-[hash].cjs',
-            banner: (chunk) => (chunk.name === 'client' ? '"use client";\n' : '')
+            banner: (chunk) => (clientChunks.has(chunk.name) ? '"use client";\n' : ''),
+            manualChunks: {
+                CodePreviewClient: ['src/components/CodePreview/CodePreviewClient.tsx'],
+                ...sharedChunks
+            }
         }
     ],
-    external: ['react', 'react-dom', '@monaco-editor/react'],
+    external: [
+        'react',
+        'react-dom',
+        'react/jsx-runtime',
+        'react/jsx-dev-runtime',
+        '@monaco-editor/react'
+    ],
     plugins: [
         resolve(),
         commonjs(),

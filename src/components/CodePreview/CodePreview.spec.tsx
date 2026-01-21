@@ -1,6 +1,13 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import CodePreview from './index';
 import { CodePreviewFixture } from './fixtures/CodePreviewFixture';
+import {
+    InitialHtmlChangeFixture,
+    InitialCssChangeFixture,
+    InitialJsChangeFixture
+} from './fixtures/PropChangeFixtures';
+
+type WindowWithAddItems = { addItems?: () => void };
 
 test.use({ viewport: { width: 1200, height: 800 } });
 
@@ -33,6 +40,207 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         const iframe = component.locator('iframe');
         const frame = iframe.contentFrame();
         await expect(frame.locator('#raw-block')).toBeVisible({ timeout: 10000 });
+    });
+
+    test('initialHTML overrides fenced content when specified', async ({ mount }) => {
+        const raw = '```html\n<div id="from-child">Child</div>\n```';
+        const component = await mount(
+            <CodePreview initialHTML="<div id='from-prop'>Prop</div>">
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+
+        await expect(frame.locator('#from-prop')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-child')).toHaveCount(0);
+    });
+
+    test('initialCSS overrides fenced content when specified', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="color-box">Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview initialCSS="#color-box { color: blue; }">
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const box = frame.locator('#color-box');
+
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+    });
+
+    test('initialJS overrides fenced content when specified', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="js-box">JS</div>',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview initialJS='document.body.setAttribute("data-js", "prop");'>
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
+    test('uses fenced JS when only initialJS is undefined', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="from-child">Child</div>',
+            '<div id="color-box">Child Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview
+                initialHTML="<div id='from-prop'>Prop</div><div id='color-box'>Prop Box</div>"
+                initialCSS="#color-box { color: blue; }"
+            >
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(frame.locator('#from-prop')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-child')).toHaveCount(0);
+
+        const box = frame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+
+        await expect(body).toHaveAttribute('data-js', 'child');
+    });
+
+    test('uses fenced HTML when only initialHTML is undefined', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="from-child">Child</div>',
+            '<div id="color-box">Child Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview
+                initialCSS="#color-box { color: blue; }"
+                initialJS='document.body.setAttribute("data-js", "prop");'
+            >
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(frame.locator('#from-child')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-prop')).toHaveCount(0);
+
+        const box = frame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+
+        await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
+    test('uses fenced CSS when only initialCSS is undefined', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="from-child">Child</div>',
+            '<div id="color-box">Child Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview
+                initialHTML="<div id='from-prop'>Prop</div><div id='color-box'>Prop Box</div>"
+                initialJS='document.body.setAttribute("data-js", "prop");'
+            >
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(frame.locator('#from-prop')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-child')).toHaveCount(0);
+
+        const box = frame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(255, 0, 0)');
+
+        await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
+    test('switches to fenced content when initialHTML changes', async ({ mount }) => {
+        const component = await mount(<InitialHtmlChangeFixture />);
+
+        const consumerFrame = component.locator('#consumer-html iframe').contentFrame();
+        await expect(consumerFrame.locator('#override-html')).toBeVisible({ timeout: 10000 });
+
+        await component.locator('#toggle-html').click();
+        await expect(consumerFrame.locator('#child-html')).toBeVisible({ timeout: 10000 });
+    });
+
+    test('switches to fenced content when initialCSS changes', async ({ mount }) => {
+        const component = await mount(<InitialCssChangeFixture />);
+
+        const consumerFrame = component.locator('#consumer-css iframe').contentFrame();
+        const box = consumerFrame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+
+        await component.locator('#toggle-css').click();
+        await expect(box).toHaveCSS('color', 'rgb(255, 0, 0)');
+    });
+
+    test('switches to fenced content when initialJS changes', async ({ mount }) => {
+        const component = await mount(<InitialJsChangeFixture />);
+
+        const consumerFrame = component.locator('#consumer-js iframe').contentFrame();
+        const body = consumerFrame.locator('body');
+        await expect(body).toHaveAttribute('data-js', 'prop');
+
+        await component.locator('#toggle-js').click();
+        await expect(body).toHaveAttribute('data-js', 'child');
     });
 
     test('タイトルが指定された場合、正しく表示されること', async ({ mount }) => {
@@ -1022,8 +1230,10 @@ test.describe('動的な高さ変更のテスト', () => {
         const component = await mount(
             <CodePreviewFixture
                 html={`<div id="container"></div>
-<button id="add-btn" onclick="
-    for(let i = 0; i < 10; i++) {
+<button id="add-btn">要素を追加</button>`}
+                js={`
+window.addItems = () => {
+    for (let i = 0; i < 10; i++) {
         const div = document.createElement('div');
         div.textContent = 'Item ' + i;
         div.style.padding = '20px';
@@ -1031,7 +1241,9 @@ test.describe('動的な高さ変更のテスト', () => {
         div.style.background = '#eee';
         document.getElementById('container').appendChild(div);
     }
-">要素を追加</button>`}
+};
+document.getElementById('add-btn').addEventListener('click', window.addItems);
+`}
                 minHeight="100px"
             />
         );
@@ -1042,14 +1254,21 @@ test.describe('動的な高さ変更のテスト', () => {
         // 初期の高さを取得
         const initialHeight = await iframe.evaluate((el) => (el as HTMLIFrameElement).offsetHeight);
 
-        // iframe内のボタンをクリックして要素を追加
         const frame = iframe.contentFrame();
         if (!frame) {
             throw new Error('iframe content frame is not available');
         }
+        const frameBody = frame.locator('body');
+
+        // Wait for addItems to be registered in the iframe and invoke it directly using polling.
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
-        await addButton.click();
+        await expect.poll(async () => {
+            return await frameBody.evaluate(() => typeof (window as WindowWithAddItems).addItems === 'function');
+        }, { timeout: 10000 }).toBe(true);
+        await frameBody.evaluate(() => {
+            (window as WindowWithAddItems).addItems?.();
+        });
         await expect(frame.locator('#container > div')).toHaveCount(10, { timeout: 10000 });
 
         // 高さが広がることを確認（ポーリングで確認）
@@ -1075,15 +1294,11 @@ test.describe('動的な高さ変更のテスト', () => {
         const initialHeight = await iframe.evaluate((el) => (el as HTMLIFrameElement).offsetHeight);
         expect(initialHeight).toBeLessThan(200);
 
-        const iframeHandle = await iframe.elementHandle();
-        if (!iframeHandle) {
-            throw new Error('iframe handle is not available');
-        }
-        const frame = await iframeHandle.contentFrame();
+        const frame = iframe.contentFrame();
         if (!frame) {
             throw new Error('iframe content frame is not available');
         }
-        await frame.evaluate(() => {
+        await frame.locator('body').evaluate(() => {
             window.parent.postMessage({ type: 'codePreviewHeightChange', height: 420, iframeId: 'mismatch-id' }, '*');
         });
 
@@ -1106,12 +1321,18 @@ test.describe('動的な高さ変更のテスト', () => {
     <button id="close-modal">閉じる</button>
 </div>`}
                 js={`
-document.getElementById('open-modal').addEventListener('click', function() {
-    document.getElementById('modal').style.display = 'block';
+const modal = document.getElementById('modal');
+const openButton = document.getElementById('open-modal');
+const closeButton = document.getElementById('close-modal');
+openButton?.addEventListener('click', function() {
+    if (!modal) return;
+    modal.style.display = 'block';
 });
-document.getElementById('close-modal').addEventListener('click', function() {
-    document.getElementById('modal').style.display = 'none';
+closeButton?.addEventListener('click', function() {
+    if (!modal) return;
+    modal.style.display = 'none';
 });
+document.body.dataset.modalReady = 'true';
 `}
                 minHeight="100px"
             />
@@ -1125,6 +1346,10 @@ document.getElementById('close-modal').addEventListener('click', function() {
 
         // iframe内のボタンをクリックしてモーダルを開く
         const frame = iframe.contentFrame();
+        const frameBody = frame.locator('body');
+        await expect.poll(async () => {
+            return await frameBody.evaluate(() => document.body.dataset.modalReady === 'true');
+        }, { timeout: 5000 }).toBe(true);
         const openButton = frame.locator('#open-modal');
         await expect(openButton).toBeVisible({ timeout: 10000 });
         await openButton.click();

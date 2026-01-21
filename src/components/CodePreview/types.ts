@@ -21,6 +21,13 @@ export interface CodePreviewProps {
      */
     children?: React.ReactNode;
     /**
+     * Optional direct initial sources. When provided, they override
+     * code extracted from fenced blocks.
+     */
+    initialHTML?: string;
+    initialCSS?: string;
+    initialJS?: string;
+    /**
      * Initial visibility of the file structure panel.
      * true shows the panel, false hides it.
      * When omitted, it is shown only if file paths or images are provided.
@@ -69,11 +76,7 @@ export interface CodePreviewProps {
     images?: ImageMap;
 }
 
-export interface ResolvedCodePreviewProps extends Omit<CodePreviewProps, 'children'> {
-    initialHTML?: string;
-    initialCSS?: string;
-    initialJS?: string;
-}
+export interface ResolvedCodePreviewProps extends Omit<CodePreviewProps, 'children'> {}
 
 export interface EditorConfig {
     key: string;

@@ -17,6 +17,11 @@
       "import": "./dist/client.esm.js",
       "require": "./dist/client.cjs",
       "types": "./dist/client.d.ts"
+    },
+    "./server": {
+      "import": "./dist/server.esm.js",
+      "require": "./dist/server.cjs",
+      "types": "./dist/server.d.ts"
     }
   },
   "files": [
@@ -29,7 +34,7 @@
     "lint": "eslint .",
     "test-ct:clean": "rimraf playwright/.cache",
     "test-ct:quick": "npm run test-ct -- --project=chromium",
-    "test-ct": "playwright test -c playwright-ct.config.ts",
+    "test-ct": "npm run test-ct:clean && playwright test -c playwright-ct.config.ts",
     "test": "npm run test-ct:quick && npm run test-ct",
     "build": "rollup -c",
     "clean": "rimraf dist",
