@@ -40,7 +40,7 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(frame.locator('#raw-block')).toBeVisible({ timeout: 10000 });
     });
 
-    test('initialHTMLが指定された場合はフェンスの内容より優先されること', async ({ mount }) => {
+    test('initialHTML overrides fenced content when specified', async ({ mount }) => {
         const raw = '```html\n<div id="from-child">Child</div>\n```';
         const component = await mount(
             <CodePreview initialHTML="<div id='from-prop'>Prop</div>">
@@ -55,7 +55,7 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(frame.locator('#from-child')).toHaveCount(0);
     });
 
-    test('initialCSSが指定された場合はフェンスの内容より優先されること', async ({ mount }) => {
+    test('initialCSS overrides fenced content when specified', async ({ mount }) => {
         const raw = [
             '```html',
             '<div id="color-box">Box</div>',
@@ -78,7 +78,7 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
     });
 
-    test('initialJSが指定された場合はフェンスの内容より優先されること', async ({ mount }) => {
+    test('initialJS overrides fenced content when specified', async ({ mount }) => {
         const raw = [
             '```html',
             '<div id="js-box">JS</div>',
@@ -100,7 +100,7 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(body).toHaveAttribute('data-js', 'prop');
     });
 
-    test('initialHTMLの変更でフェンス解析結果に切り替わること', async ({ mount }) => {
+    test('switches to fenced content when initialHTML changes', async ({ mount }) => {
         const component = await mount(<InitialHtmlChangeFixture />);
 
         const consumerFrame = component.locator('#consumer-html iframe').contentFrame();
@@ -110,7 +110,7 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(consumerFrame.locator('#child-html')).toBeVisible({ timeout: 10000 });
     });
 
-    test('initialCSSの変更でフェンス解析結果に切り替わること', async ({ mount }) => {
+    test('switches to fenced content when initialCSS changes', async ({ mount }) => {
         const component = await mount(<InitialCssChangeFixture />);
 
         const consumerFrame = component.locator('#consumer-css iframe').contentFrame();
@@ -122,7 +122,7 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(box).toHaveCSS('color', 'rgb(255, 0, 0)');
     });
 
-    test('initialJSの変更でフェンス解析結果に切り替わること', async ({ mount }) => {
+    test('switches to fenced content when initialJS changes', async ({ mount }) => {
         const component = await mount(<InitialJsChangeFixture />);
 
         const consumerFrame = component.locator('#consumer-js iframe').contentFrame();
@@ -1153,7 +1153,7 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
             throw new Error('iframe content frame is not available');
         }
 
-        // iframe内のボタンをクリックして要素を追加
+        // Click the button inside the iframe to add elements.
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
         await frame.waitForFunction(() => typeof (window as { addItems?: () => void }).addItems === 'function');
