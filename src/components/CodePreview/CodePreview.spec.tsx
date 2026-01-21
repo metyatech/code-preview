@@ -35,6 +35,21 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(frame.locator('#raw-block')).toBeVisible({ timeout: 10000 });
     });
 
+    test('initialHTMLが指定された場合はフェンスの内容より優先されること', async ({ mount }) => {
+        const raw = '```html\n<div id="from-child">Child</div>\n```';
+        const component = await mount(
+            <CodePreview initialHTML="<div id='from-prop'>Prop</div>">
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+
+        await expect(frame.locator('#from-prop')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-child')).toHaveCount(0);
+    });
+
     test('タイトルが指定された場合、正しく表示されること', async ({ mount }) => {
         const component = await mount(
             <CodePreviewFixture

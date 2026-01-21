@@ -17,6 +17,11 @@
       "import": "./dist/client.esm.js",
       "require": "./dist/client.cjs",
       "types": "./dist/client.d.ts"
+    },
+    "./server": {
+      "import": "./dist/server.esm.js",
+      "require": "./dist/server.cjs",
+      "types": "./dist/server.d.ts"
     }
   },
   "files": [

@@ -20,8 +20,14 @@ const LANGUAGE_ALIASES: Record<string, EditorKey> = {
     javascript: 'js'
 };
 
-const extractLanguage = (className?: string, language?: string, lang?: string): EditorKey | undefined => {
-    const explicit = (language || lang)?.toLowerCase();
+const extractLanguage = (
+    className?: string,
+    language?: string,
+    lang?: string,
+    dataLanguage?: string,
+    dataLang?: string,
+): EditorKey | undefined => {
+    const explicit = (language || lang || dataLanguage || dataLang)?.toLowerCase();
     if (explicit && LANGUAGE_ALIASES[explicit]) {
         return LANGUAGE_ALIASES[explicit];
     }
@@ -103,8 +109,16 @@ const collectCodeBlocks = (node: React.ReactNode, result: ExtractedCodeBlocks, r
         children?: React.ReactNode;
         language?: string;
         lang?: string;
+        'data-language'?: string;
+        'data-lang'?: string;
     };
-    const detected = extractLanguage(className, language, lang);
+    const detected = extractLanguage(
+        className,
+        language,
+        lang,
+        (node.props as { 'data-language'?: string })['data-language'],
+        (node.props as { 'data-lang'?: string })['data-lang'],
+    );
 
     if (detected && result[detected] === undefined) {
         result[detected] = extractCodeFromNode(node);

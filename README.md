@@ -44,7 +44,13 @@ Styles are injected automatically; no stylesheet import is required.
 
 ### Next.js App Router
 
-When using server component environments (such as the Next.js App Router), import from the client entry:
+When rendering from server components (including MDX), import the server entry so fenced blocks are parsed on the server:
+
+```tsx
+import { CodePreview } from '@metyatech/code-preview/server';
+```
+
+When using CodePreview inside client components, use the client entry:
 
 ```tsx
 import { CodePreview } from '@metyatech/code-preview/client';
