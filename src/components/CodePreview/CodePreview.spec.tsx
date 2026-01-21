@@ -7,7 +7,8 @@ import {
     InitialJsChangeFixture
 } from './fixtures/PropChangeFixtures';
 
-type WindowWithAddItems = { addItems?: () => void };
+type WindowWithAddItemsFunction = { addItems?: () => void };
+type WindowWithAddItems = WindowWithAddItemsFunction;
 
 test.use({ viewport: { width: 1200, height: 800 } });
 
@@ -1254,20 +1255,19 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
         // 初期の高さを取得
         const initialHeight = await iframe.evaluate((el) => (el as HTMLIFrameElement).offsetHeight);
 
-        const iframeHandle = await iframe.elementHandle();
-        if (!iframeHandle) {
-            throw new Error('iframe handle is not available');
-        }
-        const frame = await iframeHandle.contentFrame();
+        const frame = iframe.contentFrame();
         if (!frame) {
             throw new Error('iframe content frame is not available');
         }
+        const frameBody = frame.locator('body');
 
         // Click the button inside the iframe to add elements.
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
-        await frame.waitForFunction(() => typeof (window as WindowWithAddItems).addItems === 'function');
-        await frame.evaluate(() => {
+        await expect.poll(async () => {
+            return await frameBody.evaluate(() => typeof (window as WindowWithAddItems).addItems === 'function');
+        }, { timeout: 10000 }).toBe(true);
+        await frameBody.evaluate(() => {
             (window as WindowWithAddItems).addItems?.();
         });
         await expect(frame.locator('#container > div')).toHaveCount(10, { timeout: 10000 });
@@ -1295,15 +1295,11 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
         const initialHeight = await iframe.evaluate((el) => (el as HTMLIFrameElement).offsetHeight);
         expect(initialHeight).toBeLessThan(200);
 
-        const iframeHandle = await iframe.elementHandle();
-        if (!iframeHandle) {
-            throw new Error('iframe handle is not available');
-        }
-        const frame = await iframeHandle.contentFrame();
+        const frame = iframe.contentFrame();
         if (!frame) {
             throw new Error('iframe content frame is not available');
         }
-        await frame.evaluate(() => {
+        await frame.locator('body').evaluate(() => {
             window.parent.postMessage({ type: 'codePreviewHeightChange', height: 420, iframeId: 'mismatch-id' }, '*');
         });
 
