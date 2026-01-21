@@ -104,7 +104,14 @@ const collectCodeBlocks = (node: React.ReactNode, result: ExtractedCodeBlocks, r
 
     if (!React.isValidElement(node)) return;
 
-    const { className, children, language, lang } = node.props as {
+    const {
+        className,
+        children,
+        language,
+        lang,
+        'data-language': dataLanguage,
+        'data-lang': dataLang,
+    } = node.props as {
         className?: string;
         children?: React.ReactNode;
         language?: string;
@@ -116,8 +123,8 @@ const collectCodeBlocks = (node: React.ReactNode, result: ExtractedCodeBlocks, r
         className,
         language,
         lang,
-        (node.props as { 'data-language'?: string })['data-language'],
-        (node.props as { 'data-lang'?: string })['data-lang'],
+        dataLanguage,
+        dataLang,
     );
 
     if (detected && result[detected] === undefined) {

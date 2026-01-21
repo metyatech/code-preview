@@ -7,7 +7,7 @@ import {
     InitialJsChangeFixture
 } from './fixtures/PropChangeFixtures';
 
-type AddItemsWindow = { addItems?: () => void };
+type WindowWithAddItems = { addItems?: () => void };
 
 test.use({ viewport: { width: 1200, height: 800 } });
 
@@ -1194,9 +1194,9 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
         // Click the button inside the iframe to add elements.
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
-        await frame.waitForFunction(() => typeof (window as AddItemsWindow).addItems === 'function');
+        await frame.waitForFunction(() => typeof (window as WindowWithAddItems).addItems === 'function');
         await frame.evaluate(() => {
-            (window as AddItemsWindow).addItems?.();
+            (window as WindowWithAddItems).addItems?.();
         });
         await expect(frame.locator('#container > div')).toHaveCount(10, { timeout: 10000 });
 
