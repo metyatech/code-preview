@@ -1082,8 +1082,10 @@ test.describe('動的な高さ変更のテスト', () => {
         const component = await mount(
             <CodePreviewFixture
                 html={`<div id="container"></div>
-<button id="add-btn" onclick="
-    for(let i = 0; i < 10; i++) {
+<button id="add-btn">要素を追加</button>`}
+                js={`
+window.addItems = () => {
+    for (let i = 0; i < 10; i++) {
         const div = document.createElement('div');
         div.textContent = 'Item ' + i;
         div.style.padding = '20px';
@@ -1091,7 +1093,9 @@ test.describe('動的な高さ変更のテスト', () => {
         div.style.background = '#eee';
         document.getElementById('container').appendChild(div);
     }
-">要素を追加</button>`}
+};
+document.getElementById('add-btn').addEventListener('click', window.addItems);
+`}
                 minHeight="100px"
             />
         );
@@ -1102,14 +1106,22 @@ test.describe('動的な高さ変更のテスト', () => {
         // 初期の高さを取得
         const initialHeight = await iframe.evaluate((el) => (el as HTMLIFrameElement).offsetHeight);
 
-        // iframe内のボタンをクリックして要素を追加
-        const frame = iframe.contentFrame();
+        const iframeHandle = await iframe.elementHandle();
+        if (!iframeHandle) {
+            throw new Error('iframe handle is not available');
+        }
+        const frame = await iframeHandle.contentFrame();
         if (!frame) {
             throw new Error('iframe content frame is not available');
         }
+
+        // iframe内のボタンをクリックして要素を追加
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
-        await addButton.click();
+        await frame.waitForFunction(() => typeof (window as { addItems?: () => void }).addItems === 'function');
+        await frame.evaluate(() => {
+            (window as { addItems?: () => void }).addItems?.();
+        });
         await expect(frame.locator('#container > div')).toHaveCount(10, { timeout: 10000 });
 
         // 高さが広がることを確認（ポーリングで確認）

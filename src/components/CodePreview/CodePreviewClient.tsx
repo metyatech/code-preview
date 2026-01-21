@@ -16,14 +16,12 @@ export default function CodePreviewClient(props: CodePreviewProps) {
         ...rest
     } = props;
 
-    const shouldParseChildren =
-        children !== undefined &&
-        (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
-
-    const parsedSource = useMemo<ParsedCodeBlocks>(
-        () => (shouldParseChildren ? parseCodeBlocksFromChildren(children) : {}),
-        [children, shouldParseChildren]
-    );
+    const parsedSource = useMemo<ParsedCodeBlocks>(() => {
+        const shouldParseChildren =
+            children !== undefined &&
+            (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
+        return shouldParseChildren ? parseCodeBlocksFromChildren(children) : {};
+    }, [children, initialHTML, initialCSS, initialJS]);
 
     const resolvedInitialHTML = initialHTML ?? parsedSource.initialHTML;
     const resolvedInitialCSS = initialCSS ?? parsedSource.initialCSS;
