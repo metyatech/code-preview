@@ -4,7 +4,7 @@ import { parseCodeBlocksFromChildren } from './codeBlockParser';
 
 test.describe('codeBlockParser', () => {
     // Test helper that creates a <pre> element containing a <code> child with the given attributes and code content for parsing tests.
-    const parseWithProps = (attributes: Record<string, string>, code: string) => {
+    const parseCodeBlockWithAttributes = (attributes: Record<string, string>, code: string) => {
         const node = React.createElement(
             'pre',
             null,
@@ -71,7 +71,7 @@ test.describe('codeBlockParser', () => {
     });
 
     test('respects full language precedence order', async () => {
-        const languageFirst = parseWithProps(
+        const languageFirst = parseCodeBlockWithAttributes(
             {
                 language: 'html',
                 lang: 'css',
@@ -83,7 +83,7 @@ test.describe('codeBlockParser', () => {
         );
         expect(languageFirst.initialHTML).toBe('<section>Lang</section>');
 
-        const langSecond = parseWithProps(
+        const langSecond = parseCodeBlockWithAttributes(
             {
                 lang: 'css',
                 'data-language': 'html',
@@ -94,7 +94,7 @@ test.describe('codeBlockParser', () => {
         );
         expect(langSecond.initialCSS).toBe('body { color: purple; }');
 
-        const dataLanguageThird = parseWithProps(
+        const dataLanguageThird = parseCodeBlockWithAttributes(
             {
                 'data-language': 'html',
                 'data-lang': 'css',
@@ -104,7 +104,7 @@ test.describe('codeBlockParser', () => {
         );
         expect(dataLanguageThird.initialHTML).toBe('<p>Data Language</p>');
 
-        const dataLangFourth = parseWithProps(
+        const dataLangFourth = parseCodeBlockWithAttributes(
             {
                 'data-lang': 'css',
                 className: 'language-html',
@@ -115,7 +115,7 @@ test.describe('codeBlockParser', () => {
     });
 
     test('extracts code from className when explicit language is missing', async () => {
-        const classNameOnly = parseWithProps(
+        const classNameOnly = parseCodeBlockWithAttributes(
             {
                 className: 'language-html',
             },
