@@ -7,8 +7,7 @@ import {
     InitialJsChangeFixture
 } from './fixtures/PropChangeFixtures';
 
-type WindowWithAddItemsFunction = { addItems?: () => void };
-type WindowWithAddItems = WindowWithAddItemsFunction;
+type WindowWithAddItems = { addItems?: () => void };
 
 test.use({ viewport: { width: 1200, height: 800 } });
 
