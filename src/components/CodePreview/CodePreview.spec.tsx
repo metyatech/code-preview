@@ -50,6 +50,51 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(frame.locator('#from-child')).toHaveCount(0);
     });
 
+    test('initialCSSが指定された場合はフェンスの内容より優先されること', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="color-box">Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview initialCSS="#color-box { color: blue; }">
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const box = frame.locator('#color-box');
+
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+    });
+
+    test('initialJSが指定された場合はフェンスの内容より優先されること', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="js-box">JS</div>',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview initialJS='document.body.setAttribute("data-js", "prop");'>
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
     test('タイトルが指定された場合、正しく表示されること', async ({ mount }) => {
         const component = await mount(
             <CodePreviewFixture

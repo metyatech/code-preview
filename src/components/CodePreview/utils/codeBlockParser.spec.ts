@@ -20,4 +20,43 @@ test.describe('codeBlockParser', () => {
         expect(parsed.initialCSS).toBeUndefined();
         expect(parsed.initialJS).toBeUndefined();
     });
+
+    test('extracts code from data-lang blocks', async () => {
+        const node = React.createElement(
+            'pre',
+            null,
+            React.createElement(
+                'code',
+                { 'data-lang': 'css' },
+                'body { color: red; }',
+            ),
+        );
+
+        const parsed = parseCodeBlocksFromChildren(node);
+
+        expect(parsed.initialHTML).toBeUndefined();
+        expect(parsed.initialCSS).toBe('body { color: red; }');
+        expect(parsed.initialJS).toBeUndefined();
+    });
+
+    test('prefers explicit data-language over className', async () => {
+        const node = React.createElement(
+            'pre',
+            null,
+            React.createElement(
+                'code',
+                {
+                    className: 'language-css',
+                    'data-language': 'html',
+                },
+                '<div>Explicit</div>',
+            ),
+        );
+
+        const parsed = parseCodeBlocksFromChildren(node);
+
+        expect(parsed.initialHTML).toBe('<div>Explicit</div>');
+        expect(parsed.initialCSS).toBeUndefined();
+        expect(parsed.initialJS).toBeUndefined();
+    });
 });
