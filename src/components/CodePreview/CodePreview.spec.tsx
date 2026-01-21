@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import CodePreview from './index';
 import { CodePreviewFixture } from './fixtures/CodePreviewFixture';
+import {
+    InitialHtmlChangeFixture,
+    InitialCssChangeFixture,
+    InitialJsChangeFixture
+} from './fixtures/PropChangeFixtures';
 
 test.use({ viewport: { width: 1200, height: 800 } });
 
@@ -93,6 +98,39 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         const body = frame.locator('body');
 
         await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
+    test('initialHTMLの変更でフェンス解析結果に切り替わること', async ({ mount }) => {
+        const component = await mount(<InitialHtmlChangeFixture />);
+
+        const consumerFrame = component.locator('#consumer-html iframe').contentFrame();
+        await expect(consumerFrame.locator('#override-html')).toBeVisible({ timeout: 10000 });
+
+        await component.locator('#toggle-html').click();
+        await expect(consumerFrame.locator('#child-html')).toBeVisible({ timeout: 10000 });
+    });
+
+    test('initialCSSの変更でフェンス解析結果に切り替わること', async ({ mount }) => {
+        const component = await mount(<InitialCssChangeFixture />);
+
+        const consumerFrame = component.locator('#consumer-css iframe').contentFrame();
+        const box = consumerFrame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+
+        await component.locator('#toggle-css').click();
+        await expect(box).toHaveCSS('color', 'rgb(255, 0, 0)');
+    });
+
+    test('initialJSの変更でフェンス解析結果に切り替わること', async ({ mount }) => {
+        const component = await mount(<InitialJsChangeFixture />);
+
+        const consumerFrame = component.locator('#consumer-js iframe').contentFrame();
+        const body = consumerFrame.locator('body');
+        await expect(body).toHaveAttribute('data-js', 'prop');
+
+        await component.locator('#toggle-js').click();
+        await expect(body).toHaveAttribute('data-js', 'child');
     });
 
     test('タイトルが指定された場合、正しく表示されること', async ({ mount }) => {
@@ -1178,12 +1216,18 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
     <button id="close-modal">閉じる</button>
 </div>`}
                 js={`
-document.getElementById('open-modal').addEventListener('click', function() {
-    document.getElementById('modal').style.display = 'block';
+const modal = document.getElementById('modal');
+const openButton = document.getElementById('open-modal');
+const closeButton = document.getElementById('close-modal');
+openButton?.addEventListener('click', function() {
+    if (!modal) return;
+    modal.style.display = 'block';
 });
-document.getElementById('close-modal').addEventListener('click', function() {
-    document.getElementById('modal').style.display = 'none';
+closeButton?.addEventListener('click', function() {
+    if (!modal) return;
+    modal.style.display = 'none';
 });
+window.__modalReady = true;
 `}
                 minHeight="100px"
             />
@@ -1197,6 +1241,10 @@ document.getElementById('close-modal').addEventListener('click', function() {
 
         // iframe内のボタンをクリックしてモーダルを開く
         const frame = iframe.contentFrame();
+        const frameBody = frame.locator('body');
+        await expect.poll(async () => {
+            return await frameBody.evaluate(() => window.__modalReady === true);
+        }, { timeout: 5000 }).toBe(true);
         const openButton = frame.locator('#open-modal');
         await expect(openButton).toBeVisible({ timeout: 10000 });
         await openButton.click();
