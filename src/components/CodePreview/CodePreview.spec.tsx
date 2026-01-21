@@ -138,6 +138,78 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(body).toHaveAttribute('data-js', 'child');
     });
 
+    test('uses fenced HTML when only initialHTML is undefined', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="from-child">Child</div>',
+            '<div id="color-box">Child Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview
+                initialCSS="#color-box { color: blue; }"
+                initialJS='document.body.setAttribute("data-js", "prop");'
+            >
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(frame.locator('#from-child')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-prop')).toHaveCount(0);
+
+        const box = frame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+
+        await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
+    test('uses fenced CSS when only initialCSS is undefined', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="from-child">Child</div>',
+            '<div id="color-box">Child Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview
+                initialHTML="<div id='from-prop'>Prop</div><div id='color-box'>Prop Box</div>"
+                initialJS='document.body.setAttribute("data-js", "prop");'
+            >
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(frame.locator('#from-prop')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-child')).toHaveCount(0);
+
+        const box = frame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(255, 0, 0)');
+
+        await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
     test('switches to fenced content when initialHTML changes', async ({ mount }) => {
         const component = await mount(<InitialHtmlChangeFixture />);
 

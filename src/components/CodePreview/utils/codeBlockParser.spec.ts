@@ -112,4 +112,17 @@ test.describe('codeBlockParser', () => {
         );
         expect(dataLangFourth.initialCSS).toBe('body { color: green; }');
     });
+
+    test('extracts code from className when explicit language is missing', async () => {
+        const classNameOnly = parseWithProps(
+            {
+                className: 'language-html',
+            },
+            '<main>From className</main>',
+        );
+
+        expect(classNameOnly.initialHTML).toBe('<main>From className</main>');
+        expect(classNameOnly.initialCSS).toBeUndefined();
+        expect(classNameOnly.initialJS).toBeUndefined();
+    });
 });
