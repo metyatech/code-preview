@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import { parseCodeBlocksFromChildren } from './codeBlockParser';
 
 test.describe('codeBlockParser', () => {
-    // Test helper that creates a pre>code element structure with given attributes for parsing tests.
+    // Test helper that creates a <pre> element containing a <code> child with the given attributes and code content for parsing tests.
     const parseWithProps = (attributes: Record<string, string>, code: string) => {
         const node = React.createElement(
             'pre',

@@ -1260,7 +1260,7 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
         }
         const frameBody = frame.locator('body');
 
-        // Click the button inside the iframe to add elements.
+        // Wait for addItems to be registered in the iframe and invoke it directly using polling.
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
         await expect.poll(async () => {
