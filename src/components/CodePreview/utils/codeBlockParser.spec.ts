@@ -3,11 +3,11 @@ import { test, expect } from '@playwright/experimental-ct-react';
 import { parseCodeBlocksFromChildren } from './codeBlockParser';
 
 test.describe('codeBlockParser', () => {
-    const parseWithProps = (props: Record<string, string>, code: string) => {
+    const parseWithProps = (attributes: Record<string, string>, code: string) => {
         const node = React.createElement(
             'pre',
             null,
-            React.createElement('code', props, code),
+            React.createElement('code', attributes, code),
         );
         return parseCodeBlocksFromChildren(node);
     };
