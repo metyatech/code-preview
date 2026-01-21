@@ -1,7 +1,11 @@
 import { cache } from 'react';
 import type { CodePreviewProps } from './components/CodePreview/types';
 import { CodePreview as CodePreviewClient } from './client';
-import { parseCodeBlocksFromChildren, type ParsedCodeBlocks } from './components/CodePreview/utils/codeBlockParser';
+import {
+    parseCodeBlocksFromChildren,
+    shouldParseCodeBlocksFromChildren,
+    type ParsedCodeBlocks
+} from './components/CodePreview/utils/codeBlockParser';
 
 const parseCodeBlocksFromChildrenCached = cache(parseCodeBlocksFromChildren);
 
@@ -14,9 +18,12 @@ export function CodePreview(props: CodePreviewProps) {
         ...rest
     } = props;
 
-    const shouldParseChildren =
-        children !== undefined &&
-        (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
+    const shouldParseChildren = shouldParseCodeBlocksFromChildren(
+        children,
+        initialHTML,
+        initialCSS,
+        initialJS,
+    );
     const parsedSource: ParsedCodeBlocks = shouldParseChildren
         ? parseCodeBlocksFromChildrenCached(children)
         : {};

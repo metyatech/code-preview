@@ -2,7 +2,11 @@ import { useMemo } from 'react';
 import { CodePreviewProps } from './types';
 import { useCodePreview } from './hooks/useCodePreview';
 import { CodePreviewLayout } from './CodePreviewLayout';
-import { parseCodeBlocksFromChildren, type ParsedCodeBlocks } from './utils/codeBlockParser';
+import {
+    parseCodeBlocksFromChildren,
+    shouldParseCodeBlocksFromChildren,
+    type ParsedCodeBlocks
+} from './utils/codeBlockParser';
 
 export default function CodePreviewClient(props: CodePreviewProps) {
     const {
@@ -17,10 +21,10 @@ export default function CodePreviewClient(props: CodePreviewProps) {
     } = props;
 
     const parsedSource = useMemo<ParsedCodeBlocks>(() => {
-        const shouldParseChildren =
-            children !== undefined &&
-            (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
-        return shouldParseChildren ? parseCodeBlocksFromChildren(children) : {};
+        if (!shouldParseCodeBlocksFromChildren(children, initialHTML, initialCSS, initialJS)) {
+            return {};
+        }
+        return parseCodeBlocksFromChildren(children);
     }, [children, initialHTML, initialCSS, initialJS]);
 
     const resolvedInitialHTML = initialHTML ?? parsedSource.initialHTML;

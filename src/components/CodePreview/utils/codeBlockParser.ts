@@ -13,6 +13,15 @@ export interface ParsedCodeBlocks {
     initialJS?: string;
 }
 
+export const shouldParseCodeBlocksFromChildren = (
+    children: React.ReactNode,
+    initialHTML?: string,
+    initialCSS?: string,
+    initialJS?: string,
+): boolean =>
+    children !== undefined &&
+    (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
+
 const LANGUAGE_ALIASES: Record<string, EditorKey> = {
     html: 'html',
     css: 'css',
