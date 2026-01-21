@@ -7,6 +7,8 @@ import {
     InitialJsChangeFixture
 } from './fixtures/PropChangeFixtures';
 
+type AddItemsWindow = { addItems?: () => void };
+
 test.use({ viewport: { width: 1200, height: 800 } });
 
 test.describe('CodePreview コンポーネントのテスト', () => {
@@ -98,6 +100,42 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         const body = frame.locator('body');
 
         await expect(body).toHaveAttribute('data-js', 'prop');
+    });
+
+    test('uses fenced JS when only initialJS is undefined', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="from-child">Child</div>',
+            '<div id="color-box">Child Box</div>',
+            '```',
+            '```css',
+            '#color-box { color: red; }',
+            '```',
+            '```js',
+            'document.body.setAttribute("data-js", "child");',
+            '```',
+        ].join('\n');
+        const component = await mount(
+            <CodePreview
+                initialHTML="<div id='from-prop'>Prop</div><div id='color-box'>Prop Box</div>"
+                initialCSS="#color-box { color: blue; }"
+            >
+                {raw}
+            </CodePreview>
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const body = frame.locator('body');
+
+        await expect(frame.locator('#from-prop')).toBeVisible({ timeout: 10000 });
+        await expect(frame.locator('#from-child')).toHaveCount(0);
+
+        const box = frame.locator('#color-box');
+        await expect(box).toBeVisible({ timeout: 10000 });
+        await expect(box).toHaveCSS('color', 'rgb(0, 0, 255)');
+
+        await expect(body).toHaveAttribute('data-js', 'child');
     });
 
     test('switches to fenced content when initialHTML changes', async ({ mount }) => {
@@ -1156,9 +1194,9 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
         // Click the button inside the iframe to add elements.
         const addButton = frame.locator('#add-btn');
         await expect(addButton).toBeVisible({ timeout: 10000 });
-        await frame.waitForFunction(() => typeof (window as { addItems?: () => void }).addItems === 'function');
+        await frame.waitForFunction(() => typeof (window as AddItemsWindow).addItems === 'function');
         await frame.evaluate(() => {
-            (window as { addItems?: () => void }).addItems?.();
+            (window as AddItemsWindow).addItems?.();
         });
         await expect(frame.locator('#container > div')).toHaveCount(10, { timeout: 10000 });
 
