@@ -1227,7 +1227,7 @@ closeButton?.addEventListener('click', function() {
     if (!modal) return;
     modal.style.display = 'none';
 });
-window.__modalReady = true;
+document.body.dataset.modalReady = 'true';
 `}
                 minHeight="100px"
             />
@@ -1243,7 +1243,7 @@ window.__modalReady = true;
         const frame = iframe.contentFrame();
         const frameBody = frame.locator('body');
         await expect.poll(async () => {
-            return await frameBody.evaluate(() => window.__modalReady === true);
+            return await frameBody.evaluate(() => document.body.dataset.modalReady === 'true');
         }, { timeout: 5000 }).toBe(true);
         const openButton = frame.locator('#open-modal');
         await expect(openButton).toBeVisible({ timeout: 10000 });
