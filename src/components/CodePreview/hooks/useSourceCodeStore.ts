@@ -1,8 +1,9 @@
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo, useSyncExternalStore } from 'react';
 import { ensureTrailingNewline, normalizeInitialCode } from '../utils/stringUtils';
 import { resolveInitialSource } from '../utils/sourceCodeUtils';
 import { useGlobalSourceSync } from './useGlobalSourceSync';
 import { useGlobalSourceProvider } from './useGlobalSourceProvider';
+import { usePathname } from './usePathname';
 import { ISourceCodeStore, globalSourceCodeStore } from '../store';
 import type { ImageMap } from '../types';
 
@@ -25,13 +26,32 @@ export const useSourceCodeStore = (props: UseSourceCodeStoreProps) => {
     const normalizedInitialCSS = normalizeInitialCode(props.initialCSS);
     const normalizedInitialJS = normalizeInitialCode(props.initialJS);
 
+    const pathname = usePathname();
     const scopedSourceId = useMemo(() => {
         if (!sourceId) return undefined;
-        if (typeof window === 'undefined') return sourceId;
-        return `${sourceId}:${window.location.pathname}`;
-    }, [sourceId]);
+        if (!pathname) return sourceId;
+        return `${sourceId}:${pathname}`;
+    }, [sourceId, pathname]);
 
-    const storedState = (scopedSourceId && store) ? store.get(scopedSourceId) : undefined;
+    const subscribe = useCallback((listener: () => void) => {
+        if (!scopedSourceId) {
+            return () => {};
+        }
+        return store.subscribe(scopedSourceId, listener);
+    }, [store, scopedSourceId]);
+
+    const getSnapshot = useCallback(() => {
+        if (!scopedSourceId) {
+            return undefined;
+        }
+        return store.get(scopedSourceId);
+    }, [store, scopedSourceId]);
+
+    const storedState = useSyncExternalStore(
+        subscribe,
+        getSnapshot,
+        () => undefined
+    );
 
     const {
         resolvedHTML,

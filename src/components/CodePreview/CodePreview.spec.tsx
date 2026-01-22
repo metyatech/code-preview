@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/experimental-ct-react';
 import CodePreview from './index';
+import { CodePreview as ServerCodePreview } from '../../server';
 import { CodePreviewFixture } from './fixtures/CodePreviewFixture';
+import { PathChangeFixture } from './fixtures/PathChangeFixture';
 import {
     InitialHtmlChangeFixture,
     InitialCssChangeFixture,
@@ -916,6 +918,51 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         
         // 少し待機が必要かもしれない
         await expect(frame2.locator('div')).toHaveText('Shared Content', { timeout: 5000 });
+    });
+
+    test('pathnameが途中で変わってもsourceIdの共有が維持されること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/page-a');
+        });
+
+        const component = await mount(
+            <PathChangeFixture
+                sourceId="shared-path-change"
+                html="<div id='shared-path-change'>Shared</div>"
+            />
+        );
+
+        const consumer = component.locator('#consumer-after-path-change');
+        await expect(consumer).toBeVisible();
+
+        const iframe = consumer.locator('iframe');
+        const frame = iframe.contentFrame();
+        await expect(frame.locator('#shared-path-change')).toBeVisible({ timeout: 5000 });
+    });
+
+    test('server entryでもsourceIdが共有されること', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="shared-server">Shared Server</div>',
+            '```'
+        ].join('\n');
+
+        const component = await mount(
+            <div>
+                <ServerCodePreview sourceId="shared-server">
+                    {raw}
+                </ServerCodePreview>
+                <div id="second-preview-server">
+                    <ServerCodePreview sourceId="shared-server" />
+                </div>
+            </div>
+        );
+
+        const secondPreview = component.locator('#second-preview-server');
+        const iframe = secondPreview.locator('iframe');
+        const frame = iframe.contentFrame();
+
+        await expect(frame.locator('#shared-server')).toBeVisible({ timeout: 5000 });
     });
 
     test('share=falseの場合は共有ストアを上書きしないこと', async ({ mount }) => {

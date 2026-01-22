@@ -29,9 +29,9 @@ export const resolveInitialSource = (props: ResolveSourceProps) => {
 
     if (sourceId && storedState) {
         const stored = storedState;
-        if (!hasInitialHTML && stored.html) resolvedHTML = stored.html;
-        if (!hasInitialCSS && stored.css) resolvedCSS = stored.css;
-        if (!hasInitialJS && stored.js) resolvedJS = stored.js;
+        if (!hasInitialHTML && stored.html !== undefined) resolvedHTML = stored.html;
+        if (!hasInitialCSS && stored.css !== undefined) resolvedCSS = stored.css;
+        if (!hasInitialJS && stored.js !== undefined) resolvedJS = stored.js;
         if (!images && stored.images) resolvedImages = stored.images;
         if (!htmlPath && stored.htmlPath) resolvedHtmlPath = stored.htmlPath;
         if (!cssPath && stored.cssPath) resolvedCssPath = stored.cssPath;
