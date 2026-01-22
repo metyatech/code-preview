@@ -39,10 +39,10 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
         hasInitialHTML ||
         hasInitialCSS ||
         hasInitialJS ||
-        (images && Object.keys(images).length > 0) ||
-        htmlPath ||
-        cssPath ||
-        jsPath
+        images !== undefined ||
+        htmlPath !== undefined ||
+        cssPath !== undefined ||
+        jsPath !== undefined
     );
     const isSourceProvider = share && sourceId && hasSourceInputs;
 
@@ -53,10 +53,10 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
                 html: hasInitialHTML ? (initialHTML || '') : existing.html,
                 css: hasInitialCSS ? (initialCSS || '') : existing.css,
                 js: hasInitialJS ? (initialJS || '') : existing.js,
-                images: images || existing.images,
-                htmlPath: htmlPath || existing.htmlPath,
-                cssPath: cssPath || existing.cssPath,
-                jsPath: jsPath || existing.jsPath,
+                images: images !== undefined ? images : existing.images,
+                htmlPath: htmlPath !== undefined ? htmlPath : existing.htmlPath,
+                cssPath: cssPath !== undefined ? cssPath : existing.cssPath,
+                jsPath: jsPath !== undefined ? jsPath : existing.jsPath,
             };
             store.set(sourceId, updated);
             store.notify(sourceId);

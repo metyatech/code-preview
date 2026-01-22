@@ -1,6 +1,9 @@
 import { test, expect } from '@playwright/experimental-ct-react';
+import type { Page } from '@playwright/test';
 import CodePreview from './index';
+import { CodePreview as ServerCodePreview } from '../../server';
 import { CodePreviewFixture } from './fixtures/CodePreviewFixture';
+import { PathChangeFixture } from './fixtures/PathChangeFixture';
 import {
     InitialHtmlChangeFixture,
     InitialCssChangeFixture,
@@ -8,6 +11,33 @@ import {
 } from './fixtures/PropChangeFixtures';
 
 type WindowWithAddItems = { addItems?: () => void };
+type PageErrorTracker = {
+    errors: string[];
+    dispose: () => void;
+};
+
+const trackPageErrors = (page: Page): PageErrorTracker => {
+    const errors: string[] = [];
+    const onConsole = (message: { type: () => string; text: () => string }) => {
+        if (message.type() === 'error') {
+            errors.push(message.text());
+        }
+    };
+    const onPageError = (error: Error) => {
+        errors.push(error.message);
+    };
+
+    page.on('console', onConsole);
+    page.on('pageerror', onPageError);
+
+    return {
+        errors,
+        dispose: () => {
+            page.off('console', onConsole);
+            page.off('pageerror', onPageError);
+        }
+    };
+};
 
 test.use({ viewport: { width: 1200, height: 800 } });
 
@@ -916,6 +946,130 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         
         // 少し待機が必要かもしれない
         await expect(frame2.locator('div')).toHaveText('Shared Content', { timeout: 5000 });
+    });
+
+    test('pathnameが途中で変わってもsourceIdの共有が維持されること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/page-a');
+        });
+
+        const component = await mount(
+            <PathChangeFixture
+                sourceId="shared-path-change"
+                html="<div id='shared-path-change'>Shared</div>"
+            />
+        );
+
+        const consumer = component.locator('#consumer-after-path-change');
+        await expect(consumer).toBeVisible();
+
+        const iframe = consumer.locator('iframe');
+        const frame = iframe.contentFrame();
+        await expect(frame.locator('#shared-path-change')).toBeVisible({ timeout: 5000 });
+    });
+
+    test('pathname変更時にクライアントエラーが発生しないこと', async ({ mount, page }) => {
+        const tracker = trackPageErrors(page);
+
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/page-a');
+        });
+
+        const component = await mount(
+            <PathChangeFixture
+                sourceId="shared-path-change-errors"
+                html="<div id='shared-path-change-errors'>Shared</div>"
+            />
+        );
+
+        const consumer = component.locator('#consumer-after-path-change');
+        await expect(consumer).toBeVisible();
+
+        const iframe = consumer.locator('iframe');
+        const frame = iframe.contentFrame();
+        await expect(frame.locator('#shared-path-change-errors')).toBeVisible({ timeout: 5000 });
+
+        await page.waitForTimeout(250);
+        tracker.dispose();
+
+        expect(tracker.errors).toEqual([]);
+    });
+
+    test('htmlPathが空文字の場合は共有ストアのパスをクリアできること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/path-clear');
+        });
+
+        await mount(
+            <div>
+                <CodePreviewFixture
+                    sourceId="path-clear"
+                    htmlPath="index.html"
+                    html="<div>Path</div>"
+                />
+                <CodePreviewFixture sourceId="path-clear" htmlPath="" />
+            </div>
+        );
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const store = (window as any).__CodePreviewStore__;
+                const key = `path-clear:${window.location.pathname}`;
+                return store?.get(key)?.htmlPath ?? null;
+            });
+        }).toBe('');
+    });
+
+    test('imagesが空オブジェクトの場合は共有ストアのimagesをクリアできること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/images-clear');
+        });
+
+        await mount(
+            <div>
+                <CodePreviewFixture
+                    sourceId="images-clear"
+                    html="<div>Images</div>"
+                    images={{ 'img/test.png': '/img/test.png' }}
+                />
+                <CodePreviewFixture sourceId="images-clear" images={{}} />
+            </div>
+        );
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const store = (window as any).__CodePreviewStore__;
+                const key = `images-clear:${window.location.pathname}`;
+                return store?.get(key)?.images ?? null;
+            });
+        }).toEqual({});
+    });
+
+    test('server entryでもsourceIdが共有されること', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="shared-server">Shared Server</div>',
+            '```'
+        ].join('\n');
+
+        const component = await mount(
+            <div>
+                <ServerCodePreview sourceId="shared-server">
+                    {raw}
+                </ServerCodePreview>
+                <div id="second-preview-server">
+                    <ServerCodePreview sourceId="shared-server" />
+                </div>
+            </div>
+        );
+
+        const secondPreview = component.locator('#second-preview-server');
+        const iframe = secondPreview.locator('iframe');
+        const frame = iframe.contentFrame();
+
+        await expect(frame.locator('#shared-server')).toBeVisible({ timeout: 5000 });
     });
 
     test('share=falseの場合は共有ストアを上書きしないこと', async ({ mount }) => {
