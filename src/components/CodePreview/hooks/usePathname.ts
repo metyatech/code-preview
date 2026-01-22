@@ -70,6 +70,7 @@ const cleanup = () => {
     }
     initialized = false;
     listeners = new Set();
+    notifyScheduled = false;
 };
 
 const subscribe = (listener: Listener) => {
