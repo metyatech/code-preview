@@ -68,9 +68,12 @@ const cleanup = () => {
     if (originalReplaceState) {
         history.replaceState = originalReplaceState;
     }
+    originalPushState = null;
+    originalReplaceState = null;
     initialized = false;
     listeners = new Set();
     notifyScheduled = false;
+    currentPathname = undefined;
 };
 
 const subscribe = (listener: Listener) => {
