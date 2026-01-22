@@ -33,9 +33,15 @@ export const resolveInitialSource = (props: ResolveSourceProps) => {
         if (!hasInitialCSS && stored.css !== undefined) resolvedCSS = stored.css;
         if (!hasInitialJS && stored.js !== undefined) resolvedJS = stored.js;
         if (!images && stored.images) resolvedImages = stored.images;
-        if (!htmlPath && stored.htmlPath) resolvedHtmlPath = stored.htmlPath;
-        if (!cssPath && stored.cssPath) resolvedCssPath = stored.cssPath;
-        if (!jsPath && stored.jsPath) resolvedJsPath = stored.jsPath;
+        if (htmlPath === undefined && stored.htmlPath !== undefined) {
+            resolvedHtmlPath = stored.htmlPath;
+        }
+        if (cssPath === undefined && stored.cssPath !== undefined) {
+            resolvedCssPath = stored.cssPath;
+        }
+        if (jsPath === undefined && stored.jsPath !== undefined) {
+            resolvedJsPath = stored.jsPath;
+        }
     }
 
     return {

@@ -995,6 +995,32 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         expect(tracker.errors).toEqual([]);
     });
 
+    test('htmlPathが空文字の場合は共有ストアのパスをクリアできること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/path-clear');
+        });
+
+        await mount(
+            <div>
+                <CodePreviewFixture
+                    sourceId="path-clear"
+                    htmlPath="index.html"
+                    html="<div>Path</div>"
+                />
+                <CodePreviewFixture sourceId="path-clear" htmlPath="" />
+            </div>
+        );
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const store = (window as any).__CodePreviewStore__;
+                const key = `path-clear:${window.location.pathname}`;
+                return store?.get(key)?.htmlPath ?? null;
+            });
+        }).toBe('');
+    });
+
     test('server entryでもsourceIdが共有されること', async ({ mount }) => {
         const raw = [
             '```html',
