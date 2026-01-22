@@ -32,7 +32,9 @@ export const resolveInitialSource = (props: ResolveSourceProps) => {
         if (!hasInitialHTML && stored.html !== undefined) resolvedHTML = stored.html;
         if (!hasInitialCSS && stored.css !== undefined) resolvedCSS = stored.css;
         if (!hasInitialJS && stored.js !== undefined) resolvedJS = stored.js;
-        if (!images && stored.images) resolvedImages = stored.images;
+        if (images === undefined && stored.images !== undefined) {
+            resolvedImages = stored.images;
+        }
         if (htmlPath === undefined && stored.htmlPath !== undefined) {
             resolvedHtmlPath = stored.htmlPath;
         }

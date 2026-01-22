@@ -39,7 +39,7 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
         hasInitialHTML ||
         hasInitialCSS ||
         hasInitialJS ||
-        (images && Object.keys(images).length > 0) ||
+        images !== undefined ||
         htmlPath !== undefined ||
         cssPath !== undefined ||
         jsPath !== undefined
@@ -53,7 +53,7 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
                 html: hasInitialHTML ? (initialHTML || '') : existing.html,
                 css: hasInitialCSS ? (initialCSS || '') : existing.css,
                 js: hasInitialJS ? (initialJS || '') : existing.js,
-                images: images || existing.images,
+                images: images !== undefined ? images : existing.images,
                 htmlPath: htmlPath !== undefined ? htmlPath : existing.htmlPath,
                 cssPath: cssPath !== undefined ? cssPath : existing.cssPath,
                 jsPath: jsPath !== undefined ? jsPath : existing.jsPath,

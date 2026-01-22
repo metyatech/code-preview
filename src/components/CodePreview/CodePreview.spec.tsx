@@ -1021,6 +1021,32 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         }).toBe('');
     });
 
+    test('imagesが空オブジェクトの場合は共有ストアのimagesをクリアできること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/images-clear');
+        });
+
+        await mount(
+            <div>
+                <CodePreviewFixture
+                    sourceId="images-clear"
+                    html="<div>Images</div>"
+                    images={{ 'img/test.png': '/img/test.png' }}
+                />
+                <CodePreviewFixture sourceId="images-clear" images={{}} />
+            </div>
+        );
+
+        await expect.poll(async () => {
+            return await page.evaluate(() => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const store = (window as any).__CodePreviewStore__;
+                const key = `images-clear:${window.location.pathname}`;
+                return store?.get(key)?.images ?? null;
+            });
+        }).toEqual({});
+    });
+
     test('server entryでもsourceIdが共有されること', async ({ mount }) => {
         const raw = [
             '```html',

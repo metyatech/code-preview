@@ -44,13 +44,17 @@ const ensureInitialized = () => {
     originalPushState = history.pushState;
     originalReplaceState = history.replaceState;
 
-    history.pushState = function pushState(...args) {
-        originalPushState?.apply(this, args as Parameters<History['pushState']>);
+    history.pushState = function pushState(
+        ...args: Parameters<History['pushState']>
+    ) {
+        originalPushState?.apply(this, args);
         notifyListeners();
     };
 
-    history.replaceState = function replaceState(...args) {
-        originalReplaceState?.apply(this, args as Parameters<History['replaceState']>);
+    history.replaceState = function replaceState(
+        ...args: Parameters<History['replaceState']>
+    ) {
+        originalReplaceState?.apply(this, args);
         notifyListeners();
     };
 };
