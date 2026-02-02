@@ -176,3 +176,7 @@ npm publish
 ## License
 
 MIT
+
+## Overview
+This repository contains the code-preview project.
+
