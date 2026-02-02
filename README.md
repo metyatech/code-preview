@@ -150,17 +150,29 @@ console.log('ready');
 
 ## AGENTS.md
 
-This project uses `agent-rules` and `agent-rules-tools` as git submodules.
-After cloning, initialize submodules:
+This project uses `compose-agentsmd` to generate `AGENTS.md`.
+Before starting work, run:
 
 ```bash
-git submodule update --init --recursive
+compose-agentsmd
 ```
 
-Update `agent-ruleset.json` as needed and regenerate:
+To update shared rules, run:
 
 ```bash
-node agent-rules-tools/tools/compose-agents.cjs
+compose-agentsmd edit-rules
+```
+
+Edit the workspace rules, then apply:
+
+```bash
+compose-agentsmd apply-rules
+```
+
+When you update `agent-ruleset.json`, regenerate:
+
+```bash
+compose-agentsmd
 ```
 
 ## Environment variables
