@@ -92,6 +92,14 @@ export interface SourceCodeState {
     html: string;
     css: string;
     js: string;
+    /**
+     * Whether each virtual file is considered present.
+     * These flags are used to distinguish between "file absent"
+     * and "file present but empty" when sharing via sourceId.
+     */
+    hasHtml?: boolean;
+    hasCss?: boolean;
+    hasJs?: boolean;
     images?: ImageMap;
     htmlPath?: string;
     cssPath?: string;

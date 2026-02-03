@@ -37,7 +37,11 @@ export const useGlobalSourceSync = ({
         const updateFromStore = () => {
             const stored = store.get(sourceId);
             if (stored) {
-                if (!hasInitialHTML && stored.html !== undefined) {
+                const storedHasHtml = stored.hasHtml ?? true;
+                const storedHasCss = stored.hasCss ?? true;
+                const storedHasJs = stored.hasJs ?? true;
+
+                if (!hasInitialHTML && storedHasHtml) {
                     const code = ensureTrailingNewline(stored.html);
                     setHtmlCode(code);
                     if (!capturedInitialRef.current.html) {
@@ -45,7 +49,7 @@ export const useGlobalSourceSync = ({
                         capturedInitialRef.current.html = true;
                     }
                 }
-                if (!hasInitialCSS && stored.css !== undefined) {
+                if (!hasInitialCSS && storedHasCss) {
                     const code = ensureTrailingNewline(stored.css);
                     setCssCode(code);
                     if (!capturedInitialRef.current.css) {
@@ -53,7 +57,7 @@ export const useGlobalSourceSync = ({
                         capturedInitialRef.current.css = true;
                     }
                 }
-                if (!hasInitialJS && stored.js !== undefined) {
+                if (!hasInitialJS && storedHasJs) {
                     const code = ensureTrailingNewline(stored.js);
                     setJsCode(code);
                     if (!capturedInitialRef.current.js) {

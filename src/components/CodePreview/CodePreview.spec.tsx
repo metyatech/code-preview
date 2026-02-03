@@ -240,6 +240,31 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(body).toHaveAttribute('data-js', 'prop');
     });
 
+    test('JSコードが無い場合、JavaScriptタブが表示されないこと', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="only-html-css">Only HTML/CSS</div>',
+            '```',
+            '```css',
+            '#only-html-css { color: red; }',
+            '```',
+        ].join('\n');
+
+        const component = await mount(
+            <ServerCodePreview
+                images={{
+                    'img/parallax1.jpg': '/img/parallax1.jpg',
+                    'img/parallax2.jpg': '/img/parallax2.jpg',
+                    'img/parallax3.jpg': '/img/parallax3.jpg',
+                }}
+            >
+                {raw}
+            </ServerCodePreview>
+        );
+
+        await expect(component.getByText('JavaScript')).not.toBeVisible();
+    });
+
     test('switches to fenced content when initialHTML changes', async ({ mount }) => {
         const component = await mount(<InitialHtmlChangeFixture />);
 
@@ -1070,6 +1095,31 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         const frame = iframe.contentFrame();
 
         await expect(frame.locator('#shared-server')).toBeVisible({ timeout: 5000 });
+    });
+
+    test('sourceId共有時、JSが提供されていない場合はJavaScriptエディタが表示されないこと', async ({ mount }) => {
+        const raw = [
+            '```html',
+            '<div id="shared-no-js">Shared No JS</div>',
+            '```',
+            '```css',
+            '#shared-no-js { color: red; }',
+            '```',
+        ].join('\n');
+
+        const component = await mount(
+            <div>
+                <ServerCodePreview sourceId="shared-no-js">
+                    {raw}
+                </ServerCodePreview>
+                <div id="consumer-no-js">
+                    <ServerCodePreview sourceId="shared-no-js" />
+                </div>
+            </div>
+        );
+
+        const consumer = component.locator('#consumer-no-js');
+        await expect(consumer.getByText('JavaScript')).not.toBeVisible();
     });
 
     test('share=falseの場合は共有ストアを上書きしないこと', async ({ mount }) => {

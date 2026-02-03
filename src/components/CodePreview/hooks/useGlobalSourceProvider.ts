@@ -48,11 +48,21 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
 
     useEffect(() => {
         if (sourceId && isSourceProvider) {
-            const existing = store.get(sourceId) || { html: '', css: '', js: '' };
+            const existing = store.get(sourceId) || {
+                html: '',
+                css: '',
+                js: '',
+                hasHtml: false,
+                hasCss: false,
+                hasJs: false,
+            };
             const updated: SourceCodeState = {
                 html: hasInitialHTML ? (initialHTML || '') : existing.html,
                 css: hasInitialCSS ? (initialCSS || '') : existing.css,
                 js: hasInitialJS ? (initialJS || '') : existing.js,
+                hasHtml: hasInitialHTML ? true : (existing.hasHtml ?? false),
+                hasCss: hasInitialCSS ? true : (existing.hasCss ?? false),
+                hasJs: hasInitialJS ? true : (existing.hasJs ?? false),
                 images: images !== undefined ? images : existing.images,
                 htmlPath: htmlPath !== undefined ? htmlPath : existing.htmlPath,
                 cssPath: cssPath !== undefined ? cssPath : existing.cssPath,
