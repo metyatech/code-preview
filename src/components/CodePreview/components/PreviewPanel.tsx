@@ -1,4 +1,4 @@
-import type { CSSProperties, RefObject } from 'react';
+import { useEffect, useRef, type CSSProperties, type RefObject } from 'react';
 import styles from '../styles.module.css';
 import { generatePreviewDocument, PreviewGeneratorOptions } from '../utils/previewGenerator';
 
@@ -19,11 +19,34 @@ export const PreviewPanel = ({
     visible,
     generatorOptions
 }: PreviewPanelProps) => {
+    const loadedOnClientRef = useRef(false);
+
+    useEffect(() => {
+        if (!visible) return;
+
+        const iframe = iframeRef.current;
+        if (!iframe) return;
+        if (iframe.dataset.codePreviewHydrationReloaded === '1') return;
+        if (loadedOnClientRef.current) return;
+
+        const doc = iframe.contentDocument;
+        if (!doc || doc.readyState !== 'complete') return;
+
+        const srcDoc = iframe.getAttribute('srcdoc');
+        if (!srcDoc) return;
+
+        iframe.dataset.codePreviewHydrationReloaded = '1';
+        iframe.srcdoc = srcDoc;
+    }, [iframeKey, iframeRef, visible]);
+
     return (
         <iframe
             key={`${visible ? 'visible' : 'hidden'}-${iframeKey}`}
             ref={iframeRef}
             srcDoc={generatePreviewDocument(generatorOptions)}
+            onLoad={() => {
+                loadedOnClientRef.current = true;
+            }}
             className={visible ? styles.preview : undefined}
             title="HTML+CSS Preview"
             sandbox="allow-scripts allow-same-origin"
