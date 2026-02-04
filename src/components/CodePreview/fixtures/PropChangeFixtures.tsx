@@ -45,7 +45,7 @@ export const InitialCssChangeFixture = () => {
 
 export const InitialJsChangeFixture = () => {
     const [useOverride, setUseOverride] = useState(true);
-    const raw = '```js\ndocument.body.setAttribute(\"data-js\", \"child\");\n```';
+    const raw = '```js\ndocument.body.setAttribute("data-js", "child");\n```';
 
     return (
         <div>
@@ -54,7 +54,7 @@ export const InitialJsChangeFixture = () => {
                 sourceId="prop-change-js"
                 initialHTML="<div>JS</div>"
                 initialCSS="body { margin: 0; }"
-                initialJS={useOverride ? 'document.body.setAttribute(\"data-js\", \"prop\");' : undefined}
+                initialJS={useOverride ? 'document.body.setAttribute("data-js", "prop");' : undefined}
             >
                 {raw}
             </CodePreview>
