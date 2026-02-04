@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useCallback, useId, useMemo } from 'react';
+import { useState, useRef, useCallback, useId, useMemo } from 'react';
 import type { editor } from 'monaco-editor';
 import { ResolvedCodePreviewProps } from '../types';
 import { useSourceCodeStore } from './useSourceCodeStore';
@@ -43,7 +43,6 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
     const htmlEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const cssEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
     const jsEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-    const fileStructureToggledRef = useRef(false);
 
     // Store
     const {
@@ -78,13 +77,23 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
         resolvedJsPath !== undefined
     );
 
-    // State
-    const [showFileStructure, setShowFileStructure] = useState(() => {
-        if (fileStructureVisible !== undefined) {
-            return !!fileStructureVisible;
-        }
+    // State for manual toggle
+    const [isToggledManually, setIsToggledManually] = useState(false);
+    const [manualShowValue, setManualShowValue] = useState(false);
+    const [lastFileStructureVisible, setLastFileStructureVisible] = useState(fileStructureVisible);
+
+    // Sync manual toggle when fileStructureVisible prop changes
+    if (fileStructureVisible !== lastFileStructureVisible) {
+        setLastFileStructureVisible(fileStructureVisible);
+        setIsToggledManually(false);
+    }
+
+    const showFileStructure = useMemo(() => {
+        if (isToggledManually) return manualShowValue;
+        if (fileStructureVisible !== undefined) return !!fileStructureVisible;
         return hasFileStructureInputs;
-    });
+    }, [isToggledManually, manualShowValue, fileStructureVisible, hasFileStructureInputs]);
+
     const [iframeKey, setIframeKey] = useState(0);
     const rawIframeId = useId();
     const iframeId = useMemo(() => `iframe-${rawIframeId.replace(/:/g, '')}`, [rawIframeId]);
@@ -150,9 +159,9 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
     });
 
     const toggleFileStructure = useCallback(() => {
-        fileStructureToggledRef.current = true;
-        setShowFileStructure(prev => !prev);
-    }, []);
+        setIsToggledManually(true);
+        setManualShowValue(!showFileStructure);
+    }, [showFileStructure]);
 
     const clearConsoleLogs = useCallback(() => {
         setConsoleLogs([]);
@@ -181,17 +190,6 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
     useEnsureNewlines({ editors });
 
     const editorTheme = theme === 'dark' ? 'vs-dark' : 'light';
-
-    useEffect(() => {
-        if (fileStructureVisible !== undefined) {
-            setShowFileStructure(!!fileStructureVisible);
-            return;
-        }
-        if (fileStructureToggledRef.current) return;
-        if (hasFileStructureInputs) {
-            setShowFileStructure(true);
-        }
-    }, [fileStructureVisible, hasFileStructureInputs]);
 
     return {
         elementRefs: {

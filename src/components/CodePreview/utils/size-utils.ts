@@ -29,7 +29,6 @@ export const normalizeMinHeight = (
     const resolvedPx = parsed ?? fallbackPx;
 
     if (parsed === null && value !== undefined) {
-        // eslint-disable-next-line no-console
         console.error(
             `[CodePreview] Invalid minHeight "${String(value)}". ` +
             'Use a positive number (px) or a "NNpx" string.'

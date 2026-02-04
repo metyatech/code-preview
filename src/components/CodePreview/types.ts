@@ -76,7 +76,7 @@ export interface CodePreviewProps {
     images?: ImageMap;
 }
 
-export interface ResolvedCodePreviewProps extends Omit<CodePreviewProps, 'children'> {}
+export type ResolvedCodePreviewProps = Omit<CodePreviewProps, 'children'>;
 
 export interface EditorConfig {
     key: string;

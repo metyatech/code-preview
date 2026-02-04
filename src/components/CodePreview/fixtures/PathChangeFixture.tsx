@@ -15,9 +15,10 @@ export const PathChangeFixture = ({ sourceId, html }: PathChangeFixtureProps) =>
         const originalUrl = `${pathname}${search}${hash}`;
 
         history.replaceState({}, '', '/page-b');
-        setShowConsumer(true);
+        const timer = setTimeout(() => setShowConsumer(true), 0);
 
         return () => {
+            clearTimeout(timer);
             history.replaceState(originalState, '', originalUrl);
         };
     }, []);
