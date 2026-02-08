@@ -1,345 +1,347 @@
 .resetProgressCircle {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    transition: filter 0.2s, transform 0.2s;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition:
+    filter 0.2s,
+    transform 0.2s;
 }
-
 
 .resetProgressCircle svg {
-    width: 24px;
-    height: 24px;
-    pointer-events: none;
-    display: block;
+  width: 24px;
+  height: 24px;
+  pointer-events: none;
+  display: block;
 }
-
-
 
 /* ライブラリ版の同スタイル */
 .codePreviewContainer {
-    border: 1px solid #d0d7de;
-    border-radius: 6px;
-    margin: 1.5rem 0;
-    background: #fff;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    overflow: hidden;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  margin: 1.5rem 0;
+  background: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
 }
 
 .header {
-    padding: 0.75rem 1rem;
-    background: #f6f8fa;
-    border-bottom: 1px solid #d0d7de;
+  padding: 0.75rem 1rem;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
 }
 
 .title {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: #57606a;
-    display: flex;
-    align-items: center;
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #57606a;
+  display: flex;
+  align-items: center;
 }
 
 .editorsRow {
-    position: relative;
-    display: flex;
-    border-bottom: 1px solid #d0d7de;
+  position: relative;
+  display: flex;
+  border-bottom: 1px solid #d0d7de;
 }
 
 .gyoButton {
-    position: absolute;
-    top: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #d0d7de;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    font-size: 0.8rem;
-    color: #57606a;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    padding: 0;
-    z-index: 2;
+  position: absolute;
+  top: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #d0d7de;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8rem;
+  color: #57606a;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+  padding: 0;
+  z-index: 2;
 }
 
 .gyoButton:nth-of-type(1) {
-    right: 8px;
+  right: 8px;
 }
 
 .gyoButton:nth-of-type(2) {
-    right: 40px;
+  right: 40px;
 }
 
 .gyoButton:nth-of-type(3) {
-    right: 72px;
+  right: 72px;
 }
 
 .gyoButton:hover,
 .gyoButton:focus {
-    background: #e9edf2;
-    color: #24292f;
+  background: #e9edf2;
+  color: #24292f;
 }
 
 .hiddenText {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .title::before {
-    content: "🔍";
-    margin-right: 0.5rem;
-    font-size: 1em;
+  content: "🔍";
+  margin-right: 0.5rem;
+  font-size: 1em;
 }
 
 .splitLayout {
-    display: flex;
-    flex-direction: column;
-    height: auto;
+  display: flex;
+  flex-direction: column;
+  height: auto;
 }
 
 .editorSection {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    min-width: 200px;
-    overflow: hidden;
-    height: 100%;
-    flex-shrink: 0;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  overflow: hidden;
+  height: 100%;
+  flex-shrink: 0;
 }
 
 .resizer {
-    position: relative;
-    flex: 0 0 auto;
-    width: 12px;
-    cursor: col-resize;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    background: rgba(246, 248, 250, 0.7);
-    transition: background 0.2s ease;
-    touch-action: none;
+  position: relative;
+  flex: 0 0 auto;
+  width: 12px;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  background: rgba(246, 248, 250, 0.7);
+  transition: background 0.2s ease;
+  touch-action: none;
 }
 
 .resizer::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 50%;
-    width: 1px;
-    background: #d0d7de;
-    transform: translateX(-50%);
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: #d0d7de;
+  transform: translateX(-50%);
 }
 
 .resizer:hover,
 .resizer:focus-visible {
-    background: rgba(215, 222, 230, 0.8);
+  background: rgba(215, 222, 230, 0.8);
 }
 
 .resizer:focus-visible {
-    outline: 2px solid #0969da;
-    outline-offset: 2px;
+  outline: 2px solid #0969da;
+  outline-offset: 2px;
 }
 
 .resizerGrip {
-    width: 3px;
-    height: 36px;
-    border-radius: 999px;
-    background: #afb8c1;
-    position: relative;
-    z-index: 1;
+  width: 3px;
+  height: 36px;
+  border-radius: 999px;
+  background: #afb8c1;
+  position: relative;
+  z-index: 1;
 }
 
 .resizer:hover .resizerGrip,
 .resizer:focus-visible .resizerGrip {
-    background: #57606a;
+  background: #57606a;
 }
 
 .isResizing {
-    cursor: col-resize;
+  cursor: col-resize;
 }
 
 .previewSection {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 100%;
-    height: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  height: 100%;
 }
 
 .consoleSection {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
-    min-width: 100%;
-    border-top: 1px solid #d0d7de;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  border-top: 1px solid #d0d7de;
 }
 
 .sectionHeader {
-    padding: 0.5rem 1rem;
-    background: #f6f8fa;
-    border-bottom: 1px solid #d0d7de;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: #57606a;
-    text-transform: none;
-    letter-spacing: 0.5px;
-    flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #57606a;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
 }
 
 .editorContainer {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
 }
 
 .previewContainer {
-    position: relative;
-    background: white;
-    padding: 0;
-    overflow: hidden;
-    flex: 1;
-    height: fit-content;
+  position: relative;
+  background: white;
+  padding: 0;
+  overflow: hidden;
+  flex: 1;
+  height: fit-content;
 }
 
 .preview {
-    width: 100%;
-    min-height: var(--min-height, 200px);
-    border: none;
-    background: white;
-    display: block;
-    overflow: hidden;
+  width: 100%;
+  min-height: var(--min-height, 200px);
+  border: none;
+  background: white;
+  display: block;
+  overflow: hidden;
 }
 
 .consoleContainer {
-    background: #0d1117;
-    color: #f0f6fc;
-    font-family: monospace;
-    padding: 0.75rem 1rem;
-    min-height: 80px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    overflow-x: auto;
+  background: #0d1117;
+  color: #f0f6fc;
+  font-family: monospace;
+  padding: 0.75rem 1rem;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-x: auto;
 }
 
 .consoleLine {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: 0.85rem;
-    line-height: 1.5;
-    word-break: break-word;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  word-break: break-word;
 }
 
 .consoleBullet {
-    color: #58a6ff;
-    flex: 0 0 auto;
-    font-size: 0.8rem;
-    margin-top: 0.2rem;
+  color: #58a6ff;
+  flex: 0 0 auto;
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
 }
 
 .consolePlaceholder {
-    font-size: 0.8rem;
-    color: rgba(240, 246, 252, 0.65);
+  font-size: 0.8rem;
+  color: rgba(240, 246, 252, 0.65);
 }
 
 @media (max-width: 768px) {
-    .splitLayout {
-        flex-direction: column;
-        height: auto;
-    }
+  .splitLayout {
+    flex-direction: column;
+    height: auto;
+  }
 
-    .editorsRow {
-        flex-direction: column;
-    }
+  .editorsRow {
+    flex-direction: column;
+  }
 
-    .editorSection {
-        border-right: none;
-        border-bottom: 1px solid #d0d7de;
-        height: auto;
-        width: 100% !important;
-        flex-shrink: 1;
-    }
+  .editorSection {
+    border-right: none;
+    border-bottom: 1px solid #d0d7de;
+    height: auto;
+    width: 100% !important;
+    flex-shrink: 1;
+  }
 
-    .editorSection:last-child {
-        border-bottom: none;
-    }
+  .editorSection:last-child {
+    border-bottom: none;
+  }
 
-    .previewSection {
-        height: auto;
-        border-top: 1px solid #d0d7de;
-    }
+  .previewSection {
+    height: auto;
+    border-top: 1px solid #d0d7de;
+  }
 
-    .resizer {
-        display: none;
-    }
+  .resizer {
+    display: none;
+  }
 }
 
 /* ファイル構造表示 */
 .fileStructure {
-    background: #f6f8fa;
-    border-bottom: 1px solid #d0d7de;
-    padding: 12px 16px;
-    font-size: 0.85rem;
-    color: #24292f;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d0d7de;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  color: #24292f;
 }
 
 .fileStructureTitle {
-    font-weight: 600;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 1px solid #d0d7de;
-    color: #57606a;
+  font-weight: 600;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #d0d7de;
+  color: #57606a;
 }
 
 .fileTree {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .fileTreeItem {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 2px 0;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
 }
 
 .fileTreeSubItem {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 2px 0 2px 20px;
-    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 0 2px 20px;
+  font-family: "Consolas", "Monaco", "Courier New", monospace;
 }
 
 .fileTreeFolder {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .fileIcon {
-    font-size: 0.9em;
+  font-size: 0.9em;
 }
 
 .folderIcon {
-    font-size: 0.9em;
+  font-size: 0.9em;
 }

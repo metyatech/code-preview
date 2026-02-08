@@ -1,12 +1,6 @@
 {
   "source": "github:metyatech/agent-rules",
-  "domains": [
-    "node",
-    "release",
-    "web"
-  ],
-  "extra": [
-    "agent-rules-local/code-preview.md"
-  ],
+  "domains": ["node", "release", "web"],
+  "extra": ["agent-rules-local/code-preview.md"],
   "output": "AGENTS.md"
 }
