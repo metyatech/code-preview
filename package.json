@@ -32,6 +32,9 @@
   ],
   "scripts": {
     "lint": "eslint .",
+    "lint:security": "npm audit",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
     "test-ct:clean": "rimraf playwright/.cache",
     "test-ct:quick": "npm run test-ct -- --project=chromium",
     "test-ct": "npm run test-ct:clean && playwright test -c playwright-ct.config.ts",
@@ -59,10 +62,13 @@
     "@types/react-dom": "^19.1.9",
     "autoprefixer": "^10.4.21",
     "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^16.5.0",
     "postcss": "^8.5.6",
+    "prettier": "^3.5.3",
     "rimraf": "^6.0.1",
     "rollup": "^4.52.3",
     "rollup-plugin-postcss": "^4.0.2",
@@ -71,6 +77,13 @@
     "typescript-eslint": "^8.50.0"
   },
   "license": "MIT",
+  "homepage": "https://github.com/metyatech/code-preview#readme",
+  "bugs": {
+    "url": "https://github.com/metyatech/code-preview/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/metyatech/code-preview.git"

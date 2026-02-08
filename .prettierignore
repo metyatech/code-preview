@@ -1,0 +1,7 @@
+dist
+playwright-report
+test-results
+coverage
+playwright/.cache
+package-lock.json
+AGENTS.md

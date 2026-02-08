@@ -21,7 +21,7 @@ npm i @metyatech/code-preview
 ## Quick start
 
 ````mdx
-import { CodePreview } from '@metyatech/code-preview';
+import { CodePreview } from "@metyatech/code-preview";
 
 <CodePreview title="Basic Example" minHeight="240px">
 ```html
@@ -29,14 +29,17 @@ import { CodePreview } from '@metyatech/code-preview';
 ```
 
 ```css
-#btn { padding: 8px 12px; }
+#btn {
+  padding: 8px 12px;
+}
 ```
 
 ```javascript
-document.getElementById('btn')?.addEventListener('click', () => {
-  console.log('clicked');
+document.getElementById("btn")?.addEventListener("click", () => {
+  console.log("clicked");
 });
 ```
+
 </CodePreview>
 ````
 
@@ -47,13 +50,13 @@ Styles are injected automatically; no stylesheet import is required.
 When rendering from server components (including MDX), import the server entry so fenced blocks are parsed on the server:
 
 ```tsx
-import { CodePreview } from '@metyatech/code-preview/server';
+import { CodePreview } from "@metyatech/code-preview/server";
 ```
 
 When using CodePreview inside client components, use the client entry:
 
 ```tsx
-import { CodePreview } from '@metyatech/code-preview/client';
+import { CodePreview } from "@metyatech/code-preview/client";
 ```
 
 ## Props
@@ -113,12 +116,15 @@ Example using virtual paths and assets:
 ```
 
 ```css
-img { width: 120px; }
+img {
+  width: 120px;
+}
 ```
 
 ```javascript
-console.log('ready');
+console.log("ready");
 ```
+
 </CodePreview>
 ````
 
@@ -145,6 +151,9 @@ console.log('ready');
 
 - `npm run build`: build with Rollup
 - `npm run lint`: lint
+- `npm run format`: format the codebase with Prettier
+- `npm run format:check`: check formatting with Prettier
+- `npm run lint:security`: check dependencies for security vulnerabilities
 - `npm run test`: Playwright component tests (Chromium and full)
 - If Playwright fails to start due to cache issues, run `npm run test-ct:clean` and retry.
 
@@ -190,5 +199,5 @@ npm publish
 MIT
 
 ## Overview
-This repository contains the code-preview project.
 
+This repository contains the code-preview project.
