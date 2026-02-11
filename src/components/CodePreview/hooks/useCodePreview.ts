@@ -33,7 +33,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
         cssPath,
         jsPath,
         images,
-        fileStructureVisible,
+        fileStructureVisible
     } = props;
 
     // Refs
@@ -46,9 +46,12 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
 
     // Store
     const {
-        htmlCode, setHtmlCode,
-        cssCode, setCssCode,
-        jsCode, setJsCode,
+        htmlCode,
+        setHtmlCode,
+        cssCode,
+        setCssCode,
+        jsCode,
+        setJsCode,
         resolvedHTML,
         resolvedCSS,
         resolvedJS,
@@ -109,9 +112,12 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
 
     // Editors Definition
     const editors = useEditorDefinitions({
-        htmlCode, setHtmlCode,
-        cssCode, setCssCode,
-        jsCode, setJsCode,
+        htmlCode,
+        setHtmlCode,
+        cssCode,
+        setCssCode,
+        jsCode,
+        setJsCode,
         showHTMLEditor,
         showCSSEditor,
         showJSEditor,
@@ -149,11 +155,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
         containerRef
     });
 
-    const {
-        visibleEditorConfigs,
-        showLineNumbers,
-        toggleLineNumbers
-    } = useEditorConfigs({
+    const { visibleEditorConfigs, showLineNumbers, toggleLineNumbers } = useEditorConfigs({
         editors,
         updateSectionWidths
     });
@@ -168,7 +170,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
     }, [setConsoleLogs]);
 
     const remountIframe = useCallback(() => {
-        setIframeKey(prev => prev + 1);
+        setIframeKey((prev) => prev + 1);
     }, []);
 
     // リセット関数
@@ -179,12 +181,9 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
         updatePreviewHeight
     });
 
-    const {
-        resetProgress,
-        handleResetMouseDown,
-        handleResetMouseUp,
-        handleResetMouseLeave
-    } = useResetHandler({ onReset: handleReset });
+    const { resetProgress, handleResetMouseDown, handleResetMouseUp, handleResetMouseLeave } = useResetHandler({
+        onReset: handleReset
+    });
 
     // 末尾改行保証
     useEnsureNewlines({ editors });
@@ -198,7 +197,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
             editorsRowRef,
             htmlEditorRef,
             cssEditorRef,
-            jsEditorRef,
+            jsEditorRef
         },
         state: {
             htmlCode,
@@ -212,14 +211,14 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
             showFileStructure,
             iframeKey,
             iframeId,
-            editorTheme,
+            editorTheme
         },
         visibility: {
             showHTMLEditor,
             showCSSEditor,
             showJSEditor,
             showPreview,
-            showConsole,
+            showConsole
         },
         layout: {
             editorHeight,
@@ -228,7 +227,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
             isResizing,
             visibleEditorConfigs,
             showLineNumbers,
-            minHeightCss: minHeightConfig.css,
+            minHeightCss: minHeightConfig.css
         },
         handlers: {
             handleMouseDown,
@@ -239,7 +238,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
             handleResetMouseDown,
             handleResetMouseUp,
             handleResetMouseLeave,
-            resetProgress,
+            resetProgress
         }
     };
 };

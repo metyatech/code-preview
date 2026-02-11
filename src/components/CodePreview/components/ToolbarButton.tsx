@@ -8,20 +8,9 @@ interface ToolbarButtonProps {
     icon: ReactNode;
 }
 
-export const ToolbarButton = ({
-    onClick,
-    pressed,
-    label,
-    icon
-}: ToolbarButtonProps) => {
+export const ToolbarButton = ({ onClick, pressed, label, icon }: ToolbarButtonProps) => {
     return (
-        <button
-            type="button"
-            className={styles.gyoButton}
-            onClick={onClick}
-            aria-pressed={pressed}
-            title={label}
-        >
+        <button type="button" className={styles.gyoButton} onClick={onClick} aria-pressed={pressed} title={label}>
             <span aria-hidden="true">{icon}</span>
             <span className={styles.hiddenText}>{label}</span>
         </button>

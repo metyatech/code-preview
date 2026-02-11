@@ -18,9 +18,12 @@ interface UseEditorDefinitionsProps {
 }
 
 export const useEditorDefinitions = ({
-    htmlCode, setHtmlCode,
-    cssCode, setCssCode,
-    jsCode, setJsCode,
+    htmlCode,
+    setHtmlCode,
+    cssCode,
+    setCssCode,
+    jsCode,
+    setJsCode,
     showHTMLEditor,
     showCSSEditor,
     showJSEditor,
@@ -28,33 +31,49 @@ export const useEditorDefinitions = ({
     cssEditorRef,
     jsEditorRef
 }: UseEditorDefinitionsProps): EditorDefinition[] => {
-    return useMemo(() => [
-        {
-            key: 'html',
-            label: 'HTML',
-            language: 'html',
-            code: htmlCode,
-            setCode: setHtmlCode,
-            visible: showHTMLEditor,
-            ref: htmlEditorRef
-        },
-        {
-            key: 'css',
-            label: 'CSS',
-            language: 'css',
-            code: cssCode,
-            setCode: setCssCode,
-            visible: showCSSEditor,
-            ref: cssEditorRef
-        },
-        {
-            key: 'js',
-            label: 'JavaScript',
-            language: 'javascript',
-            code: jsCode,
-            setCode: setJsCode,
-            visible: showJSEditor,
-            ref: jsEditorRef
-        }
-    ], [htmlCode, cssCode, jsCode, setHtmlCode, setCssCode, setJsCode, showHTMLEditor, showCSSEditor, showJSEditor, htmlEditorRef, cssEditorRef, jsEditorRef]);
+    return useMemo(
+        () => [
+            {
+                key: 'html',
+                label: 'HTML',
+                language: 'html',
+                code: htmlCode,
+                setCode: setHtmlCode,
+                visible: showHTMLEditor,
+                ref: htmlEditorRef
+            },
+            {
+                key: 'css',
+                label: 'CSS',
+                language: 'css',
+                code: cssCode,
+                setCode: setCssCode,
+                visible: showCSSEditor,
+                ref: cssEditorRef
+            },
+            {
+                key: 'js',
+                label: 'JavaScript',
+                language: 'javascript',
+                code: jsCode,
+                setCode: setJsCode,
+                visible: showJSEditor,
+                ref: jsEditorRef
+            }
+        ],
+        [
+            htmlCode,
+            cssCode,
+            jsCode,
+            setHtmlCode,
+            setCssCode,
+            setJsCode,
+            showHTMLEditor,
+            showCSSEditor,
+            showJSEditor,
+            htmlEditorRef,
+            cssEditorRef,
+            jsEditorRef
+        ]
+    );
 };

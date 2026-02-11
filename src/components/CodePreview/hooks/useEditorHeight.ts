@@ -22,14 +22,14 @@ const HEIGHT_UPDATE_DELAY_MS = 100;
 /**
  * エディタの高さを計算・管理するフック
  */
-export const useEditorHeight = ({
-    minHeightPx,
-    editors
-}: UseEditorHeightProps) => {
+export const useEditorHeight = ({ minHeightPx, editors }: UseEditorHeightProps) => {
     const [editorHeight, setEditorHeight] = useState(`${minHeightPx}px`);
 
     const calculateEditorHeight = useCallback(() => {
-        const calculateEditorHeightByCode = (code: string, editorRef?: React.MutableRefObject<editor.IStandaloneCodeEditor | null>): number => {
+        const calculateEditorHeightByCode = (
+            code: string,
+            editorRef?: React.MutableRefObject<editor.IStandaloneCodeEditor | null>
+        ): number => {
             // 実際のエディタコンテンツの高さが取得できる場合はそれを使用
             if (editorRef && editorRef.current) {
                 const editorInstance = editorRef.current;
@@ -42,20 +42,20 @@ export const useEditorHeight = ({
 
             // エディタがまだマウントされていない場合のヒューリスティック計算
             if (!code) return minHeightPx;
-            
+
             const lines = code.split('\n').length;
             // 行数 * 行の高さ + パディング で高さを推定
             return Math.max(lines * EDITOR_LINE_HEIGHT + EDITOR_VERTICAL_PADDING, minHeightPx);
         };
 
         const heights = editors
-            .filter(editor => editor.visible)
-            .map(editor => calculateEditorHeightByCode(editor.code, editor.ref));
+            .filter((editor) => editor.visible)
+            .map((editor) => calculateEditorHeightByCode(editor.code, editor.ref));
 
         // 表示されているエディタの中で最大の高さを採用
         const maxEditorHeight = heights.length > 0 ? Math.max(...heights) : 0;
         const finalEditorHeight = Math.max(maxEditorHeight, minHeightPx);
-        
+
         // 最大高さ制限を適用
         const limitedEditorHeight = Math.min(finalEditorHeight, MAX_EDITOR_HEIGHT);
 

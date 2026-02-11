@@ -40,7 +40,12 @@ export const PreviewSection = ({
     jsPath,
     iframeRef
 }: PreviewSectionProps) => {
-    const shouldShow = visibility.showPreview || visibility.showHTMLEditor || visibility.showCSSEditor || visibility.showJSEditor || visibility.showConsole;
+    const shouldShow =
+        visibility.showPreview ||
+        visibility.showHTMLEditor ||
+        visibility.showCSSEditor ||
+        visibility.showJSEditor ||
+        visibility.showConsole;
 
     if (!shouldShow) {
         return null;
@@ -63,6 +68,7 @@ export const PreviewSection = ({
                         showPreview: visibility.showPreview,
                         showConsole: visibility.showConsole,
                         showHTMLEditor: visibility.showHTMLEditor,
+                        showCSSEditor: visibility.showCSSEditor,
                         showJSEditor: visibility.showJSEditor,
                         resolvedImages: state.resolvedImages,
                         cssPath: cssPath,

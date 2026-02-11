@@ -7,15 +7,19 @@ test.describe('PreviewPanel Hydration', () => {
         const iframe = component.locator('iframe');
         await expect(iframe).toBeVisible();
 
-        await expect.poll(async () => {
-            return await iframe.evaluate((el) => {
-                return (el as HTMLIFrameElement).dataset.codePreviewHydrationReloaded ?? '0';
-            });
-        }).toBe('1');
+        await expect
+            .poll(async () => {
+                return await iframe.evaluate((el) => {
+                    return (el as HTMLIFrameElement).dataset.codePreviewHydrationReloaded ?? '0';
+                });
+            })
+            .toBe('1');
 
-        await expect.poll(async () => {
-            return await page.evaluate(() => window.__codePreviewHydrationTest?.loadCount ?? 0);
-        }).toBeGreaterThanOrEqual(2);
+        await expect
+            .poll(async () => {
+                return await page.evaluate(() => window.__codePreviewHydrationTest?.loadCount ?? 0);
+            })
+            .toBeGreaterThanOrEqual(2);
 
         const countBefore = await page.evaluate(() => window.__codePreviewHydrationTest?.loadCount ?? 0);
         await new Promise((resolve) => setTimeout(resolve, 500));
@@ -23,4 +27,3 @@ test.describe('PreviewPanel Hydration', () => {
         expect(countAfter).toBe(countBefore);
     });
 });
-

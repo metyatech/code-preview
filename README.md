@@ -29,14 +29,17 @@ import { CodePreview } from '@metyatech/code-preview';
 ```
 
 ```css
-#btn { padding: 8px 12px; }
+#btn {
+    padding: 8px 12px;
+}
 ```
 
 ```javascript
 document.getElementById('btn')?.addEventListener('click', () => {
-  console.log('clicked');
+    console.log('clicked');
 });
 ```
+
 </CodePreview>
 ````
 
@@ -113,12 +116,15 @@ Example using virtual paths and assets:
 ```
 
 ```css
-img { width: 120px; }
+img {
+    width: 120px;
+}
 ```
 
 ```javascript
 console.log('ready');
 ```
+
 </CodePreview>
 ````
 
@@ -189,8 +195,15 @@ npm publish
 
 ## License
 
-MIT
+[MIT](LICENSE)
+
+## Community and Security
+
+- [Security Policy](SECURITY.md)
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Changelog](CHANGELOG.md)
 
 ## Overview
-This repository contains the code-preview project.
 
+This repository contains the code-preview project.

@@ -33,12 +33,15 @@ export const useSourceCodeStore = (props: UseSourceCodeStoreProps) => {
         return `${sourceId}:${pathname}`;
     }, [sourceId, pathname]);
 
-    const subscribe = useCallback((listener: () => void) => {
-        if (!scopedSourceId) {
-            return () => {};
-        }
-        return store.subscribe(scopedSourceId, listener);
-    }, [store, scopedSourceId]);
+    const subscribe = useCallback(
+        (listener: () => void) => {
+            if (!scopedSourceId) {
+                return () => {};
+            }
+            return store.subscribe(scopedSourceId, listener);
+        },
+        [store, scopedSourceId]
+    );
 
     const getSnapshot = useCallback(() => {
         if (!scopedSourceId) {
@@ -47,11 +50,7 @@ export const useSourceCodeStore = (props: UseSourceCodeStoreProps) => {
         return store.get(scopedSourceId);
     }, [store, scopedSourceId]);
 
-    const storedState = useSyncExternalStore(
-        subscribe,
-        getSnapshot,
-        () => undefined
-    );
+    const storedState = useSyncExternalStore(subscribe, getSnapshot, () => undefined);
 
     const {
         resolvedHTML,
@@ -83,7 +82,7 @@ export const useSourceCodeStore = (props: UseSourceCodeStoreProps) => {
     const initialStateRef = useRef({
         html: ensureTrailingNewline(resolvedHTML || ''),
         css: ensureTrailingNewline(resolvedCSS || ''),
-        js: ensureTrailingNewline(resolvedJS || ''),
+        js: ensureTrailingNewline(resolvedJS || '')
     });
 
     useGlobalSourceSync({
@@ -121,9 +120,12 @@ export const useSourceCodeStore = (props: UseSourceCodeStoreProps) => {
     }, [setHtmlCode, setCssCode, setJsCode]);
 
     return {
-        htmlCode, setHtmlCode,
-        cssCode, setCssCode,
-        jsCode, setJsCode,
+        htmlCode,
+        setHtmlCode,
+        cssCode,
+        setCssCode,
+        jsCode,
+        setJsCode,
         resolvedHTML,
         resolvedCSS,
         resolvedJS,

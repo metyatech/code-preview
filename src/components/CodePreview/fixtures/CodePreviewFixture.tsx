@@ -10,13 +10,7 @@ type CodePreviewFixtureProps = Omit<CodePreviewProps, 'children'> & {
 
 const buildFence = (language: string, code: string) => `\`\`\`${language}\n${code}\n\`\`\``;
 
-export const CodePreviewFixture = ({
-    html,
-    css,
-    js,
-    jsLanguage = 'js',
-    ...props
-}: CodePreviewFixtureProps) => {
+export const CodePreviewFixture = ({ html, css, js, jsLanguage = 'js', ...props }: CodePreviewFixtureProps) => {
     const blocks: string[] = [];
 
     if (html !== undefined) {
@@ -31,9 +25,5 @@ export const CodePreviewFixture = ({
 
     const children = blocks.length > 0 ? blocks.join('\n\n') : undefined;
 
-    return (
-        <CodePreview {...props}>
-            {children}
-        </CodePreview>
-    );
+    return <CodePreview {...props}>{children}</CodePreview>;
 };

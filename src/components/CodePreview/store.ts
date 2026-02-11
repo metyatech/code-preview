@@ -35,7 +35,7 @@ export class SourceCodeStore implements ISourceCodeStore {
     public notify(sourceId: string): void {
         const listeners = this.listeners.get(sourceId);
         if (listeners) {
-            listeners.forEach(listener => listener());
+            listeners.forEach((listener) => listener());
         }
     }
 }
@@ -49,5 +49,6 @@ if (typeof window !== 'undefined') {
 
 export const getStoredSource = (sourceId: string) => globalSourceCodeStore.get(sourceId);
 export const setStoredSource = (sourceId: string, state: SourceCodeState) => globalSourceCodeStore.set(sourceId, state);
-export const subscribeToStore = (sourceId: string, listener: StoreListener) => globalSourceCodeStore.subscribe(sourceId, listener);
+export const subscribeToStore = (sourceId: string, listener: StoreListener) =>
+    globalSourceCodeStore.subscribe(sourceId, listener);
 export const notifyStoreUpdate = (sourceId: string) => globalSourceCodeStore.notify(sourceId);

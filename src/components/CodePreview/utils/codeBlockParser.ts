@@ -17,10 +17,9 @@ export const shouldParseCodeBlocksFromChildren = (
     children: React.ReactNode,
     initialHTML?: string,
     initialCSS?: string,
-    initialJS?: string,
+    initialJS?: string
 ): boolean =>
-    children !== undefined &&
-    (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
+    children !== undefined && (initialHTML === undefined || initialCSS === undefined || initialJS === undefined);
 
 const LANGUAGE_ALIASES: Record<string, EditorKey> = {
     html: 'html',
@@ -34,7 +33,7 @@ const extractLanguage = (
     language?: string,
     lang?: string,
     dataLanguage?: string,
-    dataLang?: string,
+    dataLang?: string
 ): EditorKey | undefined => {
     const explicit = (language || lang || dataLanguage || dataLang)?.toLowerCase();
     if (explicit && LANGUAGE_ALIASES[explicit]) {
@@ -52,7 +51,7 @@ const extractLanguage = (
 const extractText = (node: React.ReactNode): string => {
     let text = '';
 
-    React.Children.forEach(node, child => {
+    React.Children.forEach(node, (child) => {
         if (typeof child === 'string' || typeof child === 'number') {
             text += String(child);
             return;
@@ -102,7 +101,7 @@ const collectCodeBlocks = (node: React.ReactNode, result: ExtractedCodeBlocks, r
     if (node === null || node === undefined) return;
 
     if (Array.isArray(node)) {
-        node.forEach(child => collectCodeBlocks(child, result, rawSegments));
+        node.forEach((child) => collectCodeBlocks(child, result, rawSegments));
         return;
     }
 
@@ -119,7 +118,7 @@ const collectCodeBlocks = (node: React.ReactNode, result: ExtractedCodeBlocks, r
         language,
         lang,
         'data-language': dataLanguage,
-        'data-lang': dataLang,
+        'data-lang': dataLang
     } = node.props as {
         className?: string;
         children?: React.ReactNode;
@@ -128,13 +127,7 @@ const collectCodeBlocks = (node: React.ReactNode, result: ExtractedCodeBlocks, r
         'data-language'?: string;
         'data-lang'?: string;
     };
-    const detected = extractLanguage(
-        className,
-        language,
-        lang,
-        dataLanguage,
-        dataLang,
-    );
+    const detected = extractLanguage(className, language, lang, dataLanguage, dataLang);
 
     if (detected && result[detected] === undefined) {
         result[detected] = extractCodeFromNode(node);
@@ -150,13 +143,11 @@ export const parseCodeBlocksFromChildren = (children: React.ReactNode): ParsedCo
     collectCodeBlocks(children, result, rawSegments);
 
     const resolved =
-        !result.html && !result.css && !result.js
-            ? { ...result, ...parseFencedBlocks(rawSegments.join('')) }
-            : result;
+        !result.html && !result.css && !result.js ? { ...result, ...parseFencedBlocks(rawSegments.join('')) } : result;
 
     return {
         initialHTML: resolved.html,
         initialCSS: resolved.css,
-        initialJS: resolved.js,
+        initialJS: resolved.js
     };
 };

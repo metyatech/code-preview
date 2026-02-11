@@ -1,6 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 import type { editor } from 'monaco-editor';
-import { getEditorScrollWidth, computeNewPairPercents, calculateOptimalEditorWidths, MIN_EDITOR_WIDTH } from '../utils/resizeUtils';
+import {
+    getEditorScrollWidth,
+    computeNewPairPercents,
+    calculateOptimalEditorWidths,
+    MIN_EDITOR_WIDTH
+} from '../utils/resizeUtils';
 
 type DragState<K extends string> = {
     startX: number;
@@ -37,7 +42,7 @@ export const useEditorResize = <K extends string>({
         const count = resizeTargets.length;
         if (count > 0) {
             const width = 100 / count;
-            resizeTargets.forEach(t => widths[t.key] = width);
+            resizeTargets.forEach((t) => (widths[t.key] = width));
         }
         return widths;
     });
@@ -53,7 +58,7 @@ export const useEditorResize = <K extends string>({
         const editors: Array<{ key: K; needed: number }> = [];
         const minEditorWidth = MIN_EDITOR_WIDTH;
 
-        resizeTargets.forEach(target => {
+        resizeTargets.forEach((target) => {
             const htmlNeededWidth = Math.max(getEditorScrollWidth(target.ref.current), minEditorWidth);
             editors.push({ key: target.key, needed: htmlNeededWidth });
         });
@@ -61,13 +66,16 @@ export const useEditorResize = <K extends string>({
         return calculateOptimalEditorWidths(containerWidth, editors);
     }, [containerRef, resizeTargets]);
 
-    const updateSectionWidths = useCallback((force = false) => {
-        if (!force && userResizedRef.current) {
-            return;
-        }
-        const newWidths = calculateOptimalWidths();
-        setSectionWidths(newWidths);
-    }, [calculateOptimalWidths]);
+    const updateSectionWidths = useCallback(
+        (force = false) => {
+            if (!force && userResizedRef.current) {
+                return;
+            }
+            const newWidths = calculateOptimalWidths();
+            setSectionWidths(newWidths);
+        },
+        [calculateOptimalWidths]
+    );
 
     const handleMouseMove = useCallback((e: MouseEvent) => {
         if (!dragStateRef.current) return;
@@ -78,25 +86,28 @@ export const useEditorResize = <K extends string>({
         const result = computeNewPairPercents(containerWidth, leftWidthPercent, rightWidthPercent, deltaPx);
 
         if (result) {
-            setSectionWidths(prev => ({
+            setSectionWidths((prev) => ({
                 ...prev,
                 [leftKey]: result.left,
-                [rightKey]: result.right,
+                [rightKey]: result.right
             }));
         }
     }, []);
 
-    const handleMouseUp = useCallback(function onMouseUp() {
-        if (dragStateRef.current) {
-            document.body.style.cursor = dragStateRef.current.restoreCursor;
-            document.body.style.userSelect = dragStateRef.current.restoreUserSelect;
-            dragStateRef.current = null;
-            setIsResizing(false);
-            userResizedRef.current = true;
-        }
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', onMouseUp);
-    }, [handleMouseMove]);
+    const handleMouseUp = useCallback(
+        function onMouseUp() {
+            if (dragStateRef.current) {
+                document.body.style.cursor = dragStateRef.current.restoreCursor;
+                document.body.style.userSelect = dragStateRef.current.restoreUserSelect;
+                dragStateRef.current = null;
+                setIsResizing(false);
+                userResizedRef.current = true;
+            }
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('mouseup', onMouseUp);
+        },
+        [handleMouseMove]
+    );
 
     const handleMouseDown = (e: React.MouseEvent, leftKey: K, rightKey: K) => {
         e.preventDefault();
@@ -114,7 +125,7 @@ export const useEditorResize = <K extends string>({
             rightWidthPercent,
             containerWidth,
             restoreCursor: document.body.style.cursor,
-            restoreUserSelect: document.body.style.userSelect,
+            restoreUserSelect: document.body.style.userSelect
         };
 
         document.body.style.cursor = 'col-resize';
@@ -130,11 +141,7 @@ export const useEditorResize = <K extends string>({
         updateSectionWidths(true);
     }, [updateSectionWidths]);
 
-    const handleResizerKeyDown = (
-        event: React.KeyboardEvent<HTMLDivElement>,
-        leftKey: K,
-        rightKey: K
-    ) => {
+    const handleResizerKeyDown = (event: React.KeyboardEvent<HTMLDivElement>, leftKey: K, rightKey: K) => {
         if (!containerRef.current) {
             return;
         }
@@ -169,10 +176,10 @@ export const useEditorResize = <K extends string>({
         }
 
         userResizedRef.current = true;
-        setSectionWidths(prev => ({
+        setSectionWidths((prev) => ({
             ...prev,
             [leftKey]: adjusted.left,
-            [rightKey]: adjusted.right,
+            [rightKey]: adjusted.right
         }));
 
         event.preventDefault();
