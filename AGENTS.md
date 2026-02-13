@@ -101,10 +101,12 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/command-execution.md
 - Keep changes scoped to affected repositories; when shared modules change, update consumers and verify at least one.
 - If no branch is specified, work on the current branch; direct commits to main/master are allowed.
 - After addressing PR review feedback, resolve the corresponding review thread(s) before concluding; if you lack permission, state it explicitly.
-- After pushing fixes for PR review feedback, always re-request review from the same reviewer(s) when possible; if there are no current reviewers, ask who should review.
-- When Codex and/or Copilot review bots are configured for the repo, always trigger a re-review after pushing fixes.
-- For Codex re-review: comment `@codex review` on the PR.
-- For Copilot re-review: use `gh api` to remove+re-request the bot reviewer `copilot-pull-request-reviewer[bot]` (do not rely on `gh pr edit --add-reviewer Copilot`).
+- After pushing fixes for PR review feedback, re-request review only from reviewer(s) who posted the addressed feedback in the current round.
+- Do not re-request review from reviewers (including AI reviewers) who did not post addressed feedback, or who already indicated no actionable issues.
+- If no applicable reviewer remains, ask who should review next.
+- When Codex and/or Copilot review bots are configured for the repo, trigger re-review only for the bot(s) that posted addressed feedback.
+- For Codex re-review (only when applicable): comment `@codex review` on the PR.
+- For Copilot re-review (only when applicable): use `gh api` to remove+re-request the bot reviewer `copilot-pull-request-reviewer[bot]` (do not rely on `gh pr edit --add-reviewer Copilot`).
   - Remove: `gh api --method DELETE /repos/{owner}/{repo}/pulls/{pr}/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"`
   - Add: `gh api --method POST /repos/{owner}/{repo}/pulls/{pr}/requested_reviewers -f "reviewers[]=copilot-pull-request-reviewer[bot]"`
 - After completing a PR, merge it, sync the target branch, and delete the PR branch locally and remotely.
@@ -115,6 +117,10 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/implementation-and-coding
 
 - Prefer official/standard approaches recommended by the framework or tooling.
 - Prefer well-maintained external dependencies; build in-house only when no suitable option exists.
+- Prefer third-party tools/services over custom implementations when they can meet the requirements; prefer free options (OSS/free-tier) when feasible and call out limitations/tradeoffs.
+- PowerShell: `\` is a literal character (not an escape). Do not cargo-cult `\\` escaping patterns from other languages; validate APIs that require names like `Local\...` (e.g., named mutexes).
+- PowerShell: avoid assigning to or shadowing automatic/read-only variables (e.g., `$args`, `$PID`); use different names for locals.
+- PowerShell: when invoking PowerShell from PowerShell, avoid double-quoted `-Command` strings that allow the outer shell to expand `$...`; prefer `-File`, single quotes, or here-strings to control expansion.
 - If functionality appears reusable, assess reuse first and propose a shared module/repo; prefer remote dependencies (never local filesystem paths).
 - Maintainability > testability > extensibility > readability.
 - Single responsibility; keep modules narrowly scoped and prefer composition over inheritance.
@@ -207,6 +213,7 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/linting-formatting-and-st
 - Format+lint: PSScriptAnalyzer (Invoke-Formatter + Invoke-ScriptAnalyzer).
 - Runtime: Set-StrictMode -Version Latest; fail fast on errors.
 - Tests: Pester when tests exist.
+- Enforce PSScriptAnalyzer via the repo’s standard `verify` command/script when PowerShell is used; treat findings as errors.
 
 ### Shell (sh/bash)
 
@@ -361,6 +368,18 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/quality-testing-and-error
 - Log minimally but with diagnostic context; never log secrets or personal data.
 - Remove temporary debugging/instrumentation before the final patch.
 
+Source: github:metyatech/agent-rules@HEAD/rules/global/superpowers-integration.md
+
+# Superpowers integration
+
+- If Superpowers skills are available in the current agent environment, use them to drive *how* you work (design, planning, debugging, TDD, review) instead of inventing an ad-hoc process.
+- Do not duplicate Superpowers installation/usage instructions in this ruleset; follow Superpowers’ own guidance for loading/invoking skills.
+- The hard gates in this ruleset still apply when using Superpowers workflows:
+  - Before any state-changing work: present AC + AC->evidence + a plan, then wait for an explicit “yes”.
+  - After changes: report AC -> evidence outcomes and the exact verification commands executed.
+- When a Superpowers workflow asks for writing docs / commits / pushes, treat those as state-changing steps: include them in the plan and require explicit requester approval before doing them.
+- If Superpowers skills are unavailable, proceed with these rules as the fallback.
+
 Source: github:metyatech/agent-rules@HEAD/rules/global/user-identity-and-accounts.md
 
 # User identity and accounts
@@ -459,8 +478,7 @@ Source: github:metyatech/agent-rules@HEAD/rules/domains/web/web-ui-and-testing.m
 
 ## Browser automation
 
-- For web automation, use the agent-browser CLI.
-- Prefer the ref-based workflow: agent-browser open <url> -> agent-browser snapshot -i --json -> interact using @eN refs -> re-snapshot after changes.
+- For web automation, use the agent-browser Skill.
 - If browser launch fails due to missing Playwright binaries, run npx playwright install chromium and retry.
 
 ## UI verification and E2E

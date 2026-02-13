@@ -142,6 +142,17 @@ export const useEditorResize = <K extends string>({
     window.addEventListener("mouseup", handleMouseUp);
   };
 
+  useEffect(() => {
+    return () => {
+      if (dragStateRef.current) {
+        document.body.style.cursor = dragStateRef.current.restoreCursor;
+        document.body.style.userSelect = dragStateRef.current.restoreUserSelect;
+      }
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [handleMouseMove, handleMouseUp]);
+
   const resetSectionWidthsToAuto = useCallback(() => {
     userResizedRef.current = false;
     updateSectionWidths(true);
