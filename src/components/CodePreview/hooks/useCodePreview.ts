@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useId, useMemo, useEffect } from "react";
+import { useState, useRef, useCallback, useId, useMemo } from "react";
 import type { editor } from "monaco-editor";
 import { ResolvedCodePreviewProps } from "../types";
 import { useSourceCodeStore } from "./useSourceCodeStore";
@@ -83,15 +83,12 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
   // State for manual toggle
   const [isToggledManually, setIsToggledManually] = useState(false);
   const [manualShowValue, setManualShowValue] = useState(false);
-  const [lastFileStructureVisible, setLastFileStructureVisible] = useState(fileStructureVisible);
+  const [prevFileStructureVisible, setPrevFileStructureVisible] = useState(fileStructureVisible);
 
-  // Sync manual toggle when fileStructureVisible prop changes
-  useEffect(() => {
-    if (fileStructureVisible !== lastFileStructureVisible) {
-      setLastFileStructureVisible(fileStructureVisible); // eslint-disable-line react-hooks/set-state-in-effect
-      setIsToggledManually(false);
-    }
-  }, [fileStructureVisible, lastFileStructureVisible]);
+  if (fileStructureVisible !== prevFileStructureVisible) {
+    setPrevFileStructureVisible(fileStructureVisible);
+    setIsToggledManually(false);
+  }
 
   const showFileStructure = useMemo(() => {
     if (isToggledManually) return manualShowValue;
