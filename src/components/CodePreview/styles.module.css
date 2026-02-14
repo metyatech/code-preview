@@ -20,7 +20,8 @@
 
 /* ライブラリ版の同スタイル */
 .codePreviewContainer {
-    border: 1px solid #d0d7de;
+    --cp-border: #7f92a8;
+    border: 1px solid var(--cp-border);
     border-radius: 6px;
     margin: 1.5rem 0;
     background: #fff;
@@ -31,7 +32,7 @@
 .header {
     padding: 0.75rem 1rem;
     background: #f6f8fa;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid var(--cp-border);
 }
 
 .title {
@@ -46,14 +47,14 @@
 .editorsRow {
     position: relative;
     display: flex;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid var(--cp-border);
 }
 
 .gyoButton {
     position: absolute;
     top: 8px;
     background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #d0d7de;
+    border: 1px solid var(--cp-border);
     border-radius: 50%;
     width: 24px;
     height: 24px;
@@ -141,7 +142,7 @@
     bottom: 0;
     left: 50%;
     width: 1px;
-    background: #d0d7de;
+    background: var(--cp-border);
     transform: translateX(-50%);
 }
 
@@ -186,13 +187,13 @@
     display: flex;
     flex-direction: column;
     min-width: 100%;
-    border-top: 1px solid #d0d7de;
+    border-top: 1px solid var(--cp-border);
 }
 
 .sectionHeader {
     padding: 0.5rem 1rem;
     background: #f6f8fa;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid var(--cp-border);
     font-size: 0.8rem;
     font-weight: 600;
     color: #57606a;
@@ -272,7 +273,7 @@
 
     .editorSection {
         border-right: none;
-        border-bottom: 1px solid #d0d7de;
+        border-bottom: 1px solid var(--cp-border);
         height: auto;
         width: 100% !important;
         flex-shrink: 1;
@@ -284,7 +285,7 @@
 
     .previewSection {
         height: auto;
-        border-top: 1px solid #d0d7de;
+        border-top: 1px solid var(--cp-border);
     }
 
     .resizer {
@@ -295,7 +296,7 @@
 /* ファイル構造表示 */
 .fileStructure {
     background: #f6f8fa;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid var(--cp-border);
     padding: 12px 16px;
     font-size: 0.85rem;
     color: #24292f;
@@ -305,7 +306,7 @@
     font-weight: 600;
     margin-bottom: 8px;
     padding-bottom: 6px;
-    border-bottom: 1px solid #d0d7de;
+    border-bottom: 1px solid var(--cp-border);
     color: #57606a;
 }
 

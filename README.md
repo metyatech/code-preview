@@ -145,7 +145,9 @@ console.log('ready');
 
 - `npm run build`: build with Rollup
 - `npm run lint`: lint
+- `npm run lint:contrast`: full-element contrast and boundary lint (Chromium CT)
 - `npm run test`: Playwright component tests (Chromium and full)
+- `npm run verify`: lint + tests + build
 - If Playwright fails to start due to cache issues, run `npm run test-ct:clean` and retry.
 
 ## AGENTS.md
