@@ -100,20 +100,13 @@ export const useEditorResize = <K extends string>({
     }
   }, []);
 
-  const handleMouseUp = useCallback(
-    function onMouseUp() {
-      if (dragStateRef.current) {
-        document.body.style.cursor = dragStateRef.current.restoreCursor;
-        document.body.style.userSelect = dragStateRef.current.restoreUserSelect;
-        dragStateRef.current = null;
-        setIsResizing(false);
-        userResizedRef.current = true;
-      }
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
-    },
-    [handleMouseMove],
-  );
+  const handleMouseUp = useCallback(() => {
+    if (dragStateRef.current) {
+      dragStateRef.current = null;
+      setIsResizing(false);
+      userResizedRef.current = true;
+    }
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent, leftKey: K, rightKey: K) => {
     e.preventDefault();
@@ -137,21 +130,24 @@ export const useEditorResize = <K extends string>({
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
     setIsResizing(true);
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
   };
 
   useEffect(() => {
+    if (!isResizing) return;
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseup", handleMouseUp);
+
     return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+
       if (dragStateRef.current) {
         document.body.style.cursor = dragStateRef.current.restoreCursor;
         document.body.style.userSelect = dragStateRef.current.restoreUserSelect;
       }
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [handleMouseMove, handleMouseUp]);
+  }, [isResizing, handleMouseMove, handleMouseUp]);
 
   const resetSectionWidthsToAuto = useCallback(() => {
     userResizedRef.current = false;
@@ -208,7 +204,11 @@ export const useEditorResize = <K extends string>({
 
   useEffect(() => {
     userResizedRef.current = false;
-    updateSectionWidths(true);
+    // デファード更新により、cascading rendersの警告を回避しつつ、
+    // レンダリング後のDOM計測に基づいた初期幅の計算を可能にします。
+    Promise.resolve().then(() => {
+      updateSectionWidths(true);
+    });
   }, [resizeTargets, updateSectionWidths]);
 
   useEffect(() => {
