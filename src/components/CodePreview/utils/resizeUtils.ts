@@ -56,7 +56,7 @@ export const calculateOptimalEditorWidths = <K extends string>(
 
     if (containerWidth <= 0) {
         const width = 100 / count;
-        editorNeeds.forEach(e => resultWidths[e.key] = width);
+        editorNeeds.forEach((e) => (resultWidths[e.key] = width));
         return resultWidths;
     }
 
@@ -69,21 +69,21 @@ export const calculateOptimalEditorWidths = <K extends string>(
         if (remainingWidth <= 0) {
             // スペース不足の場合は均等割り
             const width = 100 / count;
-            editorNeeds.forEach(e => resultWidths[e.key] = width);
+            editorNeeds.forEach((e) => (resultWidths[e.key] = width));
             return resultWidths;
         }
 
         const widthsPx: Record<string, number> = {};
-        editorNeeds.forEach(e => {
+        editorNeeds.forEach((e) => {
             const ratio = e.needed / totalNeededWidth;
             widthsPx[e.key] = minEditorWidth + remainingWidth * ratio;
         });
 
-        editorNeeds.forEach(e => {
+        editorNeeds.forEach((e) => {
             resultWidths[e.key] = (widthsPx[e.key] / containerWidth) * 100;
         });
     } else {
-        editorNeeds.forEach(e => {
+        editorNeeds.forEach((e) => {
             resultWidths[e.key] = (e.needed / totalNeededWidth) * 100;
         });
     }
@@ -127,6 +127,6 @@ export const computeNewPairPercents = (
 
     return {
         left: (newLeftPx / containerWidth) * 100,
-        right: (newRightPx / containerWidth) * 100,
+        right: (newRightPx / containerWidth) * 100
     };
 };

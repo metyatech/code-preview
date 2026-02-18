@@ -28,8 +28,8 @@ export const Resizer = ({
             aria-orientation="vertical"
             aria-label={`${leftLabel} と ${rightLabel} の幅を調整`}
             tabIndex={0}
-            onMouseDown={event => onMouseDown(event, leftKey, rightKey)}
-            onKeyDown={event => onKeyDown(event, leftKey, rightKey)}
+            onMouseDown={(event) => onMouseDown(event, leftKey, rightKey)}
+            onKeyDown={(event) => onKeyDown(event, leftKey, rightKey)}
             onDoubleClick={onDoubleClick}
         >
             <span className={styles.resizerGrip} />

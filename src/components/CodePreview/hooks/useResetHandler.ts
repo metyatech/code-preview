@@ -42,7 +42,7 @@ export const useResetHandler = ({ onReset, longPressDuration = 500 }: UseResetHa
     const handleResetMouseDown = useCallback(() => {
         const startTime = Date.now();
         setResetProgress(0);
-        
+
         // プログレスバーの更新
         resetProgressIntervalRef.current = window.setInterval(() => {
             const elapsed = Date.now() - startTime;

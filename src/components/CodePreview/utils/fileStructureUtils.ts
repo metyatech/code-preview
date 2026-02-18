@@ -9,14 +9,10 @@ export const buildFileStructure = (
     const folders = new Map<string, string[]>();
     const rootFiles: string[] = [];
 
-    const files = [
-        { path: resolvedHtmlPath },
-        { path: resolvedCssPath },
-        { path: resolvedJsPath },
-    ];
+    const files = [{ path: resolvedHtmlPath }, { path: resolvedCssPath }, { path: resolvedJsPath }];
     // imagesで指定された画像パスも追加
     if (resolvedImages) {
-        Object.keys(resolvedImages).forEach(imgPath => {
+        Object.keys(resolvedImages).forEach((imgPath) => {
             files.push({ path: imgPath });
         });
     }

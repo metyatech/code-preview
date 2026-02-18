@@ -54,22 +54,36 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
                 js: '',
                 hasHtml: false,
                 hasCss: false,
-                hasJs: false,
+                hasJs: false
             };
             const updated: SourceCodeState = {
-                html: hasInitialHTML ? (initialHTML || '') : existing.html,
-                css: hasInitialCSS ? (initialCSS || '') : existing.css,
-                js: hasInitialJS ? (initialJS || '') : existing.js,
+                html: hasInitialHTML ? initialHTML || '' : existing.html,
+                css: hasInitialCSS ? initialCSS || '' : existing.css,
+                js: hasInitialJS ? initialJS || '' : existing.js,
                 hasHtml: hasInitialHTML ? true : (existing.hasHtml ?? false),
                 hasCss: hasInitialCSS ? true : (existing.hasCss ?? false),
                 hasJs: hasInitialJS ? true : (existing.hasJs ?? false),
                 images: images !== undefined ? images : existing.images,
                 htmlPath: htmlPath !== undefined ? htmlPath : existing.htmlPath,
                 cssPath: cssPath !== undefined ? cssPath : existing.cssPath,
-                jsPath: jsPath !== undefined ? jsPath : existing.jsPath,
+                jsPath: jsPath !== undefined ? jsPath : existing.jsPath
             };
             store.set(sourceId, updated);
             store.notify(sourceId);
         }
-    }, [sourceId, isSourceProvider, hasInitialHTML, hasInitialCSS, hasInitialJS, initialHTML, initialCSS, initialJS, images, htmlPath, cssPath, jsPath, store]);
+    }, [
+        sourceId,
+        isSourceProvider,
+        hasInitialHTML,
+        hasInitialCSS,
+        hasInitialJS,
+        initialHTML,
+        initialCSS,
+        initialJS,
+        images,
+        htmlPath,
+        cssPath,
+        jsPath,
+        store
+    ]);
 };

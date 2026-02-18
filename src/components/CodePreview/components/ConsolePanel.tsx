@@ -18,8 +18,7 @@ export const ConsolePanel = ({ logs }: ConsolePanelProps) => {
                             <span>{log}</span>
                         </div>
                     ))
-                )
-                }
+                )}
             </div>
         </div>
     );

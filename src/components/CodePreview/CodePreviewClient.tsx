@@ -9,16 +9,7 @@ import {
 } from './utils/codeBlockParser';
 
 export default function CodePreviewClient(props: CodePreviewProps) {
-    const {
-        children,
-        title,
-        cssPath,
-        jsPath,
-        initialHTML,
-        initialCSS,
-        initialJS,
-        ...rest
-    } = props;
+    const { children, title, cssPath, jsPath, initialHTML, initialCSS, initialJS, ...rest } = props;
 
     const parsedSource = useMemo<ParsedCodeBlocks>(() => {
         if (!shouldParseCodeBlocksFromChildren(children, initialHTML, initialCSS, initialJS)) {
@@ -37,15 +28,8 @@ export default function CodePreviewClient(props: CodePreviewProps) {
         jsPath,
         initialHTML: resolvedInitialHTML,
         initialCSS: resolvedInitialCSS,
-        initialJS: resolvedInitialJS,
+        initialJS: resolvedInitialJS
     });
 
-    return (
-        <CodePreviewLayout
-            {...hookResult}
-            title={title}
-            cssPath={cssPath}
-            jsPath={jsPath}
-        />
-    );
+    return <CodePreviewLayout {...hookResult} title={title} cssPath={cssPath} jsPath={jsPath} />;
 }

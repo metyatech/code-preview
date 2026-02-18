@@ -29,12 +29,10 @@ export const stripIndent = (value: string): string => {
         return '';
     }
 
-    const indents = trimmed
-        .filter(line => line.trim().length > 0)
-        .map(line => line.match(/^\s*/)?.[0].length ?? 0);
+    const indents = trimmed.filter((line) => line.trim().length > 0).map((line) => line.match(/^\s*/)?.[0].length ?? 0);
     const minIndent = indents.length > 0 ? Math.min(...indents) : 0;
 
-    return trimmed.map(line => line.slice(minIndent)).join('\n');
+    return trimmed.map((line) => line.slice(minIndent)).join('\n');
 };
 
 export const normalizeInitialCode = (code?: string): string | undefined => {

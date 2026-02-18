@@ -5,11 +5,7 @@ import { parseCodeBlocksFromChildren } from './codeBlockParser';
 test.describe('codeBlockParser', () => {
     // Test helper that creates a <pre> element containing a <code> child with the given attributes and code content for parsing tests.
     const parseCodeBlockWithAttributes = (attributes: Record<string, string>, code: string) => {
-        const node = React.createElement(
-            'pre',
-            null,
-            React.createElement('code', attributes, code),
-        );
+        const node = React.createElement('pre', null, React.createElement('code', attributes, code));
         return parseCodeBlocksFromChildren(node);
     };
 
@@ -17,11 +13,7 @@ test.describe('codeBlockParser', () => {
         const node = React.createElement(
             'pre',
             null,
-            React.createElement(
-                'code',
-                { 'data-language': 'html' },
-                '<p>Hello</p>',
-            ),
+            React.createElement('code', { 'data-language': 'html' }, '<p>Hello</p>')
         );
 
         const parsed = parseCodeBlocksFromChildren(node);
@@ -35,11 +27,7 @@ test.describe('codeBlockParser', () => {
         const node = React.createElement(
             'pre',
             null,
-            React.createElement(
-                'code',
-                { 'data-lang': 'css' },
-                'body { color: red; }',
-            ),
+            React.createElement('code', { 'data-lang': 'css' }, 'body { color: red; }')
         );
 
         const parsed = parseCodeBlocksFromChildren(node);
@@ -57,10 +45,10 @@ test.describe('codeBlockParser', () => {
                 'code',
                 {
                     className: 'language-css',
-                    'data-language': 'html',
+                    'data-language': 'html'
                 },
-                '<div>Explicit</div>',
-            ),
+                '<div>Explicit</div>'
+            )
         );
 
         const parsed = parseCodeBlocksFromChildren(node);
@@ -77,9 +65,9 @@ test.describe('codeBlockParser', () => {
                 lang: 'css',
                 'data-language': 'js',
                 'data-lang': 'css',
-                className: 'language-css',
+                className: 'language-css'
             },
-            '<section>Lang</section>',
+            '<section>Lang</section>'
         );
         expect(languageFirst.initialHTML).toBe('<section>Lang</section>');
 
@@ -88,9 +76,9 @@ test.describe('codeBlockParser', () => {
                 lang: 'css',
                 'data-language': 'html',
                 'data-lang': 'js',
-                className: 'language-js',
+                className: 'language-js'
             },
-            'body { color: purple; }',
+            'body { color: purple; }'
         );
         expect(langSecond.initialCSS).toBe('body { color: purple; }');
 
@@ -98,18 +86,18 @@ test.describe('codeBlockParser', () => {
             {
                 'data-language': 'html',
                 'data-lang': 'css',
-                className: 'language-js',
+                className: 'language-js'
             },
-            '<p>Data Language</p>',
+            '<p>Data Language</p>'
         );
         expect(dataLanguageThird.initialHTML).toBe('<p>Data Language</p>');
 
         const dataLangFourth = parseCodeBlockWithAttributes(
             {
                 'data-lang': 'css',
-                className: 'language-html',
+                className: 'language-html'
             },
-            'body { color: green; }',
+            'body { color: green; }'
         );
         expect(dataLangFourth.initialCSS).toBe('body { color: green; }');
     });
@@ -117,9 +105,9 @@ test.describe('codeBlockParser', () => {
     test('extracts code from className when explicit language is missing', async () => {
         const classNameOnly = parseCodeBlockWithAttributes(
             {
-                className: 'language-html',
+                className: 'language-html'
             },
-            '<main>From className</main>',
+            '<main>From className</main>'
         );
 
         expect(classNameOnly.initialHTML).toBe('<main>From className</main>');

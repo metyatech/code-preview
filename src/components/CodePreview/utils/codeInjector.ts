@@ -30,7 +30,7 @@ export const injectCss = (html: string, cssPath: string, cssCode: string): strin
  * @param jsCode JSコード
  * @returns 処理されたHTMLコードと注入されたかどうかのフラグ
  */
-export const injectJs = (html: string, jsPath: string, jsCode: string): { processed: string, injected: boolean } => {
+export const injectJs = (html: string, jsPath: string, jsCode: string): { processed: string; injected: boolean } => {
     let injected = false;
     const normalizedPath = jsPath.replace(/^\.\//, '');
     const escapedPath = normalizedPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -5,7 +5,7 @@ export const processCssCode = (code: string, resolvedImages?: ImageMap, cssPath?
     if (!resolvedImages) return code;
     return code.replace(/url\((['"]?)([^)'"]+)\1\)/g, (match, quote, path) => {
         let resolvedPath = path;
-        
+
         if (cssPath) {
             // cssPathがある場合は、それに基づき相対パスを解決する
             resolvedPath = resolvePath(cssPath, path);

@@ -7,7 +7,9 @@ export const InitialHtmlChangeFixture = () => {
 
     return (
         <div>
-            <button id="toggle-html" onClick={() => setUseOverride(false)}>toggle</button>
+            <button id="toggle-html" onClick={() => setUseOverride(false)}>
+                toggle
+            </button>
             <CodePreview
                 sourceId="prop-change-html"
                 initialHTML={useOverride ? "<div id='override-html'>Override</div>" : undefined}
@@ -27,7 +29,9 @@ export const InitialCssChangeFixture = () => {
 
     return (
         <div>
-            <button id="toggle-css" onClick={() => setUseOverride(false)}>toggle</button>
+            <button id="toggle-css" onClick={() => setUseOverride(false)}>
+                toggle
+            </button>
             <CodePreview
                 sourceId="prop-change-css"
                 initialHTML="<div id='color-box'>Box</div>"
@@ -49,7 +53,9 @@ export const InitialJsChangeFixture = () => {
 
     return (
         <div>
-            <button id="toggle-js" onClick={() => setUseOverride(false)}>toggle</button>
+            <button id="toggle-js" onClick={() => setUseOverride(false)}>
+                toggle
+            </button>
             <CodePreview
                 sourceId="prop-change-js"
                 initialHTML="<div>JS</div>"

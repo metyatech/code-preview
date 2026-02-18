@@ -6,7 +6,6 @@ import { EditorSection } from './components/EditorSection';
 import { PreviewSection } from './components/PreviewSection';
 import { useCodePreview } from './hooks/useCodePreview';
 
-
 type UseCodePreviewResult = ReturnType<typeof useCodePreview>;
 
 interface CodePreviewLayoutProps extends UseCodePreviewResult {
@@ -23,16 +22,13 @@ export const CodePreviewLayout = ({
     handlers,
     title,
     cssPath,
-    jsPath,
+    jsPath
 }: CodePreviewLayoutProps) => {
-    const {
-        iframeRef,
-        containerRef,
-        editorsRowRef,
-    } = elementRefs;
+    const { iframeRef, containerRef, editorsRowRef } = elementRefs;
 
     const splitLayoutStyle: CSSProperties | undefined = visibility.showPreview ? undefined : { minHeight: 'auto' };
-    const editorsRowStyle: CSSProperties | undefined = visibility.showPreview || visibility.showConsole ? undefined : { borderBottom: 'none' };
+    const editorsRowStyle: CSSProperties | undefined =
+        visibility.showPreview || visibility.showConsole ? undefined : { borderBottom: 'none' };
 
     return (
         <div className={styles.codePreviewContainer}>
@@ -73,9 +69,7 @@ export const CodePreviewLayout = ({
                     iframeRef={iframeRef}
                 />
 
-                {visibility.showConsole && (
-                    <ConsolePanel logs={state.consoleLogs} />
-                )}
+                {visibility.showConsole && <ConsolePanel logs={state.consoleLogs} />}
             </div>
         </div>
     );

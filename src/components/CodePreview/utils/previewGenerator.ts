@@ -10,6 +10,7 @@ export interface PreviewGeneratorOptions {
     showPreview: boolean;
     showConsole: boolean;
     showHTMLEditor: boolean;
+    showCSSEditor: boolean;
     showJSEditor: boolean;
     resolvedImages?: ImageMap;
     cssPath?: string;
@@ -29,6 +30,7 @@ export const generatePreviewDocument = (options: PreviewGeneratorOptions): strin
         showPreview,
         showConsole,
         showHTMLEditor,
+        showCSSEditor,
         showJSEditor,
         resolvedImages,
         cssPath,
@@ -54,14 +56,16 @@ export const generatePreviewDocument = (options: PreviewGeneratorOptions): strin
     const processedHtml = escapeScriptEndTag(processedHtmlRaw);
     const processedCss = processCssCode(cssCode, resolvedImages, targetCssPath);
     const styleTag = processedCss ? `<style>\n${processedCss}\n</style>` : '';
-    const extraJs = (!jsInjected && jsCode) ? `<script>\n${escapeScriptEndTag(jsCode)}\n</script>` : '';
-    const consoleScriptTag = (showPreview || showConsole || showHTMLEditor || showJSEditor)
-        ? `<script data-code-preview-internal="true">${CONSOLE_INTERCEPT_SCRIPT}</script>`
-        : '';
+    const extraJs = !jsInjected && jsCode ? `<script>\n${escapeScriptEndTag(jsCode)}\n</script>` : '';
+    const consoleScriptTag =
+        showPreview || showConsole || showHTMLEditor || showCSSEditor || showJSEditor
+            ? `<script data-code-preview-internal="true">${CONSOLE_INTERCEPT_SCRIPT}</script>`
+            : '';
     // Height observer script to notify parent when content height changes dynamically
-    const heightObserverScriptTag = showPreview && options.iframeId
-        ? `<script data-code-preview-internal="true">${HEIGHT_OBSERVER_SCRIPT.replace('__IFRAME_ID__', options.iframeId)}</script>`
-        : '';
+    const heightObserverScriptTag =
+        showPreview && options.iframeId
+            ? `<script data-code-preview-internal="true">${HEIGHT_OBSERVER_SCRIPT.replace('__IFRAME_ID__', options.iframeId)}</script>`
+            : '';
 
     return `
 <!DOCTYPE html>

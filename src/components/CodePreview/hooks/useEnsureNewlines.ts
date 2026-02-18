@@ -9,11 +9,9 @@ interface UseEnsureNewlinesProps {
  * 各エディタのコードの末尾に改行がない場合、自動的に改行を追加するフック。
  * エディタのカーソル位置を保持しながら更新します。
  */
-export const useEnsureNewlines = ({
-    editors
-}: UseEnsureNewlinesProps) => {
+export const useEnsureNewlines = ({ editors }: UseEnsureNewlinesProps) => {
     useEffect(() => {
-        editors.forEach(editor => {
+        editors.forEach((editor) => {
             const { code, setCode, ref, visible } = editor;
 
             if (!visible) return;
@@ -36,16 +34,18 @@ export const useEnsureNewlines = ({
                         const lastLineLength = model.getLineLength(lineCount);
 
                         // Undoスタックを保持するためにexecuteEditsを使用
-                        editorInstance.executeEdits('ensureNewline', [{
-                            range: {
-                                startLineNumber: lineCount,
-                                startColumn: lastLineLength + 1,
-                                endLineNumber: lineCount,
-                                endColumn: lastLineLength + 1
-                            },
-                            text: '\n',
-                            forceMoveMarkers: true
-                        }]);
+                        editorInstance.executeEdits('ensureNewline', [
+                            {
+                                range: {
+                                    startLineNumber: lineCount,
+                                    startColumn: lastLineLength + 1,
+                                    endLineNumber: lineCount,
+                                    endColumn: lastLineLength + 1
+                                },
+                                text: '\n',
+                                forceMoveMarkers: true
+                            }
+                        ]);
 
                         // 編集操作をプッシュ（これがないとUndoスタックに追加されない場合がある）
                         editorInstance.pushUndoStop();

@@ -6,7 +6,7 @@ import autoprefixer from 'autoprefixer';
 
 const clientChunks = new Set(['index', 'client', 'CodePreviewClient']);
 const sharedChunks = {
-    CodePreviewShared: ['src/components/CodePreview/utils/codeBlockParser.ts'],
+    CodePreviewShared: ['src/components/CodePreview/utils/codeBlockParser.ts']
 };
 
 export default {
@@ -41,13 +41,7 @@ export default {
             }
         }
     ],
-    external: [
-        'react',
-        'react-dom',
-        'react/jsx-runtime',
-        'react/jsx-dev-runtime',
-        '@monaco-editor/react'
-    ],
+    external: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime', '@monaco-editor/react'],
     plugins: [
         resolve(),
         commonjs(),

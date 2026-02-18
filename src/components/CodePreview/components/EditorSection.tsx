@@ -1,5 +1,10 @@
 import { Fragment } from 'react';
-import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, RefObject } from 'react';
+import type {
+    CSSProperties,
+    KeyboardEvent as ReactKeyboardEvent,
+    MouseEvent as ReactMouseEvent,
+    RefObject
+} from 'react';
 import styles from '../styles.module.css';
 import { Toolbar } from './Toolbar';
 import { EditorPanel } from './EditorPanel';
@@ -33,13 +38,7 @@ interface EditorSectionProps {
     editorsRowStyle?: CSSProperties;
 }
 
-export const EditorSection = ({
-    layout,
-    state,
-    handlers,
-    editorsRowRef,
-    editorsRowStyle
-}: EditorSectionProps) => {
+export const EditorSection = ({ layout, state, handlers, editorsRowRef, editorsRowStyle }: EditorSectionProps) => {
     const editorsRowClassName = layout.isResizing ? `${styles.editorsRow} ${styles.isResizing}` : styles.editorsRow;
 
     return (

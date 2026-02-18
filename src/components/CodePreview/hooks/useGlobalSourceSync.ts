@@ -28,7 +28,7 @@ export const useGlobalSourceSync = ({
     const capturedInitialRef = useRef({
         html: !!(sourceId ? hasInitialHTML : true),
         css: !!(sourceId ? hasInitialCSS : true),
-        js: !!(sourceId ? hasInitialJS : true),
+        js: !!(sourceId ? hasInitialJS : true)
     });
 
     useEffect(() => {
@@ -72,5 +72,15 @@ export const useGlobalSourceSync = ({
         updateFromStore();
 
         return store.subscribe(sourceId, updateFromStore);
-    }, [sourceId, store, hasInitialHTML, hasInitialCSS, hasInitialJS, setHtmlCode, setCssCode, setJsCode, initialStateRef]);
+    }, [
+        sourceId,
+        store,
+        hasInitialHTML,
+        hasInitialCSS,
+        hasInitialJS,
+        setHtmlCode,
+        setCssCode,
+        setJsCode,
+        initialStateRef
+    ]);
 };
