@@ -2,7 +2,6 @@
   "source": "github:metyatech/agent-rules",
   "domains": [
     "node",
-    "release",
     "web"
   ],
   "extra": [
