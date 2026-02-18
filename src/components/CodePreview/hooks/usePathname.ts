@@ -3,8 +3,7 @@ import { useSyncExternalStore } from 'react';
 type Listener = () => void;
 
 let initialized = false;
-let currentPathname: string | undefined =
-    typeof window !== 'undefined' ? window.location.pathname : undefined;
+let currentPathname: string | undefined = typeof window !== 'undefined' ? window.location.pathname : undefined;
 let listeners = new Set<Listener>();
 let originalPushState: History['pushState'] | null = null;
 let originalReplaceState: History['replaceState'] | null = null;
@@ -16,7 +15,7 @@ const scheduleNotify = () => {
 
     const run = () => {
         notifyScheduled = false;
-        listeners.forEach(listener => listener());
+        listeners.forEach((listener) => listener());
     };
 
     if (typeof queueMicrotask === 'function') {
@@ -44,16 +43,12 @@ const ensureInitialized = () => {
     originalPushState = history.pushState;
     originalReplaceState = history.replaceState;
 
-    history.pushState = function pushState(
-        ...args: Parameters<History['pushState']>
-    ) {
+    history.pushState = function pushState(...args: Parameters<History['pushState']>) {
         originalPushState?.apply(this, args);
         notifyListeners();
     };
 
-    history.replaceState = function replaceState(
-        ...args: Parameters<History['replaceState']>
-    ) {
+    history.replaceState = function replaceState(...args: Parameters<History['replaceState']>) {
         originalReplaceState?.apply(this, args);
         notifyListeners();
     };
@@ -95,5 +90,4 @@ const subscribe = (listener: Listener) => {
 const getSnapshot = () => currentPathname;
 const getServerSnapshot = () => undefined;
 
-export const usePathname = () =>
-    useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+export const usePathname = () => useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);

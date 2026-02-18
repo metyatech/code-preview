@@ -10,7 +10,7 @@ interface ConsoleLogMessage {
 
 /**
  * iframeからのコンソールログを受信・管理するフック
- * 
+ *
  * @param iframeRef 監視対象のiframeのRef
  * @param dependencies ログをクリアするトリガーとなる依存配列
  */
@@ -27,11 +27,11 @@ export const useConsoleLogs = (iframeRef: React.RefObject<HTMLIFrameElement | nu
         const handleMessage = (event: MessageEvent) => {
             // 自身のiframeからのメッセージ以外は無視
             if (event.source !== iframeRef.current?.contentWindow) return;
-            
+
             const data = event.data as Partial<ConsoleLogMessage>;
-            
+
             if (!data || typeof data !== 'object') return;
-            
+
             if (data.type === 'codePreviewConsoleLog' && Array.isArray(data.messages)) {
                 setConsoleLogs(data.messages);
             }

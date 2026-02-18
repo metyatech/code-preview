@@ -10,15 +10,12 @@ interface UseEditorConfigsProps {
 /**
  * エディタの設定とイベントハンドラを管理するフック
  */
-export const useEditorConfigs = ({
-    editors,
-    updateSectionWidths,
-}: UseEditorConfigsProps) => {
+export const useEditorConfigs = ({ editors, updateSectionWidths }: UseEditorConfigsProps) => {
     // 行番号表示の状態
     const [showLineNumbers, setShowLineNumbers] = useState(false);
 
     const toggleLineNumbers = useCallback(() => {
-        setShowLineNumbers(prev => !prev);
+        setShowLineNumbers((prev) => !prev);
     }, []);
 
     // マウントハンドラの作成
@@ -27,15 +24,15 @@ export const useEditorConfigs = ({
     // 設定の生成
     const visibleEditorConfigs: EditorConfig[] = useMemo(() => {
         return editors
-            .filter(editor => editor.visible)
-            .map(editor => ({
+            .filter((editor) => editor.visible)
+            .map((editor) => ({
                 key: editor.key,
                 label: editor.label,
                 language: editor.language,
                 value: editor.code,
                 onChange: (value: string | undefined) => editor.setCode(value || ''),
                 onMount: createMountHandler(editor.ref),
-                visible: true,
+                visible: true
             }));
     }, [editors, createMountHandler]);
 

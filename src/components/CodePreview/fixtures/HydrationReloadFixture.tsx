@@ -10,21 +10,22 @@ declare global {
     }
 }
 
-const buildSrcDoc = () => [
-    '<!doctype html>',
-    '<html>',
-    '<head>',
-    '<meta charset="utf-8" />',
-    '<style>',
-    'body { margin: 0; }',
-    '.parallax1 { height: 2000px; background-attachment: fixed; background: linear-gradient(#000, #fff); }',
-    '</style>',
-    '</head>',
-    '<body>',
-    '<div class="parallax1"></div>',
-    '</body>',
-    '</html>'
-].join('\n');
+const buildSrcDoc = () =>
+    [
+        '<!doctype html>',
+        '<html>',
+        '<head>',
+        '<meta charset="utf-8" />',
+        '<style>',
+        'body { margin: 0; }',
+        '.parallax1 { height: 2000px; background-attachment: fixed; background: linear-gradient(#000, #fff); }',
+        '</style>',
+        '</head>',
+        '<body>',
+        '<div class="parallax1"></div>',
+        '</body>',
+        '</html>'
+    ].join('\n');
 
 export const HydrationReloadFixture = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -93,4 +94,3 @@ export const HydrationReloadFixture = () => {
 
     return <div ref={containerRef} />;
 };
-

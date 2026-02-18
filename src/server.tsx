@@ -10,23 +10,10 @@ import {
 const parseCodeBlocksFromChildrenCached = cache(parseCodeBlocksFromChildren);
 
 export function CodePreview(props: CodePreviewProps) {
-    const {
-        children,
-        initialHTML,
-        initialCSS,
-        initialJS,
-        ...rest
-    } = props;
+    const { children, initialHTML, initialCSS, initialJS, ...rest } = props;
 
-    const shouldParseChildren = shouldParseCodeBlocksFromChildren(
-        children,
-        initialHTML,
-        initialCSS,
-        initialJS,
-    );
-    const parsedSource: ParsedCodeBlocks = shouldParseChildren
-        ? parseCodeBlocksFromChildrenCached(children)
-        : {};
+    const shouldParseChildren = shouldParseCodeBlocksFromChildren(children, initialHTML, initialCSS, initialJS);
+    const parsedSource: ParsedCodeBlocks = shouldParseChildren ? parseCodeBlocksFromChildrenCached(children) : {};
     const resolvedInitialHTML = initialHTML ?? parsedSource.initialHTML;
     const resolvedInitialCSS = initialCSS ?? parsedSource.initialCSS;
     const resolvedInitialJS = initialJS ?? parsedSource.initialJS;

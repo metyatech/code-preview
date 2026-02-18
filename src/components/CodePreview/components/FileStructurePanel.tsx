@@ -16,8 +16,8 @@ export const FileStructurePanel = ({
     resolvedJsPath,
     resolvedImages
 }: FileStructurePanelProps) => {
-    const { folders, rootFiles } = useMemo(() => 
-        buildFileStructure(resolvedHtmlPath, resolvedCssPath, resolvedJsPath, resolvedImages),
+    const { folders, rootFiles } = useMemo(
+        () => buildFileStructure(resolvedHtmlPath, resolvedCssPath, resolvedJsPath, resolvedImages),
         [resolvedHtmlPath, resolvedCssPath, resolvedJsPath, resolvedImages]
     );
 
@@ -25,7 +25,7 @@ export const FileStructurePanel = ({
         <div className={styles.fileStructure}>
             <div className={styles.fileStructureTitle}>📁 ファイル構造</div>
             <div className={styles.fileTree}>
-                {rootFiles.map(file => (
+                {rootFiles.map((file) => (
                     <div key={file} className={styles.fileTreeItem}>
                         <span className={styles.fileIcon}>📄</span> {file}
                     </div>
@@ -35,7 +35,7 @@ export const FileStructurePanel = ({
                         <div className={styles.fileTreeItem}>
                             <span className={styles.folderIcon}>📁</span> {folderPath}
                         </div>
-                        {files.map(file => (
+                        {files.map((file) => (
                             <div key={`${folderPath}/${file}`} className={styles.fileTreeSubItem}>
                                 <span className={styles.fileIcon}>📄</span> {file}
                             </div>

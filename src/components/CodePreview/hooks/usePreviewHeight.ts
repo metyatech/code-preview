@@ -10,12 +10,7 @@ interface UsePreviewHeightProps {
 
 const MAX_PREVIEW_HEIGHT = 800;
 
-export const usePreviewHeight = ({
-    minHeightPx,
-    showPreview,
-    iframeRef,
-    editors
-}: UsePreviewHeightProps) => {
+export const usePreviewHeight = ({ minHeightPx, showPreview, iframeRef, editors }: UsePreviewHeightProps) => {
     const [previewHeight, setPreviewHeight] = useState(`${minHeightPx}px`);
     // Track the maximum height ever reached (only grows, never shrinks)
     const maxHeightRef = useRef(minHeightPx);
@@ -85,8 +80,7 @@ export const usePreviewHeight = ({
             if (event.source !== iframeRef.current?.contentWindow) {
                 return;
             }
-            if (event.data?.type === 'codePreviewHeightChange' &&
-                typeof event.data.height === 'number') {
+            if (event.data?.type === 'codePreviewHeightChange' && typeof event.data.height === 'number') {
                 const newHeight = event.data.height;
                 // Only grow, never shrink
                 if (newHeight > maxHeightRef.current) {

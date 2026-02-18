@@ -21,17 +21,13 @@ const parseMinHeightPx = (value: MinHeightValue | undefined): number | null => {
     return null;
 };
 
-export const normalizeMinHeight = (
-    value: MinHeightValue | undefined,
-    fallbackPx = DEFAULT_MIN_HEIGHT_PX
-) => {
+export const normalizeMinHeight = (value: MinHeightValue | undefined, fallbackPx = DEFAULT_MIN_HEIGHT_PX) => {
     const parsed = parseMinHeightPx(value);
     const resolvedPx = parsed ?? fallbackPx;
 
     if (parsed === null && value !== undefined) {
         console.error(
-            `[CodePreview] Invalid minHeight "${String(value)}". ` +
-            'Use a positive number (px) or a "NNpx" string.'
+            `[CodePreview] Invalid minHeight "${String(value)}". ` + 'Use a positive number (px) or a "NNpx" string.'
         );
     }
 

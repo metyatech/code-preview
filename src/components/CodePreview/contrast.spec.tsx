@@ -12,7 +12,16 @@ test('all rendered elements satisfy contrast and boundary visibility', async ({ 
             <CodePreviewFixture
                 title="Contrast Check"
                 html={`<main><h1>Sample</h1><p>Preview text</p><button>Run</button></main>`}
-                css={`main { padding: 16px; border: 1px solid #9aa4b2; border-radius: 8px; } button { border: 1px solid #8c98aa; }`}
+                css={`
+                    main {
+                        padding: 16px;
+                        border: 1px solid #9aa4b2;
+                        border-radius: 8px;
+                    }
+                    button {
+                        border: 1px solid #8c98aa;
+                    }
+                `}
                 js={`console.log('contrast-check');`}
                 consoleVisible={true}
                 fileStructureVisible={true}
@@ -64,9 +73,8 @@ test('all rendered elements satisfy contrast and boundary visibility', async ({ 
                 };
             };
 
-            const luminance = (color: { red: number; green: number; blue: number }) => (
-                0.2126 * toLinear(color.red) + 0.7152 * toLinear(color.green) + 0.0722 * toLinear(color.blue)
-            );
+            const luminance = (color: { red: number; green: number; blue: number }) =>
+                0.2126 * toLinear(color.red) + 0.7152 * toLinear(color.green) + 0.0722 * toLinear(color.blue);
 
             const contrast = (
                 first: { red: number; green: number; blue: number },
@@ -171,7 +179,9 @@ test('all rendered elements satisfy contrast and boundary visibility', async ({ 
                         const blended = blend(borderColor, parentBg);
                         const ratio = contrast(blended, parentBg);
                         if (ratio < 3) {
-                            boundaryIssues.push(`boundary ratio=${ratio.toFixed(2)} class=${String(element.className || '')}`);
+                            boundaryIssues.push(
+                                `boundary ratio=${ratio.toFixed(2)} class=${String(element.className || '')}`
+                            );
                         }
                     }
                 }

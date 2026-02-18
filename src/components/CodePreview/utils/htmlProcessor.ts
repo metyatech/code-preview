@@ -7,11 +7,7 @@ const RESOLVE_ATTRIBUTES = ['src', 'srcset'];
 /**
  * Resolve image-related attribute values in HTML.
  */
-export const processImagePaths = (
-    code: string,
-    resolvedImages?: ImageMap,
-    htmlPath?: string
-): string => {
+export const processImagePaths = (code: string, resolvedImages?: ImageMap, htmlPath?: string): string => {
     if (!resolvedImages) return code;
 
     const processors = {
@@ -46,7 +42,7 @@ export const resolveFilePaths = (
     cssCode?: string,
     jsPath?: string,
     jsCode?: string
-): { processed: string, jsInjected: boolean } => {
+): { processed: string; jsInjected: boolean } => {
     let processed = html;
     let jsInjected = false;
 
@@ -74,7 +70,7 @@ export const processHtmlCode = (
     jsCode?: string,
     resolvedImages?: ImageMap,
     htmlPath?: string
-): { processed: string, jsInjected: boolean } => {
+): { processed: string; jsInjected: boolean } => {
     const processed = processImagePaths(code, resolvedImages, htmlPath);
     return resolveFilePaths(processed, cssPath, cssCode, jsPath, jsCode);
 };

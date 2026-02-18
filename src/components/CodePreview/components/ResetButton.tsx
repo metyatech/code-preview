@@ -7,12 +7,7 @@ interface ResetButtonProps {
     onMouseLeave: () => void;
 }
 
-export const ResetButton = ({
-    resetProgress,
-    onMouseDown,
-    onMouseUp,
-    onMouseLeave
-}: ResetButtonProps) => {
+export const ResetButton = ({ resetProgress, onMouseDown, onMouseUp, onMouseLeave }: ResetButtonProps) => {
     return (
         <button
             type="button"
@@ -25,17 +20,16 @@ export const ResetButton = ({
             title="長押しでリセット"
         >
             <span
-                className={
-                    styles.resetProgressCircle +
-                    (resetProgress > 0 ? ' ' + styles.isCharging : '')
-                }
+                className={styles.resetProgressCircle + (resetProgress > 0 ? ' ' + styles.isCharging : '')}
                 aria-hidden="true"
             >
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     {/* チャージ進行度（細め・進行時のみ） */}
                     {resetProgress > 0 && (
                         <circle
-                            cx="12" cy="12" r="10"
+                            cx="12"
+                            cy="12"
+                            r="10"
                             fill="none"
                             stroke="#218bff"
                             strokeWidth="2.2"

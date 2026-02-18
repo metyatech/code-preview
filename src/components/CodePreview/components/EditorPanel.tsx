@@ -21,20 +21,18 @@ const DEFAULT_EDITOR_OPTIONS: EditorProps['options'] = {
     wordWrap: 'off',
     tabSize: 2,
     insertSpaces: true,
-    scrollBeyondLastLine: false,
+    scrollBeyondLastLine: false
 };
 
-export const EditorPanel = ({
-    config,
-    width,
-    height,
-    theme,
-    showLineNumbers
-}: EditorPanelProps) => {
-    const mergedOptions = useMemo(() => ({
-        ...DEFAULT_EDITOR_OPTIONS,
-        lineNumbers: showLineNumbers ? 'on' : 'off',
-    } as EditorProps['options']), [showLineNumbers]);
+export const EditorPanel = ({ config, width, height, theme, showLineNumbers }: EditorPanelProps) => {
+    const mergedOptions = useMemo(
+        () =>
+            ({
+                ...DEFAULT_EDITOR_OPTIONS,
+                lineNumbers: showLineNumbers ? 'on' : 'off'
+            }) as EditorProps['options'],
+        [showLineNumbers]
+    );
 
     return (
         <div className={styles.editorSection} style={{ width: `${width}%` }}>

@@ -6,13 +6,11 @@ interface UseResizeTargetsProps {
     editors: EditorDefinition[];
 }
 
-export const useResizeTargets = ({
-    editors
-}: UseResizeTargetsProps): ResizeTarget<EditorKey>[] => {
+export const useResizeTargets = ({ editors }: UseResizeTargetsProps): ResizeTarget<EditorKey>[] => {
     return useMemo(() => {
         return editors
-            .filter(editor => editor.visible)
-            .map(editor => ({
+            .filter((editor) => editor.visible)
+            .map((editor) => ({
                 key: editor.key,
                 ref: editor.ref
             }));
