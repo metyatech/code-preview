@@ -46,6 +46,7 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/agent-rules-composition.m
 - Prefer the most general applicable rule to avoid duplication.
 - Write rules as clear directives that prescribe specific behavior ("do X", "always Y", "never Z"). Do not use hedging language ("may", "might", "could", "consider") — if a behavior is required, state it as a requirement; if it is not required, omit it.
 - Do not use numeric filename prefixes (e.g., `00-...`) to impose ordering; treat rule modules as a flat set. If ordering matters, encode it explicitly in composition/tooling rather than filenames.
+- Before presenting a rule change proposal, verify it against all editing standards and rule placement criteria. Confirm: (1) placed at the correct level (global vs domain), (2) written at the broadest applicable scope without unnecessary ecosystem qualifiers, (3) action-oriented without hedging, (4) non-redundant with existing rules. Fix violations before presenting; do not rely on the requester for quality review.
 
 ## Rule placement (global vs domain)
 
@@ -194,6 +195,7 @@ Source: github:metyatech/agent-rules@HEAD/rules/global/implementation-and-coding
 - Do not assume machine-specific environments (fixed workspace directories, drive letters, per-PC paths). Prefer repo-relative paths and explicit configuration so workflows work in arbitrary clone locations.
 - Temporary files/directories created by the agent MUST be placed only under the OS temp directory (e.g., `%TEMP%` / `$env:TEMP`). Do not create ad-hoc temp folders in repos/workspaces unless the requester explicitly approves.
 - When building tools, CLIs, or services intended for agent use, design for cross-agent compatibility. Do not rely on features specific to a single agent platform (Claude Code, Codex, Gemini CLI, Copilot). Use standard interfaces (CLI, HTTP, stdin/stdout, MCP) that any agent can invoke.
+- After modifying dependency manifests (package.json, pyproject.toml, Cargo.toml, etc.), regenerate lock files (run `npm install`, `pip freeze`, `cargo generate-lockfile`, etc.) and include the updated lock file in the same commit. Never commit a manifest change without the corresponding lock file update.
 
 Source: github:metyatech/agent-rules@HEAD/rules/global/linting-formatting-and-static-analysis.md
 
@@ -487,6 +489,7 @@ For AC definition, verification evidence, regression tests, and final reporting 
 - If the execution environment restricts test execution (no network, no database, sandboxed), run the available subset, document what was skipped, and ensure CI covers the remainder.
 - When delivering a user-facing tool or GUI, perform end-to-end manual verification (start the service, exercise each feature, confirm correct behavior) in addition to automated tests. Do not rely solely on unit tests for user-facing deliverables.
 - When manual testing reveals issues or unexpected behavior, convert those findings into automated tests before fixing; the test must fail before the fix and pass after.
+- The verify script must include a lock-file integrity check that catches manifest/lock-file drift locally, before CI. Verify that every dependency declared in the manifest has a corresponding entry in the lock file.
 
 ## Tests
 
