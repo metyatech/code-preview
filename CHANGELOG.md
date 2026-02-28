@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Standard repository files: `SECURITY.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `CHANGELOG.md`.
 - GitHub Action workflow for CI.
 - GitHub Issue and Pull Request templates.
@@ -15,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.1] - 2026-02-04
 
 ### Initial Release
+
 - React + TypeScript code preview component.
 - Monaco Editor integration.
 - CSS Modules support.

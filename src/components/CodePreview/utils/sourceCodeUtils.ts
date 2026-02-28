@@ -1,65 +1,75 @@
 import { SourceCodeState, ImageMap } from '../types';
 
 interface ResolveSourceProps {
-    sourceId?: string;
-    storedState?: SourceCodeState;
-    initialHTML?: string;
-    initialCSS?: string;
-    initialJS?: string;
-    images?: ImageMap;
-    htmlPath?: string;
-    cssPath?: string;
-    jsPath?: string;
+  sourceId?: string;
+  storedState?: SourceCodeState;
+  initialHTML?: string;
+  initialCSS?: string;
+  initialJS?: string;
+  images?: ImageMap;
+  htmlPath?: string;
+  cssPath?: string;
+  jsPath?: string;
 }
 
 export const resolveInitialSource = (props: ResolveSourceProps) => {
-    const { sourceId, storedState, initialHTML, initialCSS, initialJS, images, htmlPath, cssPath, jsPath } = props;
+  const {
+    sourceId,
+    storedState,
+    initialHTML,
+    initialCSS,
+    initialJS,
+    images,
+    htmlPath,
+    cssPath,
+    jsPath,
+  } = props;
 
-    const hasInitialHTML = initialHTML !== undefined;
-    const hasInitialCSS = initialCSS !== undefined;
-    const hasInitialJS = initialJS !== undefined;
+  const hasInitialHTML = initialHTML !== undefined;
+  const hasInitialCSS = initialCSS !== undefined;
+  const hasInitialJS = initialJS !== undefined;
 
-    let resolvedHTML = initialHTML;
-    let resolvedCSS = initialCSS;
-    let resolvedJS = initialJS;
-    let resolvedImages = images;
-    let resolvedHtmlPath = htmlPath;
-    let resolvedCssPath = cssPath;
-    let resolvedJsPath = jsPath;
+  let resolvedHTML = initialHTML;
+  let resolvedCSS = initialCSS;
+  let resolvedJS = initialJS;
+  let resolvedImages = images;
+  let resolvedHtmlPath = htmlPath;
+  let resolvedCssPath = cssPath;
+  let resolvedJsPath = jsPath;
 
-    if (sourceId && storedState) {
-        const stored = storedState;
-        const storedHasHtml = stored.hasHtml ?? true;
-        const storedHasCss = stored.hasCss ?? true;
-        const storedHasJs = stored.hasJs ?? true;
+  if (sourceId && storedState) {
+    const stored = storedState;
+    const storedHasHtml = stored.hasHtml ?? true;
+    const storedHasCss = stored.hasCss ?? true;
+    const storedHasJs = stored.hasJs ?? true;
 
-        if (!hasInitialHTML && storedHasHtml) resolvedHTML = stored.html;
-        if (!hasInitialCSS && storedHasCss) resolvedCSS = stored.css;
-        if (!hasInitialJS && storedHasJs) resolvedJS = stored.js;
-        if (images === undefined && stored.images !== undefined) {
-            resolvedImages = stored.images;
-        }
-        if (htmlPath === undefined && stored.htmlPath !== undefined) {
-            resolvedHtmlPath = stored.htmlPath;
-        }
-        if (cssPath === undefined && stored.cssPath !== undefined) {
-            resolvedCssPath = stored.cssPath;
-        }
-        if (jsPath === undefined && stored.jsPath !== undefined) {
-            resolvedJsPath = stored.jsPath;
-        }
+    if (!hasInitialHTML && storedHasHtml) resolvedHTML = stored.html;
+    if (!hasInitialCSS && storedHasCss) resolvedCSS = stored.css;
+    if (!hasInitialJS && storedHasJs) resolvedJS = stored.js;
+    if (images === undefined && stored.images !== undefined) {
+      resolvedImages = stored.images;
     }
+    if (htmlPath === undefined && stored.htmlPath !== undefined) {
+      resolvedHtmlPath = stored.htmlPath;
+    }
+    if (cssPath === undefined && stored.cssPath !== undefined) {
+      resolvedCssPath = stored.cssPath;
+    }
+    if (jsPath === undefined && stored.jsPath !== undefined) {
+      resolvedJsPath = stored.jsPath;
+    }
+  }
 
-    return {
-        resolvedHTML,
-        resolvedCSS,
-        resolvedJS,
-        resolvedImages,
-        resolvedHtmlPath,
-        resolvedCssPath,
-        resolvedJsPath,
-        hasInitialHTML,
-        hasInitialCSS,
-        hasInitialJS
-    };
+  return {
+    resolvedHTML,
+    resolvedCSS,
+    resolvedJS,
+    resolvedImages,
+    resolvedHtmlPath,
+    resolvedCssPath,
+    resolvedJsPath,
+    hasInitialHTML,
+    hasInitialCSS,
+    hasInitialJS,
+  };
 };

@@ -21,6 +21,6 @@ npm run build
 npm test
 ```
 
-## Linting
+## Linting and Formatting
 
-Please run `npm run lint` before submitting a PR.
+Please run `npm run lint` and `npm run format` before submitting a PR.

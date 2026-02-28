@@ -16,230 +16,228 @@ import { resolveVisibility } from '../utils/visibility';
 import { normalizeMinHeight } from '../utils/size-utils';
 
 export const useCodePreview = (props: ResolvedCodePreviewProps) => {
-    const {
-        initialHTML,
-        initialCSS,
-        initialJS,
-        minHeight,
-        theme = 'light',
-        htmlVisible,
-        cssVisible,
-        jsVisible,
-        previewVisible,
-        consoleVisible,
-        sourceId,
-        share,
-        htmlPath,
-        cssPath,
-        jsPath,
-        images,
-        fileStructureVisible,
-    } = props;
+  const {
+    initialHTML,
+    initialCSS,
+    initialJS,
+    minHeight,
+    theme = 'light',
+    htmlVisible,
+    cssVisible,
+    jsVisible,
+    previewVisible,
+    consoleVisible,
+    sourceId,
+    share,
+    htmlPath,
+    cssPath,
+    jsPath,
+    images,
+    fileStructureVisible,
+  } = props;
 
-    // Refs
-    const iframeRef = useRef<HTMLIFrameElement>(null);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const editorsRowRef = useRef<HTMLDivElement>(null);
-    const htmlEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-    const cssEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
-    const jsEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  // Refs
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const editorsRowRef = useRef<HTMLDivElement>(null);
+  const htmlEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const cssEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+  const jsEditorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
 
-    // Store
-    const {
-        htmlCode, setHtmlCode,
-        cssCode, setCssCode,
-        jsCode, setJsCode,
-        resolvedHTML,
-        resolvedCSS,
-        resolvedJS,
-        resolvedImages,
-        resolvedHtmlPath: resolvedHtmlPathRaw,
-        resolvedCssPath,
-        resolvedJsPath,
-        resetCodes
-    } = useSourceCodeStore({
-        sourceId,
-        share,
-        initialHTML,
-        initialCSS,
-        initialJS,
-        images,
-        htmlPath,
-        cssPath,
-        jsPath
-    });
-    const resolvedHtmlPath = resolvedHtmlPathRaw ?? 'index.html';
+  // Store
+  const {
+    htmlCode,
+    setHtmlCode,
+    cssCode,
+    setCssCode,
+    jsCode,
+    setJsCode,
+    resolvedHTML,
+    resolvedCSS,
+    resolvedJS,
+    resolvedImages,
+    resolvedHtmlPath: resolvedHtmlPathRaw,
+    resolvedCssPath,
+    resolvedJsPath,
+    resetCodes,
+  } = useSourceCodeStore({
+    sourceId,
+    share,
+    initialHTML,
+    initialCSS,
+    initialJS,
+    images,
+    htmlPath,
+    cssPath,
+    jsPath,
+  });
+  const resolvedHtmlPath = resolvedHtmlPathRaw ?? 'index.html';
 
-    const hasFileStructureInputs = !!(
-        (resolvedImages && Object.keys(resolvedImages).length > 0) ||
-        resolvedHtmlPathRaw !== undefined ||
-        resolvedCssPath !== undefined ||
-        resolvedJsPath !== undefined
-    );
+  const hasFileStructureInputs = !!(
+    (resolvedImages && Object.keys(resolvedImages).length > 0) ||
+    resolvedHtmlPathRaw !== undefined ||
+    resolvedCssPath !== undefined ||
+    resolvedJsPath !== undefined
+  );
 
-    // State for manual toggle
-    const [isToggledManually, setIsToggledManually] = useState(false);
-    const [manualShowValue, setManualShowValue] = useState(false);
-    const [lastFileStructureVisible, setLastFileStructureVisible] = useState(fileStructureVisible);
+  // State for manual toggle
+  const [isToggledManually, setIsToggledManually] = useState(false);
+  const [manualShowValue, setManualShowValue] = useState(false);
+  const [lastFileStructureVisible, setLastFileStructureVisible] = useState(fileStructureVisible);
 
-    // Sync manual toggle when fileStructureVisible prop changes
-    if (fileStructureVisible !== lastFileStructureVisible) {
-        setLastFileStructureVisible(fileStructureVisible);
-        setIsToggledManually(false);
-    }
+  // Sync manual toggle when fileStructureVisible prop changes
+  if (fileStructureVisible !== lastFileStructureVisible) {
+    setLastFileStructureVisible(fileStructureVisible);
+    setIsToggledManually(false);
+  }
 
-    const showFileStructure = useMemo(() => {
-        if (isToggledManually) return manualShowValue;
-        if (fileStructureVisible !== undefined) return !!fileStructureVisible;
-        return hasFileStructureInputs;
-    }, [isToggledManually, manualShowValue, fileStructureVisible, hasFileStructureInputs]);
+  const showFileStructure = useMemo(() => {
+    if (isToggledManually) return manualShowValue;
+    if (fileStructureVisible !== undefined) return !!fileStructureVisible;
+    return hasFileStructureInputs;
+  }, [isToggledManually, manualShowValue, fileStructureVisible, hasFileStructureInputs]);
 
-    const [iframeKey, setIframeKey] = useState(0);
-    const rawIframeId = useId();
-    const iframeId = useMemo(() => `iframe-${rawIframeId.replace(/:/g, '')}`, [rawIframeId]);
+  const [iframeKey, setIframeKey] = useState(0);
+  const rawIframeId = useId();
+  const iframeId = useMemo(() => `iframe-${rawIframeId.replace(/:/g, '')}`, [rawIframeId]);
 
-    const { consoleLogs, setConsoleLogs } = useConsoleLogs(iframeRef, [jsCode, htmlCode]);
+  const { consoleLogs, setConsoleLogs } = useConsoleLogs(iframeRef, [jsCode, htmlCode]);
 
-    const showHTMLEditor = resolveVisibility(resolvedHTML !== undefined, htmlVisible);
-    const showCSSEditor = resolveVisibility(resolvedCSS !== undefined, cssVisible);
-    const showJSEditor = resolveVisibility(resolvedJS !== undefined, jsVisible);
-    const hasPreviewContent = resolvedHTML !== undefined || showHTMLEditor;
-    const showPreview = resolveVisibility(hasPreviewContent, previewVisible);
-    const showConsole = resolveVisibility(consoleLogs.length > 0, consoleVisible);
+  const showHTMLEditor = resolveVisibility(resolvedHTML !== undefined, htmlVisible);
+  const showCSSEditor = resolveVisibility(resolvedCSS !== undefined, cssVisible);
+  const showJSEditor = resolveVisibility(resolvedJS !== undefined, jsVisible);
+  const hasPreviewContent = resolvedHTML !== undefined || showHTMLEditor;
+  const showPreview = resolveVisibility(hasPreviewContent, previewVisible);
+  const showConsole = resolveVisibility(consoleLogs.length > 0, consoleVisible);
 
-    // Editors Definition
-    const editors = useEditorDefinitions({
-        htmlCode, setHtmlCode,
-        cssCode, setCssCode,
-        jsCode, setJsCode,
-        showHTMLEditor,
-        showCSSEditor,
-        showJSEditor,
-        htmlEditorRef,
-        cssEditorRef,
-        jsEditorRef
-    });
+  // Editors Definition
+  const editors = useEditorDefinitions({
+    htmlCode,
+    setHtmlCode,
+    cssCode,
+    setCssCode,
+    jsCode,
+    setJsCode,
+    showHTMLEditor,
+    showCSSEditor,
+    showJSEditor,
+    htmlEditorRef,
+    cssEditorRef,
+    jsEditorRef,
+  });
 
-    const minHeightConfig = normalizeMinHeight(minHeight);
+  const minHeightConfig = normalizeMinHeight(minHeight);
 
-    // Hooks
-    const { editorHeight } = useEditorHeight({
-        minHeightPx: minHeightConfig.px,
-        editors
-    });
+  // Hooks
+  const { editorHeight } = useEditorHeight({
+    minHeightPx: minHeightConfig.px,
+    editors,
+  });
 
-    const { previewHeight, updatePreviewHeight } = usePreviewHeight({
-        minHeightPx: minHeightConfig.px,
-        showPreview,
-        iframeRef,
-        editors
-    });
+  const { previewHeight, updatePreviewHeight } = usePreviewHeight({
+    minHeightPx: minHeightConfig.px,
+    showPreview,
+    iframeRef,
+    editors,
+  });
 
-    const resizeTargets = useResizeTargets({ editors });
+  const resizeTargets = useResizeTargets({ editors });
 
-    const {
-        sectionWidths,
-        isResizing,
-        handleMouseDown,
-        handleResizerKeyDown,
-        updateSectionWidths,
-        resetSectionWidthsToAuto
-    } = useEditorResize({
-        resizeTargets,
-        containerRef
-    });
+  const {
+    sectionWidths,
+    isResizing,
+    handleMouseDown,
+    handleResizerKeyDown,
+    updateSectionWidths,
+    resetSectionWidthsToAuto,
+  } = useEditorResize({
+    resizeTargets,
+    containerRef,
+  });
 
-    const {
-        visibleEditorConfigs,
-        showLineNumbers,
-        toggleLineNumbers
-    } = useEditorConfigs({
-        editors,
-        updateSectionWidths
-    });
+  const { visibleEditorConfigs, showLineNumbers, toggleLineNumbers } = useEditorConfigs({
+    editors,
+    updateSectionWidths,
+  });
 
-    const toggleFileStructure = useCallback(() => {
-        setIsToggledManually(true);
-        setManualShowValue(!showFileStructure);
-    }, [showFileStructure]);
+  const toggleFileStructure = useCallback(() => {
+    setIsToggledManually(true);
+    setManualShowValue(!showFileStructure);
+  }, [showFileStructure]);
 
-    const clearConsoleLogs = useCallback(() => {
-        setConsoleLogs([]);
-    }, [setConsoleLogs]);
+  const clearConsoleLogs = useCallback(() => {
+    setConsoleLogs([]);
+  }, [setConsoleLogs]);
 
-    const remountIframe = useCallback(() => {
-        setIframeKey(prev => prev + 1);
-    }, []);
+  const remountIframe = useCallback(() => {
+    setIframeKey((prev) => prev + 1);
+  }, []);
 
-    // リセット関数
-    const handleReset = useCodePreviewReset({
-        resetCodes,
-        clearConsoleLogs,
-        remountIframe,
-        updatePreviewHeight
-    });
+  // リセット関数
+  const handleReset = useCodePreviewReset({
+    resetCodes,
+    clearConsoleLogs,
+    remountIframe,
+    updatePreviewHeight,
+  });
 
-    const {
-        resetProgress,
-        handleResetMouseDown,
-        handleResetMouseUp,
-        handleResetMouseLeave
-    } = useResetHandler({ onReset: handleReset });
+  const { resetProgress, handleResetMouseDown, handleResetMouseUp, handleResetMouseLeave } =
+    useResetHandler({ onReset: handleReset });
 
-    // 末尾改行保証
-    useEnsureNewlines({ editors });
+  // 末尾改行保証
+  useEnsureNewlines({ editors });
 
-    const editorTheme = theme === 'dark' ? 'vs-dark' : 'light';
+  const editorTheme = theme === 'dark' ? 'vs-dark' : 'light';
 
-    return {
-        elementRefs: {
-            iframeRef,
-            containerRef,
-            editorsRowRef,
-            htmlEditorRef,
-            cssEditorRef,
-            jsEditorRef,
-        },
-        state: {
-            htmlCode,
-            cssCode,
-            jsCode,
-            resolvedImages,
-            resolvedHtmlPath,
-            resolvedCssPath,
-            resolvedJsPath,
-            consoleLogs,
-            showFileStructure,
-            iframeKey,
-            iframeId,
-            editorTheme,
-        },
-        visibility: {
-            showHTMLEditor,
-            showCSSEditor,
-            showJSEditor,
-            showPreview,
-            showConsole,
-        },
-        layout: {
-            editorHeight,
-            previewHeight,
-            sectionWidths,
-            isResizing,
-            visibleEditorConfigs,
-            showLineNumbers,
-            minHeightCss: minHeightConfig.css,
-        },
-        handlers: {
-            handleMouseDown,
-            handleResizerKeyDown,
-            resetSectionWidthsToAuto,
-            toggleLineNumbers,
-            toggleFileStructure,
-            handleResetMouseDown,
-            handleResetMouseUp,
-            handleResetMouseLeave,
-            resetProgress,
-        }
-    };
+  return {
+    elementRefs: {
+      iframeRef,
+      containerRef,
+      editorsRowRef,
+      htmlEditorRef,
+      cssEditorRef,
+      jsEditorRef,
+    },
+    state: {
+      htmlCode,
+      cssCode,
+      jsCode,
+      resolvedImages,
+      resolvedHtmlPath,
+      resolvedCssPath,
+      resolvedJsPath,
+      consoleLogs,
+      showFileStructure,
+      iframeKey,
+      iframeId,
+      editorTheme,
+    },
+    visibility: {
+      showHTMLEditor,
+      showCSSEditor,
+      showJSEditor,
+      showPreview,
+      showConsole,
+    },
+    layout: {
+      editorHeight,
+      previewHeight,
+      sectionWidths,
+      isResizing,
+      visibleEditorConfigs,
+      showLineNumbers,
+      minHeightCss: minHeightConfig.css,
+    },
+    handlers: {
+      handleMouseDown,
+      handleResizerKeyDown,
+      resetSectionWidthsToAuto,
+      toggleLineNumbers,
+      toggleFileStructure,
+      handleResetMouseDown,
+      handleResetMouseUp,
+      handleResetMouseLeave,
+      resetProgress,
+    },
+  };
 };

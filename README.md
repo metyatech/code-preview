@@ -29,7 +29,9 @@ import { CodePreview } from '@metyatech/code-preview';
 ```
 
 ```css
-#btn { padding: 8px 12px; }
+#btn {
+  padding: 8px 12px;
+}
 ```
 
 ```javascript
@@ -37,6 +39,7 @@ document.getElementById('btn')?.addEventListener('click', () => {
   console.log('clicked');
 });
 ```
+
 </CodePreview>
 ````
 
@@ -113,12 +116,15 @@ Example using virtual paths and assets:
 ```
 
 ```css
-img { width: 120px; }
+img {
+  width: 120px;
+}
 ```
 
 ```javascript
 console.log('ready');
 ```
+
 </CodePreview>
 ````
 
@@ -145,7 +151,8 @@ console.log('ready');
 
 - `npm run build`: build with Rollup
 - `npm run lint`: lint
-- `npm run test`: Playwright component tests (Chromium and full)
+- `npm run format`: format code with Prettier
+- `npm run test`: Playwright component tests
 - If Playwright fails to start due to cache issues, run `npm run test-ct:clean` and retry.
 
 ## AGENTS.md
@@ -190,5 +197,5 @@ npm publish
 MIT
 
 ## Overview
-This repository contains the code-preview project.
 
+This repository contains the code-preview project.
