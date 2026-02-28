@@ -6,7 +6,6 @@ export interface PreviewGeneratorOptions {
     showPreview: boolean;
     showConsole: boolean;
     showHTMLEditor: boolean;
-    showCSSEditor: boolean;
     showJSEditor: boolean;
     resolvedImages?: ImageMap;
     cssPath?: string;

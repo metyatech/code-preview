@@ -14,5 +14,5 @@ interface UseCodePreviewResetProps {
 /**
  * コードプレビューのリセット処理を提供するフック
  */
-export declare const useCodePreviewReset: ({ resetCodes, clearConsoleLogs, remountIframe, updatePreviewHeight }: UseCodePreviewResetProps) => () => void;
+export declare const useCodePreviewReset: ({ resetCodes, clearConsoleLogs, remountIframe, updatePreviewHeight, }: UseCodePreviewResetProps) => () => void;
 export {};

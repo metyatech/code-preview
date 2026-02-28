@@ -15,5 +15,5 @@ interface UseEditorDefinitionsProps {
     cssEditorRef: MutableRefObject<editor.IStandaloneCodeEditor | null>;
     jsEditorRef: MutableRefObject<editor.IStandaloneCodeEditor | null>;
 }
-export declare const useEditorDefinitions: ({ htmlCode, setHtmlCode, cssCode, setCssCode, jsCode, setJsCode, showHTMLEditor, showCSSEditor, showJSEditor, htmlEditorRef, cssEditorRef, jsEditorRef }: UseEditorDefinitionsProps) => EditorDefinition[];
+export declare const useEditorDefinitions: ({ htmlCode, setHtmlCode, cssCode, setCssCode, jsCode, setJsCode, showHTMLEditor, showCSSEditor, showJSEditor, htmlEditorRef, cssEditorRef, jsEditorRef, }: UseEditorDefinitionsProps) => EditorDefinition[];
 export {};

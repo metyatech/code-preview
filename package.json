@@ -9,19 +9,22 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.esm.js",
       "require": "./dist/index.cjs",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.esm.js"
     },
     "./client": {
+      "types": "./dist/client.d.ts",
       "import": "./dist/client.esm.js",
       "require": "./dist/client.cjs",
-      "types": "./dist/client.d.ts"
+      "default": "./dist/client.esm.js"
     },
     "./server": {
+      "types": "./dist/server.d.ts",
       "import": "./dist/server.esm.js",
       "require": "./dist/server.cjs",
-      "types": "./dist/server.d.ts"
+      "default": "./dist/server.esm.js"
     }
   },
   "files": [
@@ -31,16 +34,19 @@
     "**/*.css"
   ],
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint . && tsc --noEmit",
     "lint:fix": "eslint --fix .",
+    "lint:contrast": "playwright test -c playwright-ct.config.ts src/components/CodePreview/contrast.spec.tsx --project=chromium",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "test-ct:clean": "rimraf playwright/.cache",
-    "test-ct:quick": "npm run test-ct -- --project=chromium",
+    "test:quick": "npm run test-ct -- --project=chromium",
     "test-ct": "npm run test-ct:clean && playwright test -c playwright-ct.config.ts",
     "test": "npm run test-ct",
     "build": "rollup -c",
+    "verify": "npm run format:check && npm run lint && npm run test && npm run build",
     "clean": "rimraf dist",
-    "prepare": "npm run build"
+    "prepare": "husky && npm run build"
   },
   "peerDependencies": {
     "react": ">=18",
@@ -72,7 +78,8 @@
     "rollup-plugin-postcss": "^4.0.2",
     "tslib": "^2.8.1",
     "typescript": "~5.9.2",
-    "typescript-eslint": "^8.50.0"
+    "typescript-eslint": "^8.50.0",
+    "husky": "^9.0.11"
   },
   "license": "MIT",
   "repository": {

@@ -6,5 +6,5 @@ interface EditorPanelProps {
     theme: string;
     showLineNumbers: boolean;
 }
-export declare const EditorPanel: ({ config, width, height, theme, showLineNumbers }: EditorPanelProps) => import("react/jsx-runtime").JSX.Element;
+export declare const EditorPanel: ({ config, width, height, theme, showLineNumbers, }: EditorPanelProps) => import("react/jsx-runtime").JSX.Element;
 export {};

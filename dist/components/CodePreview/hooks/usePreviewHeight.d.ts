@@ -5,7 +5,7 @@ interface UsePreviewHeightProps {
     iframeRef: React.RefObject<HTMLIFrameElement | null>;
     editors: EditorDefinition[];
 }
-export declare const usePreviewHeight: ({ minHeightPx, showPreview, iframeRef, editors }: UsePreviewHeightProps) => {
+export declare const usePreviewHeight: ({ minHeightPx, showPreview, iframeRef, editors, }: UsePreviewHeightProps) => {
     previewHeight: string;
     updatePreviewHeight: () => void;
 };

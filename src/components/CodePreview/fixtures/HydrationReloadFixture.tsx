@@ -71,7 +71,6 @@ export const HydrationReloadFixture = () => {
             showPreview: true,
             showConsole: false,
             showHTMLEditor: false,
-            showCSSEditor: false,
             showJSEditor: false,
             resolvedImages: {},
             cssPath: undefined,

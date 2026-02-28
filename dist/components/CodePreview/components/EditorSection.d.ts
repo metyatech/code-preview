@@ -26,5 +26,5 @@ interface EditorSectionProps {
     editorsRowRef: RefObject<HTMLDivElement | null>;
     editorsRowStyle?: CSSProperties;
 }
-export declare const EditorSection: ({ layout, state, handlers, editorsRowRef, editorsRowStyle }: EditorSectionProps) => import("react/jsx-runtime").JSX.Element;
+export declare const EditorSection: ({ layout, state, handlers, editorsRowRef, editorsRowStyle, }: EditorSectionProps) => import("react/jsx-runtime").JSX.Element;
 export {};

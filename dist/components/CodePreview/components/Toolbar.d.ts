@@ -8,5 +8,5 @@ interface ToolbarProps {
     onToggleLineNumbers: () => void;
     onToggleFileStructure: () => void;
 }
-export declare const Toolbar: ({ resetProgress, showLineNumbers, showFileStructure, onResetMouseDown, onResetMouseUp, onResetMouseLeave, onToggleLineNumbers, onToggleFileStructure }: ToolbarProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Toolbar: ({ resetProgress, showLineNumbers, showFileStructure, onResetMouseDown, onResetMouseUp, onResetMouseLeave, onToggleLineNumbers, onToggleFileStructure, }: ToolbarProps) => import("react/jsx-runtime").JSX.Element;
 export {};

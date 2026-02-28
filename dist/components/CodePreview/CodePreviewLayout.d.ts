@@ -5,5 +5,5 @@ interface CodePreviewLayoutProps extends UseCodePreviewResult {
     cssPath?: string;
     jsPath?: string;
 }
-export declare const CodePreviewLayout: ({ elementRefs, state, visibility, layout, handlers, title, cssPath, jsPath }: CodePreviewLayoutProps) => import("react/jsx-runtime").JSX.Element;
+export declare const CodePreviewLayout: ({ elementRefs, state, visibility, layout, handlers, title, cssPath, jsPath, }: CodePreviewLayoutProps) => import("react/jsx-runtime").JSX.Element;
 export {};

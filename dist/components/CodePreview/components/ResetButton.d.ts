@@ -4,5 +4,5 @@ interface ResetButtonProps {
     onMouseUp: () => void;
     onMouseLeave: () => void;
 }
-export declare const ResetButton: ({ resetProgress, onMouseDown, onMouseUp, onMouseLeave }: ResetButtonProps) => import("react/jsx-runtime").JSX.Element;
+export declare const ResetButton: ({ resetProgress, onMouseDown, onMouseUp, onMouseLeave, }: ResetButtonProps) => import("react/jsx-runtime").JSX.Element;
 export {};

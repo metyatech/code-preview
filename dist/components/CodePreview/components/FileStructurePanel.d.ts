@@ -5,5 +5,5 @@ interface FileStructurePanelProps {
     resolvedJsPath?: string;
     resolvedImages?: ImageMap;
 }
-export declare const FileStructurePanel: ({ resolvedHtmlPath, resolvedCssPath, resolvedJsPath, resolvedImages }: FileStructurePanelProps) => import("react/jsx-runtime").JSX.Element;
+export declare const FileStructurePanel: ({ resolvedHtmlPath, resolvedCssPath, resolvedJsPath, resolvedImages, }: FileStructurePanelProps) => import("react/jsx-runtime").JSX.Element;
 export {};
