@@ -8,5 +8,5 @@ interface PreviewPanelProps {
     visible: boolean;
     generatorOptions: PreviewGeneratorOptions;
 }
-export declare const PreviewPanel: ({ iframeRef, iframeKey, previewHeight, minHeightCss, visible, generatorOptions }: PreviewPanelProps) => import("react/jsx-runtime").JSX.Element;
+export declare const PreviewPanel: ({ iframeRef, iframeKey, previewHeight, minHeightCss, visible, generatorOptions, }: PreviewPanelProps) => import("react/jsx-runtime").JSX.Element;
 export {};

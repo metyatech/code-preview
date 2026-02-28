@@ -8,7 +8,7 @@ interface UseEditorResizeProps<K extends string> {
     containerRef: React.RefObject<HTMLDivElement | null>;
     initialWidths?: Record<K, number>;
 }
-export declare const useEditorResize: <K extends string>({ resizeTargets, containerRef, initialWidths }: UseEditorResizeProps<K>) => {
+export declare const useEditorResize: <K extends string>({ resizeTargets, containerRef, initialWidths, }: UseEditorResizeProps<K>) => {
     sectionWidths: Record<K, number>;
     isResizing: boolean;
     handleMouseDown: (e: React.MouseEvent, leftKey: K, rightKey: K) => void;

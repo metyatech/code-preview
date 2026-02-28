@@ -10,8 +10,8 @@
  * @returns 最終的な表示状態
  */
 export const resolveVisibility = (autoVisible: boolean, override?: boolean): boolean => {
-    if (typeof override === 'boolean') {
-        return override;
-    }
-    return autoVisible;
+  if (typeof override === 'boolean') {
+    return override;
+  }
+  return autoVisible;
 };

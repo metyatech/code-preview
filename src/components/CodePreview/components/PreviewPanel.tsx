@@ -3,58 +3,58 @@ import styles from '../styles.module.css';
 import { generatePreviewDocument, PreviewGeneratorOptions } from '../utils/previewGenerator';
 
 interface PreviewPanelProps {
-    iframeRef: RefObject<HTMLIFrameElement | null>;
-    iframeKey: number;
-    previewHeight: string;
-    minHeightCss: string;
-    visible: boolean;
-    generatorOptions: PreviewGeneratorOptions;
+  iframeRef: RefObject<HTMLIFrameElement | null>;
+  iframeKey: number;
+  previewHeight: string;
+  minHeightCss: string;
+  visible: boolean;
+  generatorOptions: PreviewGeneratorOptions;
 }
 
 export const PreviewPanel = ({
-    iframeRef,
-    iframeKey,
-    previewHeight,
-    minHeightCss,
-    visible,
-    generatorOptions
+  iframeRef,
+  iframeKey,
+  previewHeight,
+  minHeightCss,
+  visible,
+  generatorOptions,
 }: PreviewPanelProps) => {
-    const loadedOnClientRef = useRef(false);
+  const loadedOnClientRef = useRef(false);
 
-    useEffect(() => {
-        if (!visible) return;
+  useEffect(() => {
+    if (!visible) return;
 
-        const iframe = iframeRef.current;
-        if (!iframe) return;
-        if (iframe.dataset.codePreviewHydrationReloaded === '1') return;
-        if (loadedOnClientRef.current) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    if (iframe.dataset.codePreviewHydrationReloaded === '1') return;
+    if (loadedOnClientRef.current) return;
 
-        const doc = iframe.contentDocument;
-        if (!doc || doc.readyState !== 'complete') return;
+    const doc = iframe.contentDocument;
+    if (!doc || doc.readyState !== 'complete') return;
 
-        const srcDoc = iframe.getAttribute('srcdoc');
-        if (!srcDoc) return;
+    const srcDoc = iframe.getAttribute('srcdoc');
+    if (!srcDoc) return;
 
-        iframe.dataset.codePreviewHydrationReloaded = '1';
-        iframe.srcdoc = srcDoc;
-    }, [iframeKey, iframeRef, visible]);
+    iframe.dataset.codePreviewHydrationReloaded = '1';
+    iframe.srcdoc = srcDoc;
+  }, [iframeKey, iframeRef, visible]);
 
-    return (
-        <iframe
-            key={`${visible ? 'visible' : 'hidden'}-${iframeKey}`}
-            ref={iframeRef}
-            srcDoc={generatePreviewDocument(generatorOptions)}
-            onLoad={() => {
-                loadedOnClientRef.current = true;
-            }}
-            className={visible ? styles.preview : undefined}
-            title="HTML+CSS Preview"
-            sandbox="allow-scripts allow-same-origin"
-            style={
-                visible
-                    ? ({ height: previewHeight, '--min-height': minHeightCss } as CSSProperties)
-                    : ({ display: 'none' } as CSSProperties)
-            }
-        />
-    );
+  return (
+    <iframe
+      key={`${visible ? 'visible' : 'hidden'}-${iframeKey}`}
+      ref={iframeRef}
+      srcDoc={generatePreviewDocument(generatorOptions)}
+      onLoad={() => {
+        loadedOnClientRef.current = true;
+      }}
+      className={visible ? styles.preview : undefined}
+      title="HTML+CSS Preview"
+      sandbox="allow-scripts allow-same-origin"
+      style={
+        visible
+          ? ({ height: previewHeight, '--min-height': minHeightCss } as CSSProperties)
+          : ({ display: 'none' } as CSSProperties)
+      }
+    />
+  );
 };

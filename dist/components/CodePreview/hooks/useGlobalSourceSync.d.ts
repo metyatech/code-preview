@@ -14,5 +14,5 @@ interface UseGlobalSourceSyncProps {
         js: string;
     }>;
 }
-export declare const useGlobalSourceSync: ({ sourceId, store, setHtmlCode, setCssCode, setJsCode, hasInitialHTML, hasInitialCSS, hasInitialJS, initialStateRef }: UseGlobalSourceSyncProps) => void;
+export declare const useGlobalSourceSync: ({ sourceId, store, setHtmlCode, setCssCode, setJsCode, hasInitialHTML, hasInitialCSS, hasInitialJS, initialStateRef, }: UseGlobalSourceSyncProps) => void;
 export {};

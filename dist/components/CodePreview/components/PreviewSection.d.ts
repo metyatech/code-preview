@@ -27,5 +27,5 @@ interface PreviewSectionProps {
     jsPath?: string;
     iframeRef: RefObject<HTMLIFrameElement | null>;
 }
-export declare const PreviewSection: ({ visibility, state, layout, minHeightCss, cssPath, jsPath, iframeRef }: PreviewSectionProps) => import("react/jsx-runtime").JSX.Element | null;
+export declare const PreviewSection: ({ visibility, state, layout, minHeightCss, cssPath, jsPath, iframeRef, }: PreviewSectionProps) => import("react/jsx-runtime").JSX.Element | null;
 export {};

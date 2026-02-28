@@ -1,7 +1,8 @@
-dist
-node_modules
-package-lock.json
+dist/
+playwright-report/
+test-results/
+playwright/.cache/
 AGENTS.md
-CHANGELOG.md
-.github
-*.log
+package-lock.json
+coverage/
+node_modules/

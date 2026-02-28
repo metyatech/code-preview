@@ -1,97 +1,89 @@
 {
-    "name": "@metyatech/code-preview",
-    "version": "0.2.1",
-    "description": "A React + TypeScript component for editing HTML/CSS/JS with a live preview.",
-    "private": false,
-    "type": "module",
-    "main": "dist/index.cjs",
-    "module": "dist/index.esm.js",
-    "types": "dist/index.d.ts",
-    "exports": {
-        ".": {
-            "types": "./dist/index.d.ts",
-            "import": "./dist/index.esm.js",
-            "require": "./dist/index.cjs",
-            "default": "./dist/index.esm.js"
-        },
-        "./client": {
-            "types": "./dist/client.d.ts",
-            "import": "./dist/client.esm.js",
-            "require": "./dist/client.cjs",
-            "default": "./dist/client.esm.js"
-        },
-        "./server": {
-            "types": "./dist/server.d.ts",
-            "import": "./dist/server.esm.js",
-            "require": "./dist/server.cjs",
-            "default": "./dist/server.esm.js"
-        }
+  "name": "@metyatech/code-preview",
+  "version": "0.2.1",
+  "description": "A React + TypeScript component for editing HTML/CSS/JS with a live preview.",
+  "private": false,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.cjs",
+      "default": "./dist/index.esm.js"
     },
-    "files": [
-        "dist"
-    ],
-    "sideEffects": [
-        "**/*.css"
-    ],
-    "scripts": {
-        "lint": "eslint . && tsc --noEmit",
-        "lint:contrast": "playwright test -c playwright-ct.config.ts src/components/CodePreview/contrast.spec.tsx --project=chromium",
-        "format": "prettier --write .",
-        "format:check": "prettier --check .",
-        "test-ct:clean": "rimraf playwright/.cache",
-        "test:quick": "npm run test-ct -- --project=chromium",
-        "test-ct": "npm run test-ct:clean && playwright test -c playwright-ct.config.ts",
-        "test": "npm run test-ct",
-        "build": "rollup -c",
-        "verify": "npm run format:check && npm run lint && npm run test && npm run build",
-        "clean": "rimraf dist",
-        "prepare": "husky && npm run build"
+    "./client": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.esm.js",
+      "require": "./dist/client.cjs",
+      "default": "./dist/client.esm.js"
     },
-    "peerDependencies": {
-        "react": ">=18",
-        "react-dom": ">=18"
-    },
-    "dependencies": {
-        "@monaco-editor/react": "^4.7.0"
-    },
-    "devDependencies": {
-        "@eslint/js": "^9.39.2",
-        "@playwright/experimental-ct-react": "^1.57.0",
-        "@playwright/test": "^1.57.0",
-        "@rollup/plugin-commonjs": "^28.0.6",
-        "@rollup/plugin-node-resolve": "^16.0.1",
-        "@rollup/plugin-typescript": "^12.1.4",
-        "@types/node": "^25.0.3",
-        "@types/react": "^19.1.16",
-        "@types/react-dom": "^19.1.9",
-        "autoprefixer": "^10.4.21",
-        "eslint": "^9.39.2",
-        "eslint-plugin-react": "^7.37.5",
-        "eslint-plugin-react-hooks": "^7.0.1",
-        "globals": "^16.5.0",
-        "husky": "^9.1.7",
-        "lint-staged": "^16.2.7",
-        "postcss": "^8.5.6",
-        "prettier": "^3.8.1",
-        "rimraf": "^6.0.1",
-        "rollup": "^4.52.3",
-        "rollup-plugin-postcss": "^4.0.2",
-        "tslib": "^2.8.1",
-        "typescript": "~5.9.2",
-        "typescript-eslint": "^8.50.0"
-    },
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/metyatech/code-preview.git"
-    },
-    "lint-staged": {
-        "**/*.{ts,tsx}": [
-            "prettier --check",
-            "eslint"
-        ],
-        "*.{json,md}": [
-            "prettier --check"
-        ]
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "import": "./dist/server.esm.js",
+      "require": "./dist/server.cjs",
+      "default": "./dist/server.esm.js"
     }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "lint": "eslint . && tsc --noEmit",
+    "lint:fix": "eslint --fix .",
+    "lint:contrast": "playwright test -c playwright-ct.config.ts src/components/CodePreview/contrast.spec.tsx --project=chromium",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test-ct:clean": "rimraf playwright/.cache",
+    "test:quick": "npm run test-ct -- --project=chromium",
+    "test-ct": "npm run test-ct:clean && playwright test -c playwright-ct.config.ts",
+    "test": "npm run test-ct",
+    "build": "rollup -c",
+    "verify": "npm run format:check && npm run lint && npm run test && npm run build",
+    "clean": "rimraf dist",
+    "prepare": "husky && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "react-dom": ">=18"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "@playwright/experimental-ct-react": "^1.57.0",
+    "@playwright/test": "^1.57.0",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.1.16",
+    "@types/react-dom": "^19.1.9",
+    "autoprefixer": "^10.4.21",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "prettier": "^3.8.1",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.52.3",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tslib": "^2.8.1",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.50.0",
+    "husky": "^9.0.11"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metyatech/code-preview.git"
+  }
 }

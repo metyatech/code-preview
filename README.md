@@ -30,13 +30,13 @@ import { CodePreview } from '@metyatech/code-preview';
 
 ```css
 #btn {
-    padding: 8px 12px;
+  padding: 8px 12px;
 }
 ```
 
 ```javascript
 document.getElementById('btn')?.addEventListener('click', () => {
-    console.log('clicked');
+  console.log('clicked');
 });
 ```
 
@@ -117,7 +117,7 @@ Example using virtual paths and assets:
 
 ```css
 img {
-    width: 120px;
+  width: 120px;
 }
 ```
 
@@ -151,9 +151,8 @@ console.log('ready');
 
 - `npm run build`: build with Rollup
 - `npm run lint`: lint
-- `npm run lint:contrast`: full-element contrast and boundary lint (Chromium CT)
-- `npm run test`: Playwright component tests (Chromium and full)
-- `npm run verify`: lint + tests + build
+- `npm run format`: format code with Prettier
+- `npm run test`: Playwright component tests
 - If Playwright fails to start due to cache issues, run `npm run test-ct:clean` and retry.
 
 ## AGENTS.md
@@ -195,14 +194,7 @@ npm publish
 
 ## License
 
-[MIT](LICENSE)
-
-## Community and Security
-
-- [Security Policy](SECURITY.md)
-- [Contributing Guidelines](CONTRIBUTING.md)
-- [Code of Conduct](CODE_OF_CONDUCT.md)
-- [Changelog](CHANGELOG.md)
+MIT
 
 ## Overview
 

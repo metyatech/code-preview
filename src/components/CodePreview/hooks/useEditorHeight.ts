@@ -6,8 +6,8 @@ import { EditorDefinition } from '../types';
  * useEditorHeight フックのプロパティ
  */
 interface UseEditorHeightProps {
-    minHeightPx: number;
-    editors: EditorDefinition[];
+  minHeightPx: number;
+  editors: EditorDefinition[];
 }
 
 /** Monaco Editorの行の高さ (px) */
@@ -23,62 +23,62 @@ const HEIGHT_UPDATE_DELAY_MS = 100;
  * エディタの高さを計算・管理するフック
  */
 export const useEditorHeight = ({ minHeightPx, editors }: UseEditorHeightProps) => {
-    const [editorHeight, setEditorHeight] = useState(`${minHeightPx}px`);
+  const [editorHeight, setEditorHeight] = useState(`${minHeightPx}px`);
 
-    const calculateEditorHeight = useCallback(() => {
-        const calculateEditorHeightByCode = (
-            code: string,
-            editorRef?: React.MutableRefObject<editor.IStandaloneCodeEditor | null>
-        ): number => {
-            // 実際のエディタコンテンツの高さが取得できる場合はそれを使用
-            if (editorRef && editorRef.current) {
-                const editorInstance = editorRef.current;
-                // getContentHeight はコンテンツの高さを返す
-                const contentHeight = editorInstance.getContentHeight();
-                if (contentHeight > 0) {
-                    return contentHeight;
-                }
-            }
+  const calculateEditorHeight = useCallback(() => {
+    const calculateEditorHeightByCode = (
+      code: string,
+      editorRef?: React.MutableRefObject<editor.IStandaloneCodeEditor | null>,
+    ): number => {
+      // 実際のエディタコンテンツの高さが取得できる場合はそれを使用
+      if (editorRef && editorRef.current) {
+        const editorInstance = editorRef.current;
+        // getContentHeight はコンテンツの高さを返す
+        const contentHeight = editorInstance.getContentHeight();
+        if (contentHeight > 0) {
+          return contentHeight;
+        }
+      }
 
-            // エディタがまだマウントされていない場合のヒューリスティック計算
-            if (!code) return minHeightPx;
+      // エディタがまだマウントされていない場合のヒューリスティック計算
+      if (!code) return minHeightPx;
 
-            const lines = code.split('\n').length;
-            // 行数 * 行の高さ + パディング で高さを推定
-            return Math.max(lines * EDITOR_LINE_HEIGHT + EDITOR_VERTICAL_PADDING, minHeightPx);
-        };
+      const lines = code.split('\n').length;
+      // 行数 * 行の高さ + パディング で高さを推定
+      return Math.max(lines * EDITOR_LINE_HEIGHT + EDITOR_VERTICAL_PADDING, minHeightPx);
+    };
 
-        const heights = editors
-            .filter((editor) => editor.visible)
-            .map((editor) => calculateEditorHeightByCode(editor.code, editor.ref));
+    const heights = editors
+      .filter((editor) => editor.visible)
+      .map((editor) => calculateEditorHeightByCode(editor.code, editor.ref));
 
-        // 表示されているエディタの中で最大の高さを採用
-        const maxEditorHeight = heights.length > 0 ? Math.max(...heights) : 0;
-        const finalEditorHeight = Math.max(maxEditorHeight, minHeightPx);
+    // 表示されているエディタの中で最大の高さを採用
+    const maxEditorHeight = heights.length > 0 ? Math.max(...heights) : 0;
+    const finalEditorHeight = Math.max(maxEditorHeight, minHeightPx);
 
-        // 最大高さ制限を適用
-        const limitedEditorHeight = Math.min(finalEditorHeight, MAX_EDITOR_HEIGHT);
+    // 最大高さ制限を適用
+    const limitedEditorHeight = Math.min(finalEditorHeight, MAX_EDITOR_HEIGHT);
 
-        setEditorHeight(limitedEditorHeight + 'px');
-    }, [editors, minHeightPx]);
+    setEditorHeight(limitedEditorHeight + 'px');
+  }, [editors, minHeightPx]);
 
-    const updateEditorHeight = useCallback(() => {
-        setTimeout(() => {
-            calculateEditorHeight();
-        }, HEIGHT_UPDATE_DELAY_MS);
-    }, [calculateEditorHeight]);
+  const updateEditorHeight = useCallback(() => {
+    setTimeout(() => {
+      calculateEditorHeight();
+    }, HEIGHT_UPDATE_DELAY_MS);
+  }, [calculateEditorHeight]);
 
-    useEffect(() => {
-        updateEditorHeight();
-    }, [updateEditorHeight]);
+  useEffect(() => {
+    updateEditorHeight();
+  }, [updateEditorHeight]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            updateEditorHeight();
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [updateEditorHeight]);
+  useEffect(() => {
+    const handleResize = () => {
+      updateEditorHeight();
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [updateEditorHeight]);
 
-    return { editorHeight, updateEditorHeight };
+  return { editorHeight, updateEditorHeight };
 };

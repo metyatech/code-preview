@@ -9,68 +9,70 @@ import { useCodePreview } from './hooks/useCodePreview';
 type UseCodePreviewResult = ReturnType<typeof useCodePreview>;
 
 interface CodePreviewLayoutProps extends UseCodePreviewResult {
-    title?: string;
-    cssPath?: string;
-    jsPath?: string;
+  title?: string;
+  cssPath?: string;
+  jsPath?: string;
 }
 
 export const CodePreviewLayout = ({
-    elementRefs,
-    state,
-    visibility,
-    layout,
-    handlers,
-    title,
-    cssPath,
-    jsPath
+  elementRefs,
+  state,
+  visibility,
+  layout,
+  handlers,
+  title,
+  cssPath,
+  jsPath,
 }: CodePreviewLayoutProps) => {
-    const { iframeRef, containerRef, editorsRowRef } = elementRefs;
+  const { iframeRef, containerRef, editorsRowRef } = elementRefs;
 
-    const splitLayoutStyle: CSSProperties | undefined = visibility.showPreview ? undefined : { minHeight: 'auto' };
-    const editorsRowStyle: CSSProperties | undefined =
-        visibility.showPreview || visibility.showConsole ? undefined : { borderBottom: 'none' };
+  const splitLayoutStyle: CSSProperties | undefined = visibility.showPreview
+    ? undefined
+    : { minHeight: 'auto' };
+  const editorsRowStyle: CSSProperties | undefined =
+    visibility.showPreview || visibility.showConsole ? undefined : { borderBottom: 'none' };
 
-    return (
-        <div className={styles.codePreviewContainer}>
-            {title ? (
-                <div className={styles.header}>
-                    <h4 className={styles.title}>{title}</h4>
-                </div>
-            ) : null}
-
-            <div className={styles.splitLayout} ref={containerRef} style={splitLayoutStyle}>
-                {/* ファイル構造の表示 */}
-                {state.showFileStructure && (
-                    <FileStructurePanel
-                        resolvedHtmlPath={state.resolvedHtmlPath}
-                        resolvedCssPath={state.resolvedCssPath}
-                        resolvedJsPath={state.resolvedJsPath}
-                        resolvedImages={state.resolvedImages}
-                    />
-                )}
-
-                {/* エディタセクション（上段） */}
-                <EditorSection
-                    layout={layout}
-                    state={state}
-                    handlers={handlers}
-                    editorsRowRef={editorsRowRef}
-                    editorsRowStyle={editorsRowStyle}
-                />
-
-                {/* プレビュー（下段） */}
-                <PreviewSection
-                    visibility={visibility}
-                    state={state}
-                    layout={layout}
-                    minHeightCss={layout.minHeightCss}
-                    cssPath={cssPath}
-                    jsPath={jsPath}
-                    iframeRef={iframeRef}
-                />
-
-                {visibility.showConsole && <ConsolePanel logs={state.consoleLogs} />}
-            </div>
+  return (
+    <div className={styles.codePreviewContainer}>
+      {title ? (
+        <div className={styles.header}>
+          <h4 className={styles.title}>{title}</h4>
         </div>
-    );
+      ) : null}
+
+      <div className={styles.splitLayout} ref={containerRef} style={splitLayoutStyle}>
+        {/* ファイル構造の表示 */}
+        {state.showFileStructure && (
+          <FileStructurePanel
+            resolvedHtmlPath={state.resolvedHtmlPath}
+            resolvedCssPath={state.resolvedCssPath}
+            resolvedJsPath={state.resolvedJsPath}
+            resolvedImages={state.resolvedImages}
+          />
+        )}
+
+        {/* エディタセクション（上段） */}
+        <EditorSection
+          layout={layout}
+          state={state}
+          handlers={handlers}
+          editorsRowRef={editorsRowRef}
+          editorsRowStyle={editorsRowStyle}
+        />
+
+        {/* プレビュー（下段） */}
+        <PreviewSection
+          visibility={visibility}
+          state={state}
+          layout={layout}
+          minHeightCss={layout.minHeightCss}
+          cssPath={cssPath}
+          jsPath={jsPath}
+          iframeRef={iframeRef}
+        />
+
+        {visibility.showConsole && <ConsolePanel logs={state.consoleLogs} />}
+      </div>
+    </div>
+  );
 };
