@@ -59,6 +59,36 @@ When using CodePreview inside client components, use the client entry:
 import { CodePreview } from '@metyatech/code-preview/client';
 ```
 
+## Compatibility
+
+### Frameworks
+
+- **React**: >= 18.0.0
+- **Next.js**: Supported (App Router and Pages Router)
+
+### Browsers
+
+This library uses Monaco Editor and standard web technologies (CSS Grid, Flexbox, `srcDoc` iframes). It supports the following modern browsers:
+
+- Edge >= 91
+- Chrome >= 91
+- Firefox >= 78
+- Safari >= 14.1
+
+## SemVer policy
+
+This project adheres to [Semantic Versioning](https://semver.org/).
+
+- **Major** (x.0.0): Breaking changes that require user action (e.g., changing required React version, removing public Props).
+- **Minor** (0.x.0): New features or significant improvements that are backward compatible.
+- **Patch** (0.0.x): Backward compatible bug fixes and documentation updates.
+
+### What counts as a breaking change?
+
+- Removing or renaming public Props in `CodePreview`.
+- Changing the default behavior in a way that breaks existing layouts or functionality.
+- Increasing the minimum required Node.js or React version.
+
 ## Props
 
 | Prop                   | Type                     | Default        | Notes                                                                                         |
