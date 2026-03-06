@@ -28,13 +28,16 @@
         }
     },
     "files": [
-        "dist"
+        "dist",
+        "LICENSE",
+        "README.md",
+        "CHANGELOG.md"
     ],
     "sideEffects": [
         "**/*.css"
     ],
     "scripts": {
-        "lint": "eslint . && tsc --noEmit",
+        "lint": "eslint . --max-warnings=0 && tsc --noEmit",
         "lint:contrast": "playwright test -c playwright-ct.config.ts src/components/CodePreview/contrast.spec.tsx --project=chromium",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
