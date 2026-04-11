@@ -1,13 +1,13 @@
 import { DefaultAttributeProcessor, SrcSetAttributeProcessor } from './attributeProcessor';
 import { injectCss, injectJs } from './codeInjector';
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 
 const RESOLVE_ATTRIBUTES = ['src', 'srcset'];
 
 /**
  * Resolve image-related attribute values in HTML.
  */
-export const processImagePaths = (code: string, resolvedImages?: ImageMap, htmlPath?: string): string => {
+export const processImagePaths = (code: string, resolvedImages?: ResolvedImageMap, htmlPath?: string): string => {
     if (!resolvedImages) return code;
 
     const processors = {
@@ -68,7 +68,7 @@ export const processHtmlCode = (
     cssCode?: string,
     jsPath?: string,
     jsCode?: string,
-    resolvedImages?: ImageMap,
+    resolvedImages?: ResolvedImageMap,
     htmlPath?: string
 ): { processed: string; jsInjected: boolean } => {
     const processed = processImagePaths(code, resolvedImages, htmlPath);

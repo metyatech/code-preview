@@ -13,7 +13,7 @@ export declare const useCodePreview: (props: ResolvedCodePreviewProps) => {
         htmlCode: string;
         cssCode: string;
         jsCode: string;
-        resolvedImages: import("../types").ImageMap | undefined;
+        resolvedImages: import("../types").ResolvedImageMap | undefined;
         resolvedHtmlPath: string;
         resolvedCssPath: string | undefined;
         resolvedJsPath: string | undefined;

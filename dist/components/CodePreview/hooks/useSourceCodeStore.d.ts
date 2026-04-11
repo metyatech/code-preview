@@ -22,7 +22,7 @@ export declare const useSourceCodeStore: (props: UseSourceCodeStoreProps) => {
     resolvedHTML: string | undefined;
     resolvedCSS: string | undefined;
     resolvedJS: string | undefined;
-    resolvedImages: ImageMap | undefined;
+    resolvedImages: import("../types").ResolvedImageMap | undefined;
     resolvedHtmlPath: string | undefined;
     resolvedCssPath: string | undefined;
     resolvedJsPath: string | undefined;

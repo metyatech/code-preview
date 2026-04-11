@@ -1,10 +1,10 @@
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 
 export const buildFileStructure = (
     resolvedHtmlPath?: string,
     resolvedCssPath?: string,
     resolvedJsPath?: string,
-    resolvedImages?: ImageMap
+    resolvedImages?: ResolvedImageMap
 ): { folders: Map<string, string[]>; rootFiles: string[] } => {
     const folders = new Map<string, string[]>();
     const rootFiles: string[] = [];

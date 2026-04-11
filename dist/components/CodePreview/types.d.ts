@@ -1,6 +1,17 @@
 import type { editor } from 'monaco-editor';
 export type EditorKey = 'html' | 'css' | 'js';
-export type ImageMap = Record<string, string>;
+export type ImageSource = string | {
+    src: string;
+    [key: string]: unknown;
+} | {
+    default: string | {
+        src: string;
+        [key: string]: unknown;
+    };
+    [key: string]: unknown;
+};
+export type ImageMap = Record<string, ImageSource>;
+export type ResolvedImageMap = Record<string, string>;
 export type MinHeightValue = number | string;
 export interface EditorDefinition {
     key: EditorKey;
@@ -94,7 +105,7 @@ export interface SourceCodeState {
     hasHtml?: boolean;
     hasCss?: boolean;
     hasJs?: boolean;
-    images?: ImageMap;
+    images?: ResolvedImageMap;
     htmlPath?: string;
     cssPath?: string;
     jsPath?: string;

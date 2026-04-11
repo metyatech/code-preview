@@ -1,8 +1,8 @@
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 /**
  * Resolve image-related attribute values in HTML.
  */
-export declare const processImagePaths: (code: string, resolvedImages?: ImageMap, htmlPath?: string) => string;
+export declare const processImagePaths: (code: string, resolvedImages?: ResolvedImageMap, htmlPath?: string) => string;
 /**
  * Escape </script> tags in HTML to prevent premature termination.
  */
@@ -17,7 +17,7 @@ export declare const resolveFilePaths: (html: string, cssPath?: string, cssCode?
 /**
  * Process HTML with asset resolution and inline file injection.
  */
-export declare const processHtmlCode: (code: string, cssPath?: string, cssCode?: string, jsPath?: string, jsCode?: string, resolvedImages?: ImageMap, htmlPath?: string) => {
+export declare const processHtmlCode: (code: string, cssPath?: string, cssCode?: string, jsPath?: string, jsCode?: string, resolvedImages?: ResolvedImageMap, htmlPath?: string) => {
     processed: string;
     jsInjected: boolean;
 };

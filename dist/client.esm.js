@@ -1,6 +1,6 @@
 "use client";
 
-export { C as CodePreview } from './CodePreviewClient-t8epznlw.esm.js';
+export { C as CodePreview } from './CodePreviewClient-DVyay_AX.esm.js';
 import 'react/jsx-runtime';
 import 'react';
 import '@monaco-editor/react';

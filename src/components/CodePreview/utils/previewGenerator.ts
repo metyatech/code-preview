@@ -1,7 +1,7 @@
 import { CONSOLE_INTERCEPT_SCRIPT, HEIGHT_OBSERVER_SCRIPT } from './consoleScript';
 import { processCssCode } from './cssProcessor';
 import { processHtmlCode, escapeScriptEndTag } from './htmlProcessor';
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 
 export interface PreviewGeneratorOptions {
     htmlCode: string;
@@ -12,7 +12,7 @@ export interface PreviewGeneratorOptions {
     showHTMLEditor: boolean;
     showCSSEditor: boolean;
     showJSEditor: boolean;
-    resolvedImages?: ImageMap;
+    resolvedImages?: ResolvedImageMap;
     cssPath?: string;
     jsPath?: string;
     resolvedHtmlPath?: string;

@@ -1,4 +1,4 @@
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 export interface PreviewGeneratorOptions {
     htmlCode: string;
     cssCode: string;
@@ -8,7 +8,7 @@ export interface PreviewGeneratorOptions {
     showHTMLEditor: boolean;
     showCSSEditor: boolean;
     showJSEditor: boolean;
-    resolvedImages?: ImageMap;
+    resolvedImages?: ResolvedImageMap;
     cssPath?: string;
     jsPath?: string;
     resolvedHtmlPath?: string;

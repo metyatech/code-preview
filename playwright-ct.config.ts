@@ -1,5 +1,12 @@
 import { defineConfig, devices } from '@playwright/experimental-ct-react';
 
+import { resolvePlaywrightCtPort } from './scripts/playwrightCtPort.mjs';
+
+const ctPort = await resolvePlaywrightCtPort({
+    preferredPort: 3100,
+    host: '127.0.0.1'
+});
+
 /**
  * See https://playwright.dev/docs/test-configuration
  */
@@ -15,17 +22,24 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     /* Retry on CI only */
     retries: process.env.CI ? 2 : 0,
-    /* Opt out of parallel tests on CI. */
-    workers: process.env.CI ? 1 : undefined,
+    /*
+     * Firefox component tests are unstable on Windows when many workers
+     * try to bootstrap pages at once. Keep local Windows runs serialized
+     * so `npm run verify` stays deterministic.
+     */
+    workers: process.env.CI ? 1 : process.platform === 'win32' ? 1 : undefined,
     /* Reporter to use. See https://playwright.dev/docs/test-reporters */
     reporter: 'html',
     /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
     use: {
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
         trace: 'on-first-retry',
-
-        /* Port to use for Playwright component endpoint. */
-        ctPort: 3100
+        /*
+         * Fixed ports collide with local daemons on this PC (for example Docker on 3100).
+         * Resolve a free localhost port deterministically, while keeping an env override.
+         */
+        baseURL: `http://127.0.0.1:${ctPort}`,
+        ctPort
     },
 
     /* Configure projects for major browsers */

@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { ISourceCodeStore } from '../store';
 import { SourceCodeState, ImageMap } from '../types';
+import { normalizeImageMap } from '../utils/imageMap';
 
 interface UseGlobalSourceProviderProps {
     sourceId?: string;
@@ -45,6 +46,7 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
         jsPath !== undefined
     );
     const isSourceProvider = share && sourceId && hasSourceInputs;
+    const normalizedImages = normalizeImageMap(images);
 
     useEffect(() => {
         if (sourceId && isSourceProvider) {
@@ -63,7 +65,7 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
                 hasHtml: hasInitialHTML ? true : (existing.hasHtml ?? false),
                 hasCss: hasInitialCSS ? true : (existing.hasCss ?? false),
                 hasJs: hasInitialJS ? true : (existing.hasJs ?? false),
-                images: images !== undefined ? images : existing.images,
+                images: images !== undefined ? normalizedImages : existing.images,
                 htmlPath: htmlPath !== undefined ? htmlPath : existing.htmlPath,
                 cssPath: cssPath !== undefined ? cssPath : existing.cssPath,
                 jsPath: jsPath !== undefined ? jsPath : existing.jsPath
@@ -81,6 +83,7 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
         initialCSS,
         initialJS,
         images,
+        normalizedImages,
         htmlPath,
         cssPath,
         jsPath,

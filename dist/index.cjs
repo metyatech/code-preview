@@ -2,7 +2,7 @@
 
 'use strict';
 
-var CodePreviewClient = require('./CodePreviewClient-v06cHV0l.cjs');
+var CodePreviewClient = require('./CodePreviewClient-dxsq5sYz.cjs');
 require('react/jsx-runtime');
 require('react');
 require('@monaco-editor/react');

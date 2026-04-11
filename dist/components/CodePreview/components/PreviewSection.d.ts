@@ -1,5 +1,5 @@
 import type { RefObject } from 'react';
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 interface PreviewSectionProps {
     visibility: {
         showPreview: boolean;
@@ -13,7 +13,7 @@ interface PreviewSectionProps {
         htmlCode: string;
         cssCode: string;
         jsCode: string;
-        resolvedImages?: ImageMap;
+        resolvedImages?: ResolvedImageMap;
         resolvedHtmlPath?: string;
         resolvedCssPath?: string;
         resolvedJsPath?: string;

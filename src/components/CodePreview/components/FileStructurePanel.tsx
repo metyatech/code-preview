@@ -1,13 +1,13 @@
 import { useMemo } from 'react';
 import styles from '../styles.module.css';
 import { buildFileStructure } from '../utils/fileStructureUtils';
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 
 interface FileStructurePanelProps {
     resolvedHtmlPath?: string;
     resolvedCssPath?: string;
     resolvedJsPath?: string;
-    resolvedImages?: ImageMap;
+    resolvedImages?: ResolvedImageMap;
 }
 
 export const FileStructurePanel = ({

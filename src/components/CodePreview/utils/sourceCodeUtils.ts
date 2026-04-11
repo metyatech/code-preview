@@ -1,4 +1,5 @@
 import { SourceCodeState, ImageMap } from '../types';
+import { normalizeImageMap } from './imageMap';
 
 interface ResolveSourceProps {
     sourceId?: string;
@@ -22,7 +23,7 @@ export const resolveInitialSource = (props: ResolveSourceProps) => {
     let resolvedHTML = initialHTML;
     let resolvedCSS = initialCSS;
     let resolvedJS = initialJS;
-    let resolvedImages = images;
+    let resolvedImages = normalizeImageMap(images);
     let resolvedHtmlPath = htmlPath;
     let resolvedCssPath = cssPath;
     let resolvedJsPath = jsPath;

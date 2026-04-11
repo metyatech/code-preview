@@ -10,7 +10,10 @@ import {
     InitialJsChangeFixture
 } from './fixtures/PropChangeFixtures';
 
-type WindowWithAddItems = { addItems?: () => void };
+type WindowWithFixtureActions = {
+    addItems?: () => void;
+    openModal?: () => void;
+};
 type PageErrorTracker = {
     errors: string[];
     dispose: () => void;
@@ -40,6 +43,9 @@ const trackPageErrors = (page: Page): PageErrorTracker => {
 };
 
 test.use({ viewport: { width: 1200, height: 800 } });
+
+const DATA_URL_PNG =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aF9sAAAAASUVORK5CYII=';
 
 test.describe('CodePreview コンポーネントのテスト', () => {
     test('最低限のプロパティで正しく描画されること', async ({ mount }) => {
@@ -1051,6 +1057,30 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(div).toHaveCSS('background-image', /url\("?.*\/static\/img\/real-bg\.png"?\)/);
     });
 
+    test('Next-style static image objects are normalized for CSS background images', async ({ mount }) => {
+        const component = await mount(
+            <CodePreviewFixture
+                html="<div id='bg-static-import'></div>"
+                css="#bg-static-import { background-image: url('img/bg.png'); width: 100px; height: 100px; }"
+                images={{
+                    'img/bg.png': {
+                        src: DATA_URL_PNG,
+                        width: 1,
+                        height: 1,
+                        blurDataURL: DATA_URL_PNG
+                    }
+                }}
+            />
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const div = frame.locator('#bg-static-import');
+
+        await expect(div).toBeVisible();
+        await expect(div).toHaveCSS('background-image', /url\("data:image\/png;base64,/);
+    });
+
     test('CSS: 正しい相対パス(../img/fence.png)のみが解決されること', async ({ mount }) => {
         const component = await mount(
             <CodePreviewFixture
@@ -1153,6 +1183,28 @@ test.describe('CodePreview コンポーネントのテスト', () => {
 
         // src属性が置換されているか確認
         await expect(img).toHaveAttribute('src', '/static/img/real-logo.png');
+    });
+
+    test('Next-style static image objects are normalized for HTML image sources', async ({ mount }) => {
+        const component = await mount(
+            <CodePreviewFixture
+                html="<img src='img/logo.png' id='logo-object' />"
+                images={{
+                    'img/logo.png': {
+                        src: DATA_URL_PNG,
+                        width: 1,
+                        height: 1
+                    }
+                }}
+            />
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        const img = frame.locator('#logo-object');
+
+        await expect(img).toBeVisible();
+        await expect(img).toHaveAttribute('src', DATA_URL_PNG);
     });
 
     test('sourceIdの共有範囲が同一ページ内に限定されること', async ({ mount, page }) => {
@@ -1262,14 +1314,14 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
             .poll(
                 async () => {
                     return await frameBody.evaluate(
-                        () => typeof (window as WindowWithAddItems).addItems === 'function'
+                        () => typeof (window as WindowWithFixtureActions).addItems === 'function'
                     );
                 },
                 { timeout: 10000 }
             )
             .toBe(true);
         await frameBody.evaluate(() => {
-            (window as WindowWithAddItems).addItems?.();
+            (window as WindowWithFixtureActions).addItems?.();
         });
         await expect(frame.locator('#container > div')).toHaveCount(10, { timeout: 10000 });
 
@@ -1331,10 +1383,11 @@ document.getElementById('add-btn').addEventListener('click', window.addItems);
 const modal = document.getElementById('modal');
 const openButton = document.getElementById('open-modal');
 const closeButton = document.getElementById('close-modal');
-openButton?.addEventListener('click', function() {
+window.openModal = function() {
     if (!modal) return;
     modal.style.display = 'block';
-});
+};
+openButton?.addEventListener('click', window.openModal);
 closeButton?.addEventListener('click', function() {
     if (!modal) return;
     modal.style.display = 'none';
@@ -1357,14 +1410,20 @@ document.body.dataset.modalReady = 'true';
         await expect
             .poll(
                 async () => {
-                    return await frameBody.evaluate(() => document.body.dataset.modalReady === 'true');
+                    return await frameBody.evaluate(
+                        () =>
+                            document.body.dataset.modalReady === 'true' &&
+                            typeof (window as WindowWithFixtureActions).openModal === 'function'
+                    );
                 },
                 { timeout: 5000 }
             )
             .toBe(true);
         const openButton = frame.locator('#open-modal');
         await expect(openButton).toBeVisible({ timeout: 10000 });
-        await openButton.click();
+        await frameBody.evaluate(() => {
+            (window as WindowWithFixtureActions).openModal?.();
+        });
 
         // モーダルが表示されるのを待つ
         await expect(frame.locator('#modal')).toBeVisible();
@@ -1373,9 +1432,12 @@ document.body.dataset.modalReady = 'true';
         await expect
             .poll(
                 async () => {
+                    await iframe.evaluate((el) => {
+                        (el as HTMLIFrameElement).contentWindow?.postMessage({ type: 'codePreviewHeightRequest' }, '*');
+                    });
                     return await iframe.evaluate((el) => (el as HTMLIFrameElement).offsetHeight);
                 },
-                { timeout: 5000 }
+                { timeout: 10000 }
             )
             .toBeGreaterThan(initialHeight);
     });

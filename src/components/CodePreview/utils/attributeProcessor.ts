@@ -1,18 +1,18 @@
 import { resolveUrl } from './urlResolver';
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 
 export interface AttributeProcessor {
-    process(value: string, resolvedImages?: ImageMap, baseFilePath?: string): string;
+    process(value: string, resolvedImages?: ResolvedImageMap, baseFilePath?: string): string;
 }
 
 export class DefaultAttributeProcessor implements AttributeProcessor {
-    process(value: string, resolvedImages?: ImageMap, baseFilePath?: string): string {
+    process(value: string, resolvedImages?: ResolvedImageMap, baseFilePath?: string): string {
         return resolveUrl(value, resolvedImages, baseFilePath);
     }
 }
 
 export class SrcSetAttributeProcessor implements AttributeProcessor {
-    process(value: string, resolvedImages?: ImageMap, baseFilePath?: string): string {
+    process(value: string, resolvedImages?: ResolvedImageMap, baseFilePath?: string): string {
         return value
             .split(',')
             .map((part: string) => {

@@ -1,7 +1,7 @@
 import type { RefObject } from 'react';
 import styles from '../styles.module.css';
 import { PreviewPanel } from './PreviewPanel';
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 
 interface PreviewSectionProps {
     visibility: {
@@ -16,7 +16,7 @@ interface PreviewSectionProps {
         htmlCode: string;
         cssCode: string;
         jsCode: string;
-        resolvedImages?: ImageMap;
+        resolvedImages?: ResolvedImageMap;
         resolvedHtmlPath?: string;
         resolvedCssPath?: string;
         resolvedJsPath?: string;

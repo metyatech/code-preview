@@ -1,10 +1,10 @@
-import type { ImageMap } from '../types';
+import type { ResolvedImageMap } from '../types';
 export interface AttributeProcessor {
-    process(value: string, resolvedImages?: ImageMap, baseFilePath?: string): string;
+    process(value: string, resolvedImages?: ResolvedImageMap, baseFilePath?: string): string;
 }
 export declare class DefaultAttributeProcessor implements AttributeProcessor {
-    process(value: string, resolvedImages?: ImageMap, baseFilePath?: string): string;
+    process(value: string, resolvedImages?: ResolvedImageMap, baseFilePath?: string): string;
 }
 export declare class SrcSetAttributeProcessor implements AttributeProcessor {
-    process(value: string, resolvedImages?: ImageMap, baseFilePath?: string): string;
+    process(value: string, resolvedImages?: ResolvedImageMap, baseFilePath?: string): string;
 }

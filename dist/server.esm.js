@@ -1,7 +1,7 @@
 import { jsx } from 'react/jsx-runtime';
 import { cache } from 'react';
 import { p as parseCodeBlocksFromChildren, s as shouldParseCodeBlocksFromChildren } from './CodePreviewShared-OZSlX-Bp.esm.js';
-import { C as CodePreviewClient } from './CodePreviewClient-t8epznlw.esm.js';
+import { C as CodePreviewClient } from './CodePreviewClient-DVyay_AX.esm.js';
 import '@monaco-editor/react';
 
 const parseCodeBlocksFromChildrenCached = cache(parseCodeBlocksFromChildren);
