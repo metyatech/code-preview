@@ -1,3 +1,5 @@
+'use client';
+
 import { useMemo } from 'react';
 import { CodePreviewProps } from './types';
 import { useCodePreview } from './hooks/useCodePreview';
