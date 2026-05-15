@@ -14,6 +14,7 @@ import { useEditorConfigs } from './useEditorConfigs';
 import { useEditorDefinitions } from './useEditorDefinitions';
 import { resolveVisibility } from '../utils/visibility';
 import { normalizeMinHeight } from '../utils/size-utils';
+import { CODE_PREVIEW_DARK_EDITOR_THEME } from '../editorTheme';
 
 export const useCodePreview = (props: ResolvedCodePreviewProps) => {
     const {
@@ -188,7 +189,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
     // 末尾改行保証
     useEnsureNewlines({ editors });
 
-    const editorTheme = theme === 'dark' ? 'vs-dark' : 'light';
+    const editorTheme = theme === 'dark' ? CODE_PREVIEW_DARK_EDITOR_THEME : 'light';
 
     return {
         elementRefs: {
@@ -211,6 +212,7 @@ export const useCodePreview = (props: ResolvedCodePreviewProps) => {
             showFileStructure,
             iframeKey,
             iframeId,
+            theme,
             editorTheme
         },
         visibility: {

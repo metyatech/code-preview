@@ -526,20 +526,127 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(component).toBeVisible();
     });
 
-    test('themeのデフォルト値(light)が適用されること', async ({ mount }) => {
+    test('themeを省略するとdocument themeに追従すること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+        });
+
         const component = await mount(<CodePreviewFixture html="<div>test</div>" />);
+
+        await expect(component).toHaveAttribute('data-theme', 'dark');
+
+        await page.evaluate(() => {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+        });
+
+        await expect(component).toHaveAttribute('data-theme', 'light');
+    });
+
+    test('themeを省略しdocument themeがない場合はlightにfallbackすること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            document.documentElement.classList.remove('dark', 'light');
+            document.documentElement.removeAttribute('data-theme');
+            document.body.removeAttribute('data-theme');
+        });
+
+        const component = await mount(<CodePreviewFixture html="<div>test</div>" />);
+
+        await expect(component).toHaveAttribute('data-theme', 'light');
 
         // Monacoエディタが描画されていることを確認
         const monacoEditor = component.locator('.monaco-editor');
         await expect(monacoEditor).toBeVisible({ timeout: 10000 });
     });
 
-    test('theme="dark"が適用されること', async ({ mount }) => {
-        const component = await mount(<CodePreviewFixture theme="dark" html="<div>test</div>" />);
+    test('themeを明示した場合はdocument themeより優先されること', async ({ mount, page }) => {
+        await page.evaluate(() => {
+            document.documentElement.classList.remove('light');
+            document.documentElement.classList.add('dark');
+        });
 
-        // Monacoエディタが描画されていることを確認
-        const monacoEditor = component.locator('.monaco-editor');
+        const component = await mount(<CodePreviewFixture theme="light" html="<div>test</div>" />);
+
+        await expect(component).toHaveAttribute('data-theme', 'light');
+
+        await page.evaluate(() => {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.classList.add('light');
+        });
+
+        await expect(component).toHaveAttribute('data-theme', 'light');
+    });
+
+    test('theme="dark"がCodePreview shellとMonaco editor全体に適用されること', async ({ mount }) => {
+        const component = await mount(
+            <CodePreviewFixture
+                theme="dark"
+                html="<div>test</div>"
+                css="div { color: red; }"
+                fileStructureVisible={true}
+            />
+        );
+
+        await expect(component).toHaveAttribute('data-theme', 'dark');
+
+        const monacoEditor = component.locator('.monaco-editor').first();
         await expect(monacoEditor).toBeVisible({ timeout: 10000 });
+
+        const editorColors = await monacoEditor.evaluate((node) => {
+            const editor = node as HTMLElement;
+            const background = editor.querySelector<HTMLElement>('.monaco-editor-background');
+            const gutter = editor.querySelector<HTMLElement>('.margin');
+
+            return {
+                editorBackground: window.getComputedStyle(editor).backgroundColor,
+                textBackground: background ? window.getComputedStyle(background).backgroundColor : '',
+                gutterBackground: gutter ? window.getComputedStyle(gutter).backgroundColor : ''
+            };
+        });
+
+        expect(editorColors.editorBackground).toBe('rgb(15, 23, 42)');
+        expect(editorColors.textBackground).toBe('rgb(15, 23, 42)');
+        expect(editorColors.gutterBackground).toBe('rgb(15, 23, 42)');
+
+        await monacoEditor.click();
+
+        const cursorColor = await monacoEditor
+            .locator('.cursors-layer .cursor')
+            .first()
+            .evaluate((node) => {
+                return window.getComputedStyle(node as HTMLElement).backgroundColor;
+            });
+
+        expect(cursorColor).toBe('rgb(248, 250, 252)');
+    });
+
+    test('theme="dark"の構文色が黒い親コンテナ内でも維持されること', async ({ mount }) => {
+        const component = await mount(
+            <div style={{ color: 'rgb(0, 0, 0)' }} className="hostile-exercise-theme">
+                <style>{`.hostile-exercise-theme :where(span, div) { color: rgb(248, 250, 252) !important; }`}</style>
+                <CodePreviewFixture
+                    theme="dark"
+                    title="Exercise Dark CodePreview"
+                    html={'<section class="card"><h2>Dark preview</h2><button id="action">Click</button></section>'}
+                    css={'.card { color: #e5e7eb; background: #0f172a; }\nbutton { color: #0f172a; }'}
+                    fileStructureVisible={true}
+                />
+            </div>
+        );
+
+        const monacoEditor = component.locator('.monaco-editor').first();
+        await expect(monacoEditor).toBeVisible({ timeout: 10000 });
+        await expect(monacoEditor.locator('.view-line span').first()).toBeVisible({ timeout: 10000 });
+
+        const tokenColors = await monacoEditor.locator('.view-line span').evaluateAll((nodes) => {
+            return Array.from(new Set(nodes.map((node) => window.getComputedStyle(node).color).filter(Boolean)));
+        });
+
+        expect(tokenColors).toContain('rgb(96, 165, 250)');
+        expect(tokenColors).toContain('rgb(249, 168, 212)');
+        expect(tokenColors).toContain('rgb(134, 239, 172)');
+        expect(tokenColors).not.toEqual(['rgb(0, 0, 0)']);
     });
 
     test('htmlPathのデフォルト値(index.html)が適用されること', async ({ mount }) => {

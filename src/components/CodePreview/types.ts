@@ -52,7 +52,8 @@ export interface CodePreviewProps {
     title?: string;
     minHeight?: MinHeightValue;
     /**
-     * Monaco editor theme. Defaults to 'light'.
+     * Component and Monaco editor theme. When omitted, follows the document
+     * theme from html/body class or data-theme and falls back to 'light'.
      */
     theme?: 'light' | 'dark';
     htmlVisible?: boolean;

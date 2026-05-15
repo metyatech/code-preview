@@ -20,17 +20,47 @@
 /* ライブラリ版の同スタイル */
 .codePreviewContainer {
     --cp-border: #7f92a8;
+    --cp-bg: #ffffff;
+    --cp-surface: #f6f8fa;
+    --cp-control-bg: rgba(255, 255, 255, 0.9);
+    --cp-control-hover-bg: #e9edf2;
+    --cp-text: #57606a;
+    --cp-strong-text: #24292f;
+    --cp-resizer-bg: rgba(246, 248, 250, 0.7);
+    --cp-resizer-hover-bg: rgba(215, 222, 230, 0.8);
+    --cp-resizer-grip: #afb8c1;
+    --cp-resizer-grip-hover: #57606a;
+    --cp-focus: #0969da;
+    --cp-editor-bg: #ffffff;
     border: 1px solid var(--cp-border);
     border-radius: 6px;
     margin: 1.5rem 0;
-    background: #fff;
+    background: var(--cp-bg);
+    color: var(--cp-strong-text);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     overflow: hidden;
 }
 
+.codePreviewContainer[data-theme='dark'] {
+    --cp-border: #475569;
+    --cp-bg: #0f172a;
+    --cp-surface: #111827;
+    --cp-control-bg: rgba(15, 23, 42, 0.92);
+    --cp-control-hover-bg: #1e293b;
+    --cp-text: #cbd5e1;
+    --cp-strong-text: #f8fafc;
+    --cp-resizer-bg: #111827;
+    --cp-resizer-hover-bg: #1e293b;
+    --cp-resizer-grip: #94a3b8;
+    --cp-resizer-grip-hover: #e2e8f0;
+    --cp-focus: #38bdf8;
+    --cp-editor-bg: #0f172a;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
 .header {
     padding: 0.75rem 1rem;
-    background: #f6f8fa;
+    background: var(--cp-surface);
     border-bottom: 1px solid var(--cp-border);
 }
 
@@ -38,7 +68,7 @@
     margin: 0;
     font-size: 0.9rem;
     font-weight: 600;
-    color: #57606a;
+    color: var(--cp-text);
     display: flex;
     align-items: center;
 }
@@ -47,18 +77,19 @@
     position: relative;
     display: flex;
     border-bottom: 1px solid var(--cp-border);
+    background: var(--cp-editor-bg);
 }
 
 .gyoButton {
     position: absolute;
     top: 8px;
-    background: rgba(255, 255, 255, 0.9);
+    background: var(--cp-control-bg);
     border: 1px solid var(--cp-border);
     border-radius: 50%;
     width: 24px;
     height: 24px;
     font-size: 0.8rem;
-    color: #57606a;
+    color: var(--cp-text);
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -85,8 +116,8 @@
 
 .gyoButton:hover,
 .gyoButton:focus {
-    background: #e9edf2;
-    color: #24292f;
+    background: var(--cp-control-hover-bg);
+    color: var(--cp-strong-text);
 }
 
 .hiddenText {
@@ -121,6 +152,7 @@
     overflow: hidden;
     height: 100%;
     flex-shrink: 0;
+    background: var(--cp-editor-bg);
 }
 
 .resizer {
@@ -132,7 +164,7 @@
     align-items: center;
     justify-content: center;
     user-select: none;
-    background: rgba(246, 248, 250, 0.7);
+    background: var(--cp-resizer-bg);
     transition: background 0.2s ease;
     touch-action: none;
 }
@@ -150,11 +182,11 @@
 
 .resizer:hover,
 .resizer:focus-visible {
-    background: rgba(215, 222, 230, 0.8);
+    background: var(--cp-resizer-hover-bg);
 }
 
 .resizer:focus-visible {
-    outline: 2px solid #0969da;
+    outline: 2px solid var(--cp-focus);
     outline-offset: 2px;
 }
 
@@ -162,14 +194,14 @@
     width: 3px;
     height: 36px;
     border-radius: 999px;
-    background: #afb8c1;
+    background: var(--cp-resizer-grip);
     position: relative;
     z-index: 1;
 }
 
 .resizer:hover .resizerGrip,
 .resizer:focus-visible .resizerGrip {
-    background: #57606a;
+    background: var(--cp-resizer-grip-hover);
 }
 
 .isResizing {
@@ -194,11 +226,11 @@
 
 .sectionHeader {
     padding: 0.5rem 1rem;
-    background: #f6f8fa;
+    background: var(--cp-surface);
     border-bottom: 1px solid var(--cp-border);
     font-size: 0.8rem;
     font-weight: 600;
-    color: #57606a;
+    color: var(--cp-text);
     text-transform: none;
     letter-spacing: 0.5px;
     flex-shrink: 0;
@@ -210,6 +242,7 @@
     flex-direction: column;
     flex: 1;
     overflow: hidden;
+    background: var(--cp-editor-bg);
 }
 
 .previewContainer {
@@ -297,11 +330,11 @@
 
 /* ファイル構造表示 */
 .fileStructure {
-    background: #f6f8fa;
+    background: var(--cp-surface);
     border-bottom: 1px solid var(--cp-border);
     padding: 12px 16px;
     font-size: 0.85rem;
-    color: #24292f;
+    color: var(--cp-strong-text);
 }
 
 .fileStructureTitle {
@@ -309,7 +342,7 @@
     margin-bottom: 8px;
     padding-bottom: 6px;
     border-bottom: 1px solid var(--cp-border);
-    color: #57606a;
+    color: var(--cp-text);
 }
 
 .fileTree {

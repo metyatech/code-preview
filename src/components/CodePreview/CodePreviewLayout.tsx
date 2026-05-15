@@ -31,7 +31,7 @@ export const CodePreviewLayout = ({
         visibility.showPreview || visibility.showConsole ? undefined : { borderBottom: 'none' };
 
     return (
-        <div className={styles.codePreviewContainer}>
+        <div className={styles.codePreviewContainer} data-theme={state.theme}>
             {title ? (
                 <div className={styles.header}>
                     <h4 className={styles.title}>{title}</h4>

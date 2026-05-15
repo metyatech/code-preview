@@ -61,24 +61,24 @@ import { CodePreview } from '@metyatech/code-preview/client';
 
 ## Props
 
-| Prop                   | Type                                        | Default        | Notes                                                                                            |
-| ---------------------- | ------------------------------------------- | -------------- | ------------------------------------------------------------------------------------------------ |
-| `children`             | `ReactNode`                                 | `undefined`    | One or more fenced code blocks with `html`, `css`, `js`, or `javascript` language labels.        |
-| `title`                | `string`                                    | `undefined`    | Header title shown above the editor layout.                                                      |
-| `minHeight`            | `number \| string`                          | `"200px"`      | Minimum height for editors and preview. Numbers are treated as px.                               |
-| `theme`                | `"light" \| "dark"`                         | `"light"`      | Monaco theme mapping (`"dark"` uses `vs-dark`).                                                  |
-| `htmlVisible`          | `boolean`                                   | auto           | Force HTML editor visibility.                                                                    |
-| `cssVisible`           | `boolean`                                   | auto           | Force CSS editor visibility.                                                                     |
-| `jsVisible`            | `boolean`                                   | auto           | Force JS editor visibility.                                                                      |
-| `previewVisible`       | `boolean`                                   | auto           | Force preview visibility (default shows when HTML exists or HTML editor is forced on).           |
-| `consoleVisible`       | `boolean`                                   | auto           | Force console visibility (default shows when logs exist).                                        |
-| `fileStructureVisible` | `boolean`                                   | auto           | Initial file structure visibility (default: `true` when file paths or `images` are provided).    |
-| `sourceId`             | `string`                                    | `undefined`    | Share sources across instances on the same page.                                                 |
-| `share`                | `boolean`                                   | `true`         | When `false`, this instance does not write its initial sources to the shared store.              |
-| `htmlPath`             | `string`                                    | `"index.html"` | Virtual HTML file path for the file structure panel.                                             |
-| `cssPath`              | `string`                                    | `undefined`    | Virtual CSS path for file structure and `url(...)` resolution.                                   |
-| `jsPath`               | `string`                                    | `undefined`    | Virtual JS path for file structure and script injection.                                         |
-| `images`               | `Record<string, string \| { src: string }>` | `undefined`    | Map of virtual image paths to real URLs. Next.js-style static import objects are also supported. |
+| Prop                   | Type                                        | Default        | Notes                                                                                                                                                           |
+| ---------------------- | ------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `children`             | `ReactNode`                                 | `undefined`    | One or more fenced code blocks with `html`, `css`, `js`, or `javascript` language labels.                                                                       |
+| `title`                | `string`                                    | `undefined`    | Header title shown above the editor layout.                                                                                                                     |
+| `minHeight`            | `number \| string`                          | `"200px"`      | Minimum height for editors and preview. Numbers are treated as px.                                                                                              |
+| `theme`                | `"light" \| "dark"`                         | `"light"`      | Component and Monaco editor theme. The dark theme uses CodePreview's own Monaco theme so the editor background, gutter, line numbers, and caret remain visible. |
+| `htmlVisible`          | `boolean`                                   | auto           | Force HTML editor visibility.                                                                                                                                   |
+| `cssVisible`           | `boolean`                                   | auto           | Force CSS editor visibility.                                                                                                                                    |
+| `jsVisible`            | `boolean`                                   | auto           | Force JS editor visibility.                                                                                                                                     |
+| `previewVisible`       | `boolean`                                   | auto           | Force preview visibility (default shows when HTML exists or HTML editor is forced on).                                                                          |
+| `consoleVisible`       | `boolean`                                   | auto           | Force console visibility (default shows when logs exist).                                                                                                       |
+| `fileStructureVisible` | `boolean`                                   | auto           | Initial file structure visibility (default: `true` when file paths or `images` are provided).                                                                   |
+| `sourceId`             | `string`                                    | `undefined`    | Share sources across instances on the same page.                                                                                                                |
+| `share`                | `boolean`                                   | `true`         | When `false`, this instance does not write its initial sources to the shared store.                                                                             |
+| `htmlPath`             | `string`                                    | `"index.html"` | Virtual HTML file path for the file structure panel.                                                                                                            |
+| `cssPath`              | `string`                                    | `undefined`    | Virtual CSS path for file structure and `url(...)` resolution.                                                                                                  |
+| `jsPath`               | `string`                                    | `undefined`    | Virtual JS path for file structure and script injection.                                                                                                        |
+| `images`               | `Record<string, string \| { src: string }>` | `undefined`    | Map of virtual image paths to real URLs. Next.js-style static import objects are also supported.                                                                |
 
 ## Behavior notes
 

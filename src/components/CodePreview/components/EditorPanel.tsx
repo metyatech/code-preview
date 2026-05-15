@@ -3,6 +3,7 @@ import Editor, { EditorProps } from '@monaco-editor/react';
 import styles from '../styles.module.css';
 
 import { EditorConfig } from '../types';
+import { defineCodePreviewEditorThemes } from '../editorTheme';
 
 interface EditorPanelProps {
     config: EditorConfig;
@@ -44,6 +45,7 @@ export const EditorPanel = ({ config, width, height, theme, showLineNumbers }: E
                     value={config.value}
                     onChange={config.onChange}
                     onMount={config.onMount}
+                    beforeMount={defineCodePreviewEditorThemes}
                     theme={theme}
                     options={mergedOptions}
                 />
