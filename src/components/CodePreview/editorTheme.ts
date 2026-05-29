@@ -72,6 +72,7 @@ export const defineCodePreviewEditorThemes = (monaco: MonacoInstance) => {
             'editorCursor.foreground': '#f8fafc',
             'editor.selectionBackground': '#2563eb66',
             'editor.inactiveSelectionBackground': '#33415599',
+            'editor.lineHighlightBorder': '#64748b',
             'editorWidget.background': '#111827',
             'editorWhitespace.foreground': '#64748b80'
         }
