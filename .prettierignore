@@ -5,3 +5,5 @@ AGENTS.md
 CHANGELOG.md
 .github
 *.log
+.mwt-worktree.json
+.mwt/state
