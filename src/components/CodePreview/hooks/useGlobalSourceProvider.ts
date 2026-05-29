@@ -3,6 +3,29 @@ import { ISourceCodeStore } from '../store';
 import { SourceCodeState, ImageMap } from '../types';
 import { normalizeImageMap } from '../utils/imageMap';
 
+const areRecordsEqual = (left?: Record<string, string>, right?: Record<string, string>) => {
+    if (left === right) return true;
+    if (!left || !right) return false;
+
+    const leftEntries = Object.entries(left);
+    const rightEntries = Object.entries(right);
+    if (leftEntries.length !== rightEntries.length) return false;
+
+    return leftEntries.every(([key, value]) => right[key] === value);
+};
+
+const areSourceStatesEqual = (left: SourceCodeState, right: SourceCodeState) =>
+    left.html === right.html &&
+    left.css === right.css &&
+    left.js === right.js &&
+    left.hasHtml === right.hasHtml &&
+    left.hasCss === right.hasCss &&
+    left.hasJs === right.hasJs &&
+    left.htmlPath === right.htmlPath &&
+    left.cssPath === right.cssPath &&
+    left.jsPath === right.jsPath &&
+    areRecordsEqual(left.images, right.images);
+
 interface UseGlobalSourceProviderProps {
     sourceId?: string;
     store: ISourceCodeStore;
@@ -70,6 +93,9 @@ export const useGlobalSourceProvider = (props: UseGlobalSourceProviderProps) => 
                 cssPath: cssPath !== undefined ? cssPath : existing.cssPath,
                 jsPath: jsPath !== undefined ? jsPath : existing.jsPath
             };
+            if (areSourceStatesEqual(existing, updated)) {
+                return;
+            }
             store.set(sourceId, updated);
             store.notify(sourceId);
         }

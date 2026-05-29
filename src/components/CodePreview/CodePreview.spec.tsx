@@ -1005,6 +1005,31 @@ test.describe('CodePreview コンポーネントのテスト', () => {
             .toEqual({});
     });
 
+    test('imagesを持つ共有ソースが再通知ループを起こさないこと', async ({ mount, page }) => {
+        const tracker = trackPageErrors(page);
+
+        await page.evaluate(() => {
+            history.replaceState({}, '', '/images-stable');
+        });
+
+        const component = await mount(
+            <CodePreviewFixture
+                sourceId="images-stable"
+                html="<div id='stable-image-source'>Stable image source</div>"
+                images={{ 'img/test.png': DATA_URL_PNG }}
+            />
+        );
+
+        const iframe = component.locator('iframe');
+        const frame = iframe.contentFrame();
+        await expect(frame.locator('#stable-image-source')).toBeVisible({ timeout: 5000 });
+
+        await page.waitForTimeout(250);
+        tracker.dispose();
+
+        expect(tracker.errors).toEqual([]);
+    });
+
     test('server entryでもsourceIdが共有されること', async ({ mount }) => {
         const raw = ['```html', '<div id="shared-server">Shared Server</div>', '```'].join('\n');
 
