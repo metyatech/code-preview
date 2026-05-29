@@ -639,14 +639,25 @@ test.describe('CodePreview コンポーネントのテスト', () => {
         await expect(monacoEditor).toBeVisible({ timeout: 10000 });
         await expect(monacoEditor.locator('.view-line span').first()).toBeVisible({ timeout: 10000 });
 
-        const tokenColors = await monacoEditor.locator('.view-line span').evaluateAll((nodes) => {
-            return Array.from(new Set(nodes.map((node) => window.getComputedStyle(node).color).filter(Boolean)));
-        });
+        const expectedTokenColors = ['rgb(96, 165, 250)', 'rgb(249, 168, 212)', 'rgb(134, 239, 172)'];
+        const readTokenColors = async () => {
+            return await monacoEditor.locator('.view-line span').evaluateAll((nodes) => {
+                return Array.from(new Set(nodes.map((node) => window.getComputedStyle(node).color).filter(Boolean)));
+            });
+        };
 
-        expect(tokenColors).toContain('rgb(96, 165, 250)');
-        expect(tokenColors).toContain('rgb(249, 168, 212)');
-        expect(tokenColors).toContain('rgb(134, 239, 172)');
+        await expect
+            .poll(readTokenColors, {
+                message: 'Monaco dark syntax token colors should be applied',
+                timeout: 10000
+            })
+            .toEqual(expect.arrayContaining(expectedTokenColors));
+
+        const tokenColors = await readTokenColors();
         expect(tokenColors).not.toEqual(['rgb(0, 0, 0)']);
+        expectedTokenColors.forEach((expectedColor) => {
+            expect(tokenColors).toContain(expectedColor);
+        });
     });
 
     test('htmlPathのデフォルト値(index.html)が適用されること', async ({ mount }) => {
