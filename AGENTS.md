@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD025 -->
 # Tool Rules (compose-agentsmd)
 
-- **Session gate**: before responding to ANY user message, run `compose-agentsmd` from the project root. AGENTS.md contains the rules you operate under; stale rules cause rule violations. If you discover you skipped this step mid-session, stop, run it immediately, re-read the diff, and adjust your behavior before continuing.
+- **Session gate**: before starting substantive work for each externally supplied human/operator instruction, run `compose-agentsmd` once from the project root. AGENTS.md contains the rules you operate under; stale rules cause rule violations. Do not rerun this gate within the same instruction after tool results, retries, generated continuations, or resumed execution. If you discover you skipped this step mid-session, stop, run it immediately, re-read the diff, and adjust your behavior before continuing.
 - `compose-agentsmd` intentionally regenerates `AGENTS.md`; any resulting `AGENTS.md` diff is expected and must not be treated as an unexpected external change.
 - If `compose-agentsmd` is not available, run it via `npx compose-agentsmd`. If `npx` is unavailable or cannot fetch the package, install it via npm with an environment-appropriate method such as `npm install -g compose-agentsmd` when global installs are permitted, or a user-local npm prefix when global installs are not permitted.
 - To update shared/global rules, use `compose-agentsmd edit-rules` to locate the writable rules workspace, make changes only in that workspace, then run `compose-agentsmd apply-rules` (do not manually clone or edit the rules source repo outside this workflow).
@@ -41,14 +41,12 @@ Source: github:metyatech/agent-rules@HEAD/rules/domains/web/web-ui-and-testing.m
 
 ## Browser automation
 
-- For web automation, use the agent-browser Skill.
-- If browser launch fails due to missing Playwright binaries, run npx playwright
-  install chromium and retry.
+- For web automation or UI verification, use the browser automation tooling available in the current agent environment.
+- If browser launch fails due to missing Playwright binaries, run `npx playwright install chromium` and retry.
 
 ## UI verification and E2E
 
-- For user-visible UI changes, verify in a real browser using agent-browser; if
-  not possible, explain and provide manual steps.
+- For user-visible UI changes, verify in a real browser; if not possible, explain and provide manual steps.
 - Always add E2E tests for user-visible changes; if no harness exists, add one.
 - Run E2E in CI and require it for PR merges; do not defer correctness coverage
   to scheduled runs.
@@ -65,40 +63,3 @@ Source: github:metyatech/agent-rules@HEAD/rules/domains/web/web-ui-and-testing.m
   at the boundary). If impractical, document the limitation and get explicit
   user approval before skipping.
 - Use established icon libraries; do not handcraft custom icons or inline SVGs.
-
-Source: agent-rules-local/code-preview.md
-
-## このプロジェクトについて（@metyatech/code-preview）
-
-このプロジェクトは、教材サイトなどで利用するための **React + TypeScript** 製のコードプレビューライブラリ。
-
-## 技術スタック
-
-- 言語: TypeScript（`strict` 前提）
-- UI: React（>= 18）
-- ビルド: Rollup
-- スタイル: CSS Modules（`*.module.css`）
-- エディタ: Monaco Editor（`@monaco-editor/react`）
-
-## 実装方針
-
-- クラスコンポーネントは使わず、関数コンポーネントと Hooks で実装する。
-- `useEffect` は必要最小限にし、依存配列を正しく設定する。
-- ユーザー入力（HTML/CSS/JS）は信頼できない前提で扱い、プレビュー生成で例外が起きても全体がクラッシュしないように守る（`try/catch` や Error Boundary を検討）。
-
-## TypeScript / 型
-
-- `any` は原則禁止。不明な型は `unknown` を使い、型ガードで絞り込む。
-- `React.FC` は使わず、通常の関数宣言 / 変数宣言でコンポーネントを定義する。
-- コンポーネント Props は `interface` で定義し、公開 API になるものは JSDoc を付ける。
-
-## スタイリング（CSS Modules）
-
-- CSS Modules を使い、スタイルの衝突を避ける。
-- クラス名はキャメルケース（例: `.container`, `.activeTab`）を推奨し、JS 側は `styles.container` のように参照する。
-
-## テスト / 品質
-
-- テストは Playwright Component Testing を使用する。
-- 挙動が変わる変更（仕様追加/変更/バグ修正/リファクタ等）では、対応する `*.spec.tsx` を追加・更新する。
-- Playwright CT では 1 テスト内で `mount()` は 1 回まで（複数シナリオはテストを分割する）。
