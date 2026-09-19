@@ -220,9 +220,8 @@ npm publish
 
 [MIT](LICENSE)
 
-## Community and Security
+## Community
 
-- [Security Policy](SECURITY.md)
 - [Contributing Guidelines](CONTRIBUTING.md)
 - [Code of Conduct](CODE_OF_CONDUCT.md)
 - [Changelog](CHANGELOG.md)
