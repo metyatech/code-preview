@@ -32,6 +32,12 @@ const removeCurrentScript = () => {
 removeInternalScripts(document);
 removeCurrentScript();
 
+window.addEventListener('message', event => {
+    if (event.source !== window.parent) return;
+    if (event.data?.type !== 'codePreviewHydrationCheck') return;
+    window.parent.postMessage({ type: 'codePreviewHydrationReady' }, '*');
+});
+
 const postLogs = () => {
     try {
         window.parent.postMessage({ type: 'codePreviewConsoleLog', messages: logs.slice() }, '*');

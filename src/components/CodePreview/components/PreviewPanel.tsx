@@ -29,14 +29,22 @@ export const PreviewPanel = ({
         if (iframe.dataset.codePreviewHydrationReloaded === '1') return;
         if (loadedOnClientRef.current) return;
 
-        const doc = iframe.contentDocument;
-        if (!doc || doc.readyState !== 'complete') return;
-
         const srcDoc = iframe.getAttribute('srcdoc');
         if (!srcDoc) return;
 
-        iframe.dataset.codePreviewHydrationReloaded = '1';
-        iframe.srcdoc = srcDoc;
+        const handleMessage = (event: MessageEvent) => {
+            if (event.source !== iframe.contentWindow) return;
+            if (event.data?.type !== 'codePreviewHydrationReady') return;
+            if (iframe.dataset.codePreviewHydrationReloaded === '1') return;
+
+            iframe.dataset.codePreviewHydrationReloaded = '1';
+            iframe.srcdoc = srcDoc;
+        };
+
+        window.addEventListener('message', handleMessage);
+        iframe.contentWindow?.postMessage({ type: 'codePreviewHydrationCheck' }, '*');
+
+        return () => window.removeEventListener('message', handleMessage);
     }, [iframeKey, iframeRef, visible]);
 
     return (
@@ -49,7 +57,7 @@ export const PreviewPanel = ({
             }}
             className={visible ? styles.preview : undefined}
             title="HTML+CSS Preview"
-            sandbox="allow-scripts allow-same-origin"
+            sandbox="allow-scripts"
             style={
                 visible
                     ? ({ height: previewHeight, '--min-height': minHeightCss } as CSSProperties)
