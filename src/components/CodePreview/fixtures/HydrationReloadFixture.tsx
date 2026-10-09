@@ -23,6 +23,7 @@ const buildSrcDoc = () =>
         '</head>',
         '<body>',
         '<div class="parallax1"></div>',
+        '<script>window.addEventListener("message", event => { if (event.source === window.parent && event.data?.type === "codePreviewHydrationCheck") window.parent.postMessage({ type: "codePreviewHydrationReady" }, "*"); });</script>',
         '</body>',
         '</html>'
     ].join('\n');
@@ -40,7 +41,7 @@ export const HydrationReloadFixture = () => {
 
         const iframe = document.createElement('iframe');
         iframe.title = 'HTML+CSS Preview';
-        iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+        iframe.setAttribute('sandbox', 'allow-scripts');
         iframe.style.height = '200px';
         iframe.style.setProperty('--min-height', '200px');
         iframe.addEventListener('load', () => {

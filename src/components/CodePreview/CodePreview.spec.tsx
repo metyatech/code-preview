@@ -21,12 +21,16 @@ type PageErrorTracker = {
 
 const trackPageErrors = (page: Page): PageErrorTracker => {
     const errors: string[] = [];
+    const isSandboxServiceWorkerError = (message: string) =>
+        /service\s*worker.*disabled.*sandboxed.*allow-same-origin/i.test(message);
     const onConsole = (message: { type: () => string; text: () => string }) => {
-        if (message.type() === 'error') {
+        if (message.type() === 'error' && !isSandboxServiceWorkerError(message.text())) {
             errors.push(message.text());
         }
     };
     const onPageError = (error: Error) => {
+        // An opaque-origin sandbox intentionally disables serviceWorker; Chromium reports that denied API read as a frame error.
+        if (isSandboxServiceWorkerError(error.message)) return;
         errors.push(error.message);
     };
 

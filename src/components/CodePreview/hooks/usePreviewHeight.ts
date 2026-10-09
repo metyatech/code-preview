@@ -21,26 +21,7 @@ export const usePreviewHeight = ({ minHeightPx, showPreview, iframeRef, editors 
     }, [minHeightPx]);
 
     const calculatePreviewHeight = useCallback(() => {
-        const iframe = iframeRef.current;
-        let pHeight = minHeightPx;
-
-        if (iframe) {
-            try {
-                const iframeDoc = iframe.contentDocument;
-                if (iframeDoc) {
-                    const calculatedHeight = Math.max(
-                        iframeDoc.body?.scrollHeight || 0,
-                        iframeDoc.body?.offsetHeight || 0,
-                        iframeDoc.documentElement?.clientHeight || 0,
-                        iframeDoc.documentElement?.scrollHeight || 0,
-                        iframeDoc.documentElement?.offsetHeight || 0
-                    );
-                    pHeight = Math.max(pHeight, calculatedHeight);
-                }
-            } catch {
-                // noop
-            }
-        }
+        const pHeight = minHeightPx;
 
         // Only grow, never shrink - update maxHeightRef if we have a larger height
         if (pHeight > maxHeightRef.current) {
@@ -51,7 +32,7 @@ export const usePreviewHeight = ({ minHeightPx, showPreview, iframeRef, editors 
         const limitedPreviewHeight = Math.min(finalPreviewHeight, MAX_PREVIEW_HEIGHT);
 
         setPreviewHeight(limitedPreviewHeight + 'px');
-    }, [iframeRef, minHeightPx]);
+    }, [minHeightPx]);
 
     const requestPreviewHeight = useCallback(() => {
         const iframe = iframeRef.current;
@@ -107,9 +88,6 @@ export const usePreviewHeight = ({ minHeightPx, showPreview, iframeRef, editors 
             };
 
             iframe.addEventListener('load', handleLoad);
-            if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
-                handleLoad();
-            }
             return () => iframe.removeEventListener('load', handleLoad);
         }
     }, [showPreview, iframeRef, updatePreviewHeight]);
